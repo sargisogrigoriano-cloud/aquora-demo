@@ -261,8 +261,8 @@
   .achart .aline.l2{stroke:var(--blue);animation-delay:.45s}
 
   /* keep content clear of the fixed assistant panel on wide screens */
-  @media(min-width:1024px){.content{padding-right:680px}}
-  @media(min-width:1600px){.content{padding-right:680px}}
+  @media(min-width:1024px){.content{padding-right:540px}}
+  @media(min-width:1600px){.content{padding-right:540px}}
 
   /* nicer scrollbars */
   .menu::-webkit-scrollbar,.content::-webkit-scrollbar{width:9px;height:9px}
@@ -307,7 +307,7 @@
   .btn.primary{background:linear-gradient(135deg,#12C2B0,#6D5BF0);border:none;box-shadow:0 10px 24px rgba(93,91,240,.30)}
   .overlay .go{background:linear-gradient(135deg,#12C2B0,#6D5BF0);border-radius:999px;box-shadow:0 16px 36px rgba(93,91,240,.4)}
   .tag{font-weight:600}
-  .assistant{border-radius:22px;width:640px;max-width:calc(100vw - 28px)}
+  .assistant{border-radius:0 0 0 20px;width:520px;max-width:calc(100vw - 20px);top:52px;bottom:auto;right:0;max-height:calc(100vh - 56px);overflow:auto}
   .avbanner{aspect-ratio:4/3;object-fit:cover;object-position:50% 48%}
   .top .lang{border-radius:999px}
   .flowmap{width:100%;max-width:760px;height:auto;display:block;border-radius:20px;box-shadow:0 18px 44px rgba(10,30,40,.28);margin-bottom:12px}
