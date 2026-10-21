@@ -320,9 +320,9 @@
   @media(max-width:820px){.content::before,.content::after{left:62px}}
 
   /* ===== GLASS + AURORA (Stripe/Linear/Vercel vibe) ===== */
-  /* neutral per-page tint — no object photos */
-  .content::before{background:linear-gradient(155deg,rgba(15,181,166,.20) 0%,rgba(15,181,166,.06) 44%,rgba(59,130,246,.07) 100%);opacity:1;filter:hue-rotate(var(--phue,0deg))}
-  .content::after{display:none}
+  /* satellite / earth imagery — neutral, no objects, non-clashing */
+  .content::before{background:var(--pbg,none) center/cover no-repeat;opacity:.5;filter:none}
+  .content::after{display:block;background:linear-gradient(180deg,rgba(245,246,251,.56),rgba(245,246,251,.32))}
   /* frosted glass widgets — background photo shows through */
   .card:not(.kpi){background:rgba(255,255,255,.60);backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25);border:1px solid rgba(255,255,255,.65)}
   .filters{background:rgba(255,255,255,.60);backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25)}
@@ -977,9 +977,12 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     limits:"water",sensors:"water",melioration:"fields",dispatch:"water",billing:"water",payments:"water",reports:"network",
     losses:"water",inspections:"fields",maintenance:"fields",advice:"fields",climate:"fields",finance:"network",reuse:"water",basin:"water",
     ai:"network",data:"space",platform:"network",compliance:"network",experts:"network",roadmap:"network"};
+  const IMGP=["patch","delta","pivot","coast","delta2"];
+  const IMGMAP={};(function(){var k=0;MENU.forEach(function(m){if(m[0]==="grp")return;IMGMAP[m[0]]=IMGP[k%IMGP.length];k++;});})();
+  IMGMAP.data="earth";IMGMAP.ai="earth";IMGMAP.platform="earth";
   function showScreen(id){const m=MENU.find(x=>x[0]===id),acc=ACC[id]||PALETTE[0];
     content.style.setProperty("--phue",acc[1]+"deg");
-    content.style.setProperty("--pbg","url('img/"+id+".jpg')");
+    content.style.setProperty("--pbg","url('img/"+(IMGMAP[id]||"patch")+".jpg')");
     content.innerHTML=(S[id]||S.dashboard)();
     const t=content.querySelector(".ptitle");
     if(t&&m){const b=document.createElement("span");b.className="picon";b.textContent=m[1];b.style.background=acc[0];t.parentNode.insertBefore(b,t);}
