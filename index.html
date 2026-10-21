@@ -259,8 +259,8 @@
   .achart .aline.l2{stroke:var(--blue);animation-delay:.45s}
 
   /* keep content clear of the fixed assistant panel on wide screens */
-  @media(min-width:1024px){.content{padding-right:430px}}
-  @media(min-width:1600px){.content{padding-right:40px;max-width:1120px}}
+  @media(min-width:1024px){.content{padding-right:360px}}
+  @media(min-width:1600px){.content{padding-right:40px;max-width:1160px}}
 
   /* nicer scrollbars */
   .menu::-webkit-scrollbar,.content::-webkit-scrollbar{width:9px;height:9px}
@@ -305,7 +305,7 @@
   .btn.primary{background:linear-gradient(135deg,#12C2B0,#6D5BF0);border:none;box-shadow:0 10px 24px rgba(93,91,240,.30)}
   .overlay .go{background:linear-gradient(135deg,#12C2B0,#6D5BF0);border-radius:999px;box-shadow:0 16px 36px rgba(93,91,240,.4)}
   .tag{font-weight:600}
-  .assistant{border-radius:22px}
+  .assistant{border-radius:22px;width:320px;max-width:calc(100vw - 28px)}
   .top .lang{border-radius:999px}
   .flowmap{width:100%;max-width:760px;height:auto;display:block;border-radius:20px;box-shadow:0 18px 44px rgba(10,30,40,.28);margin-bottom:12px}
 </style>
@@ -483,6 +483,7 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       ${[["Water User",611],["Water User Association",140],["Basin Water Authority",15],["Regional Water Authority",14],["National Water Agency",1]].map(r=>`<div class="li" style="padding:10px 0;border-color:rgba(23,66,74,.4)"><span>${r[0]}</span><span class="num">${r[1]}</span></div>`).join("")}</div></div></div>`;
 
   S.users=()=>`<h1 class="ptitle">Water users</h1><p class="psub">Every user and farm — the single source of truth.</p>
+    ${radialNetSVG(["Operator","WhatsApp","Voice","USSD","Self-service"],"Registry")}
     ${filters(["Basin","Canal","Status"],"+ Add water user")}
     ${table(["ID","Water user","Type","Plots","Area","Status"],[
       ["1041","Water User 1041","Farm","3","4.0 ha",tg("ok","active")],
@@ -510,6 +511,7 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     ])}</div>`;
 
   S.requests=()=>`<h1 class="ptitle">Requests</h1><p class="psub">Users ask for water; the system turns it into a plan.</p>
+    ${pipelineSVG(["Request","Limit check","Plan","Delivery","Invoice"])}
     <div style="margin:4px 0 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <button class="btn primary" data-flow="req">💧 Make a water request</button>
       ${FLOW.req?'<span class="tag ok">request created ✓</span>':'<span class="psub">— click to request water, as a farmer would</span>'}</div>
@@ -562,6 +564,9 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       ["Zone B","2.6 dS/m","1.4 m","scheduled",tg("warn","watch")],
       ["Zone C","3.9 dS/m","0.9 m","in progress",tg("crit","saline")],
     ])}
+    <div class="card" style="margin-top:16px;max-width:560px"><div class="lbl">Soil salinity by zone (dS/m, scaled)</div>
+      <div class="bars autobars" data-vals="24,52,78" data-scale="1" style="margin-top:22px"></div>
+      <div class="legend" style="margin-top:10px"><span>Zone A</span><span>Zone B</span><span>Zone C</span></div></div>
     <p class="psub" style="margin-top:14px">When salinity rises or groundwater gets too high, Aquora schedules leaching irrigations and drainage — keeping farmland productive.</p>`;
 
   S.dispatch=()=>`<h1 class="ptitle">Dispatching</h1><p class="psub">Daily water distribution — plan versus fact.</p>
@@ -588,6 +593,8 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     ${FLOW.paid?`<div class="card" style="max-width:620px;margin-bottom:14px"><div class="stripe"></div><div class="lbl" style="color:var(--good)">✓ Payment received</div><div style="margin-top:6px"><b>$206.00</b> paid by bank · reconciled automatically · debt cleared.</div></div>`:''}
     <div class="kpis" style="grid-template-columns:repeat(3,1fr);max-width:620px">
       ${kpi("Paid","824,816","$","good")}${kpi("Debt","284,150","$","amber")}${kpi("Collection","91","%","aqua")}</div>
+    <div class="card" style="margin-bottom:16px;max-width:560px"><div class="lbl">Collection rate — last 6 months (%)</div>
+      <div class="bars autobars" data-vals="82,86,88,90,89,91" data-pct="1" style="margin-top:22px"></div></div>
     ${table(["Water user","Amount","Method","Date","Status"],
       (FLOW.paid?[["Water User 1041","206.00","Bank","today",tg("ok","paid")]]:[]).concat([
         ["Water User 1041","375.00","Bank","12 Oct",tg("ok","paid")],
@@ -596,6 +603,7 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       ]))}`;
 
   S.reports=()=>`<h1 class="ptitle">Reports</h1><p class="psub">Everything, filtered and exported in one click.</p>
+    ${pipelineSVG(["Collect","Filter","Build","Export"])}
     ${filters(["Report","Period","Region"],"⬇ Export")}
     <div class="list">${["Requests","Water balance","Plan vs fact","Billing & collection","Sensor readings","Losses (NRW)"].map(r=>`<div class="li"><span>${r}</span><span style="display:flex;gap:8px"><span class="btn ghost" style="padding:5px 10px">Excel</span><span class="btn ghost" style="padding:5px 10px">PDF</span></span></div>`).join("")}</div>`;
 
@@ -624,6 +632,9 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       ["INS-1041","Gate damage","Crew 2","Main Canal · gate 3","2 photos",tg("warn","in progress")],
       ["INS-1039","Meter check","Inspector B.","Plot #1041-1","signed act",tg("ok","closed")],
     ])}
+    <div class="card" style="margin-top:16px;max-width:520px"><div class="lbl">Tasks by status</div>
+      <div class="bars autobars" data-vals="42,30,88" data-scale="1" style="margin-top:22px"></div>
+      <div class="legend" style="margin-top:10px"><span>Open</span><span>In progress</span><span>Closed</span></div></div>
     <p class="psub" style="margin-top:14px">Works fully offline; data and signatures sync automatically when the connection returns.</p>`;
 
   S.maintenance=()=>`<h1 class="ptitle">Maintenance</h1><p class="psub">Planned and emergency maintenance of canals and pumps — spare parts, costs, cleaning schedule.</p>
@@ -634,7 +645,9 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       ["Pump station 2","Bearing replacement","Emergency","today","1,200 $",tg("crit","urgent")],
       ["Main Canal 1","Sediment cleaning","Planned","in 5 days","800 $",tg("warn","scheduled")],
       ["Gate 3","Actuator service","Planned","in 12 days","350 $",tg("ok","planned")],
-    ])}`;
+    ])}
+    <div class="card" style="margin-top:16px;max-width:560px"><div class="lbl">Work orders — last 6 months</div>
+      <div class="bars autobars" data-vals="60,45,70,55,80,65" data-scale="1" style="margin-top:22px"></div></div>`;
 
   S.advice=()=>`<h1 class="ptitle">Farmer advice</h1><p class="psub">Personal guidance by WhatsApp or voice — in the farmer's own language.</p>
     <div class="chatline" style="max-width:600px">
@@ -667,6 +680,8 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       ["DroughtSure","Index insurance","Delivery vs plan",tg("ok","granted"),tg("ok","live")],
       ["Regional co-op","Input financing","Season volumes",tg("warn","pending"),tg("warn","onboarding")],
     ])}
+    <div class="card" style="margin-top:14px;margin-bottom:14px;max-width:560px"><div class="lbl">Opted-in farmers — last 6 months</div>
+      <div class="bars autobars" data-vals="40,50,62,70,78,86" data-scale="1" style="margin-top:22px"></div></div>
     <div class="card" style="max-width:640px;margin-top:14px"><div class="stripe"></div><div class="lbl">Rule</div><div style="margin-top:6px">Data leaves Aquora only after the farmer gives explicit, revocable opt-in consent (GDPR / Data Act).</div></div>`;
 
   S.reuse=()=>`<h1 class="ptitle">Reuse & groundwater</h1><p class="psub">Treated wastewater and groundwater — built for Gulf countries: well licences, well meters, reuse distribution.</p>
@@ -677,7 +692,9 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       ["Well GW-201","valid → 2028","smart meter","120,000 m³/yr",tg("ok","active")],
       ["Well GW-202","renewal due","smart meter","90,000 m³/yr",tg("warn","renew")],
       ["TWW plant 1","municipal","flow meter","reuse: farms + landscaping",tg("ok","active")],
-    ])}`;
+    ])}
+    <div class="card" style="margin-top:16px;max-width:560px"><div class="lbl">Treated-water reuse — monthly (k m³)</div>
+      <div class="bars autobars" data-vals="60,68,74,80,86,78" data-scale="1" style="margin-top:22px"></div></div>`;
 
   S.basin=()=>`<h1 class="ptitle">Transboundary basin</h1><p class="psub">A shared water balance for countries in one river basin — Central Asia, the Nile, Gulf aquifers.</p>
     <div class="kpis" style="grid-template-columns:repeat(3,1fr);max-width:640px">
@@ -687,6 +704,9 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       ["Midstream B","7.5 B m³","7.6 B m³","−0.1",tg("warn","over")],
       ["Downstream C","5.5 B m³","4.9 B m³","+0.6",tg("ok","within")],
     ])}
+    <div class="card" style="margin-top:16px;max-width:560px"><div class="lbl">Allocation used by party (%)</div>
+      <div class="bars autobars" data-vals="93,101,89" data-pct="1" data-scale="1" style="margin-top:22px"></div>
+      <div class="legend" style="margin-top:10px"><span>Upstream A</span><span>Midstream B</span><span>Downstream C</span></div></div>
     <p class="psub" style="margin-top:14px">One transparent balance builds trust between parties sharing the same river or aquifer.</p>`;
 
   S.ai=()=>`<h1 class="ptitle">AI layer</h1><p class="psub">Agents that do real work for each user — not just a chatbot.</p>
@@ -725,6 +745,7 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     ${info("Security","blue",null,"SSO, two-factor auth, encryption, backups, and ISO 27001 readiness.")}`;
 
   S.compliance=()=>`<h1 class="ptitle">Compliance — EU readiness</h1><p class="psub">How Aquora meets the EU rules that matter to water operators.</p>
+    ${radialNetSVG(["NIS2","CRA","AI Act","Data Act","GDPR"],"Compliant")}
     ${info("NIS2 Directive","blue",["aqua","supply-chain"],"Irrigation is likely out of direct scope, but water utilities will pass these security clauses down to us — so we meet them.")}
     ${info("Cyber Resilience Act (CRA)","amber",["warn","2026 / 2027"],"Vulnerability reporting applies since <b>11 Sep 2026</b>; full CE marking of valve controllers applies from <b>11 Dec 2027</b>.")}
     ${info("AI Act","crit",["warn","2026 / 2027"],"The AI-disclosure duty applies since <b>2 Aug 2026</b>. If AI controls a water supply we treat it as <b>high-risk</b>, with the deadline at <b>2 Dec 2027</b>.")}
@@ -732,12 +753,14 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     ${info("GDPR","aqua",["ok","privacy"],"Data-protection impact assessment (DPIA), client data-processing agreements (DPA), and opt-in consent for voice.")}`;
 
   S.experts=()=>`<h1 class="ptitle">Expert notes</h1><p class="psub">Guidance from legal, finance, market and language experts shaping the build.</p>
+    ${radialNetSVG(["Legal","Finance","Market","Language"],"Aquora")}
     ${info("Legal","blue",["aqua","law"],"Valve automation must keep a <b>manual override</b> and human confirmation. Quota trading needs a legal basis in each country — Spain, Morocco and Australia already have one. Transferring data for credit scoring requires the farmer's <b>explicit consent</b>.")}
     ${info("Finance","good",["ok","revenue"],"The fastest revenue comes from <b>billing, payments and loss detection</b> — they prove a measurable return (more collected, less water lost) that buyers and investors can verify.")}
     ${info("Market","amber",["warn","go-to-market"],"Subsidised digitalisation categories (web portal, GIS, telecontrol) should map <b>one-to-one</b> to the MVP modules, so sales can be funded through subsidies.")}
     ${info("Language","aqua",["aqua","i18n"],"Translation must be built into the platform <b>from day one</b>: a single central glossary plus AI translation, verified by humans.")}`;
 
   S.roadmap=()=>`<h1 class="ptitle">Roadmap</h1><p class="psub">From demo to platform — MVP (6 months), v2 (12 months), v3 (24 months).</p>
+    ${pipelineSVG(["MVP · 6 mo","v2 · 12 mo","v3 · 24 mo"])}
     <div class="card" style="margin-bottom:14px"><div class="stripe"></div><div class="lbl">In short</div>
       <div style="margin-top:8px;line-height:1.6">Today's demo has 13 solid modules, but they are separate screens with illustrative data. To become a platform investors take seriously — and adaptable for the EU, the Gulf and Africa — Aquora needs three layers: a <b>real core</b> (live data, the full request → payment flow, a complete audit log), an <b>AI layer</b> that does useful work for every user, and <b>platform features</b> (country configuration, open API, multi-tenancy, offline).</div></div>
     <div class="card" style="margin-bottom:20px"><div class="stripe aqua"></div><div class="lbl">One platform, adaptable everywhere</div>
@@ -844,6 +867,27 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       +'<rect width="760" height="320" rx="18" fill="url(#bgrad4)"/>'+bg+arcs+parts+dots
       +pulseNode(hub[0],hub[1],"#FFB15C",16)
       +'<text x="'+hub[0]+'" y="'+(hub[1]+4)+'" fill="#06202A" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">Aquora</text>'+labs+'</svg>';}
+  function radialNetSVG(labels,center){
+    var cx=380,cy=160,rx=252,ry=116,n=labels.length,spokes="",parts="",dots="",labs="";
+    for(var i=0;i<n;i++){var a=(-90+i*(360/n))*Math.PI/180,x=cx+rx*Math.cos(a),y=cy+ry*Math.sin(a),id="rn"+i;
+      spokes+='<path id="'+id+'" d="M'+cx+' '+cy+' L'+x.toFixed(1)+' '+y.toFixed(1)+'" fill="none" stroke="#1C5560" stroke-width="2"/>';
+      spokes+='<path d="M'+cx+' '+cy+' L'+x.toFixed(1)+' '+y.toFixed(1)+'" fill="none" stroke="url(#cflow)" stroke-width="1.6" stroke-dasharray="2 10" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-12" dur="0.6s" repeatCount="indefinite"/></path>';
+      parts+='<circle r="2.4" fill="#8CF5E4" filter="url(#fglow)"><animateMotion dur="2.2s" begin="'+(i*0.3).toFixed(2)+'s" repeatCount="indefinite"><mpath href="#'+id+'"/></animateMotion></circle>';
+      dots+=pulseNode(x,y,"#2FE6C8",7);
+      labs+='<text x="'+x.toFixed(1)+'" y="'+(y>cy?y+22:y-13).toFixed(1)+'" fill="#CFE6E2" font-size="12" text-anchor="middle" font-family="sans-serif">'+labels[i]+'</text>';}
+    return '<svg class="flowmap" viewBox="0 0 760 320"><defs><radialGradient id="bgr_rn" cx="50%" cy="50%" r="70%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
+      +'<rect width="760" height="320" rx="18" fill="url(#bgr_rn)"/>'+spokes+parts+dots
+      +pulseNode(cx,cy,"#FFB15C",17)
+      +'<text x="'+cx+'" y="'+(cy+4)+'" fill="#06202A" font-size="11.5" font-weight="700" text-anchor="middle" font-family="sans-serif">'+center+'</text>'+labs+'</svg>';}
+  function pipelineSVG(stages){
+    var W=760,n=stages.length,pad=74,step=(W-pad*2)/(n-1),y=72,line="M"+pad+" "+y+" H"+(W-pad),nodes="",labs="";
+    for(var i=0;i<n;i++){var x=pad+i*step;nodes+=pulseNode(x,y,"#2FE6C8",9);
+      labs+='<text x="'+x+'" y="'+(y+32)+'" fill="#CFE6E2" font-size="12" text-anchor="middle" font-family="sans-serif">'+stages[i]+'</text>';}
+    return '<svg class="flowmap" viewBox="0 0 760 150"><defs><linearGradient id="bgr_pp" x1="0" x2="1"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#06202A"/></linearGradient></defs>'
+      +'<rect width="760" height="150" rx="18" fill="url(#bgr_pp)"/>'
+      +'<path id="pipe" d="'+line+'" fill="none" stroke="#124A54" stroke-width="5" stroke-linecap="round"/>'
+      +'<path d="'+line+'" fill="none" stroke="url(#cflow)" stroke-width="2.5" stroke-dasharray="3 12" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-15" dur="0.5s" repeatCount="indefinite"/></path>'
+      +flowParticles("pipe",4,"#8CF5E4",3)+nodes+labs+'</svg>';}
   function filters(labels,action,primaryAmber){return `<div class="filters">${labels.map(l=>`<div class="fl"><label>${l}</label><div class="sel">All ${l.toLowerCase()} ▾</div></div>`).join("")}<div style="flex:1"></div><div style="display:flex;align-items:flex-end"><button class="btn ${primaryAmber?'':'primary'}" data-action style="${primaryAmber?'background:var(--amber);color:#2a1800;border-color:var(--amber);font-weight:600':''}">${action}</button></div></div>`;}
   function table(cols,rows){return `<table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;}
   function tg(k,t){return `<span class="tag ${k}">${t}</span>`;}
