@@ -416,11 +416,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     var k=FEMALE_QA[normQ(q)]||FEMALE_QA[fuzzyFQ(q)];
     if(!k) return false;
     if(k.screen){activate(k.screen);showScreen(k.screen);}
-    cap.textContent="One moment — let me check that…"; stt.textContent="Checking…";
-    playClip("presenter/filler_"+(Math.random()<0.5?0:1)+".mp4", function(){ if(g!==gen)return;
-      cap.textContent="I've checked — my assistant will answer that.";
-      playClip("presenter/handoff.mp4", function(){ if(g!==gen)return;
-        cap.textContent=k.a||""; stt.textContent="Speaking…"; playSrc("voice/"+k.f,function(){}); }); });
+    cap.textContent=k.a||""; stt.textContent="Speaking…"; playSrc("voice/"+k.f,function(){});
     return true; }
   const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
 
@@ -1116,6 +1112,12 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     const ql=q.toLowerCase();
     for(var ai=0;ai<ACTIONS.length;ai++){ if(new RegExp(ACTIONS[ai].re,"i").test(ql)){ runFlow(ACTIONS[ai].flow); return; } }
     if(answerFemale(q,g)) return;
+    cap.textContent="One moment \u2014 let me check that\u2026"; stt.textContent="Checking\u2026";
+    playClip("presenter/filler_"+(Math.random()<0.5?0:1)+".mp4", function(){ if(g!==gen)return;
+      cap.textContent="I've checked \u2014 my assistant will answer that.";
+      playClip("presenter/handoff.mp4", function(){ if(g!==gen)return; askServer(q,g); }); });
+  }
+  function askServer(q,g){ if(g!==gen)return;
     cap.textContent="\u2026"; stt.textContent="Thinking\u2026";
     var _done=false; var _t=setTimeout(function(){ if(_done||g!==gen)return; _done=true; localFallback(q,g); },4500);
     fetch(SERVER+"/ask",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({q:q})})
