@@ -707,6 +707,7 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
         • Government customers can run an in-country hosted model.</div></div>`;
 
   S.data=()=>`<h1 class="ptitle">Data & satellites</h1><p class="psub">Open, commercially-licensed data powering crops, planning and the assistant.</p>
+    ${dataFlowSVG()}
     ${info("FAO WaPOR v3 — crop water use","good",["ok","every 10 days"],"Global actual evapotranspiration and crop water consumption, refreshed every 10 days. Feeds the <b>irrigation plan</b>.")}
     ${info("Sentinel-2 &amp; Landsat — imagery","blue",["aqua","open data"],"Free optical satellite imagery for field monitoring and change detection. Feeds <b>Map &amp; canals</b> and <b>Crops</b>.")}
     ${info("Prithvi-EO-2.0 &amp; AlphaEarth — field mapping","aqua",["aqua","CC-BY"],"NASA/IBM Prithvi foundation model and Google AlphaEarth embeddings for crop and field recognition — cross-checks what the farmer declared. Feeds <b>Crops &amp; sowing</b>.")}
@@ -811,6 +812,21 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       +'<rect width="760" height="320" rx="18" fill="url(#bgrad2)"/>'+spokes+parts+dots
       +pulseNode(cx,cy,"#FFB15C",17)
       +'<text x="'+cx+'" y="'+(cy+4)+'" fill="#06202A" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">Aquora AI</text>'+labs+'</svg>';}
+  function dataFlowSVG(){
+    var srcs=[[120,74,"WaPOR v3"],[250,62,"Sentinel-2"],[380,68,"Prithvi·AlphaEarth"],[510,62,"ECMWF AIFS"],[640,74,"Omnilingual"]];
+    var px=380,py=262,spokes="",parts="",dots="",labs="";
+    srcs.forEach(function(s,i){var id="ds"+i;
+      spokes+='<path id="'+id+'" d="M'+s[0]+' '+s[1]+' L'+px+' '+py+'" fill="none" stroke="#1C5560" stroke-width="2"/>';
+      spokes+='<path d="M'+s[0]+' '+s[1]+' L'+px+' '+py+'" fill="none" stroke="url(#cflow)" stroke-width="1.5" stroke-dasharray="2 11" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-13" dur="0.6s" repeatCount="indefinite"/></path>';
+      parts+=flowParticles(id,2,"#8CF5E4",2.2);
+      dots+=pulseNode(s[0],s[1],"#49A7FF",7);
+      labs+='<text x="'+s[0]+'" y="'+(s[1]-14)+'" fill="#CFE6E2" font-size="11" text-anchor="middle" font-family="sans-serif">'+s[2]+'</text>';});
+    var orbit='<path id="orbit" d="M40 34 Q380 0 720 34" fill="none" stroke="#0E3B45" stroke-width="1" opacity=".5"/>'
+      +'<g filter="url(#fglow)"><rect x="-7" y="-3" width="14" height="6" rx="1.5" fill="#FFB15C"/><animateMotion dur="7s" repeatCount="indefinite" rotate="auto"><mpath href="#orbit"/></animateMotion></g>';
+    return '<svg class="flowmap" viewBox="0 0 760 320"><defs><radialGradient id="bgrad3" cx="50%" cy="18%" r="95%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
+      +'<rect width="760" height="320" rx="18" fill="url(#bgrad3)"/>'+orbit+spokes+parts+dots
+      +pulseNode(px,py,"#2FE6C8",18)
+      +'<text x="'+px+'" y="'+(py+5)+'" fill="#06202A" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">Aquora</text>'+labs+'</svg>';}
   function filters(labels,action,primaryAmber){return `<div class="filters">${labels.map(l=>`<div class="fl"><label>${l}</label><div class="sel">All ${l.toLowerCase()} ▾</div></div>`).join("")}<div style="flex:1"></div><div style="display:flex;align-items:flex-end"><button class="btn ${primaryAmber?'':'primary'}" data-action style="${primaryAmber?'background:var(--amber);color:#2a1800;border-color:var(--amber);font-weight:600':''}">${action}</button></div></div>`;}
   function table(cols,rows){return `<table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;}
   function tg(k,t){return `<span class="tag ${k}">${t}</span>`;}
