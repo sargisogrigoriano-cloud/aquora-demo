@@ -307,11 +307,14 @@
   .tag{font-weight:600}
   .assistant{border-radius:22px}
   .top .lang{border-radius:999px}
+  .flowmap{width:100%;max-width:760px;height:auto;display:block;border-radius:20px;box-shadow:0 18px 44px rgba(10,30,40,.28);margin-bottom:12px}
 </style>
 
 <svg width="0" height="0" style="position:absolute"><defs>
   <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2FE6C8"/><stop offset="1" stop-color="#1C8E82"/></linearGradient>
   <linearGradient id="aqgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0FB5A6" stop-opacity=".30"/><stop offset="1" stop-color="#0FB5A6" stop-opacity="0"/></linearGradient>
+  <linearGradient id="cflow" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2FE6C8"/><stop offset="1" stop-color="#49A7FF"/></linearGradient>
+  <filter id="fglow" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="2.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
   <symbol id="person" viewBox="0 0 64 64"><circle cx="32" cy="21" r="12" fill="url(#g1)"/><path d="M11 57c0-13 9-18 21-18s21 5 21 18Z" fill="url(#g1)"/></symbol>
   <symbol id="drop" viewBox="0 0 48 48"><path d="M24 3C24 3 7 22 7 33a17 17 0 0 0 34 0C41 22 24 3 24 3Z" fill="url(#g1)"/><circle cx="18" cy="31" r="3" fill="#042"/><circle cx="30" cy="31" r="3" fill="#042"/></symbol>
 </defs></svg>
@@ -497,9 +500,9 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     ])}
     <div style="margin-top:16px;max-width:520px"><div class="psub" style="margin-bottom:6px">Sown area by crop (ha)</div><div class="bars" id="cropbars"></div><div class="barcap"><div>Cotton</div><div>Wheat</div><div>Rice</div><div>Alfalfa</div><div>Orchard</div></div></div>`;
 
-  S.map=()=>`<h1 class="ptitle">Map & canals</h1><p class="psub">The canal network, gates and sensors — as live layers.</p>
-    ${mapSVG()}
-    <div class="legend"><span><i style="background:#49A7FF"></i>Canals</span><span><i style="background:#2FE6C8"></i>Plots</span><span><i style="background:#FFB15C"></i>Reservoir</span><span><i style="background:#FF5C6C"></i>Sensor alert</span></div>
+  S.map=()=>`<h1 class="ptitle">Map & canals</h1><p class="psub">Live water flow across the network — from the reservoir to every field.</p>
+    ${flowMapSVG()}
+    <div class="legend"><span><i style="background:#FFB15C"></i>Reservoir (source)</span><span><i style="background:#2FE6C8"></i>Water flow</span><span><i style="background:#49A7FF"></i>Canals</span><span><i style="background:#FF5C6C"></i>Sensor alert</span></div>
     <div style="margin-top:16px">${table(["Canal","Flow","Gate","Status"],[
       ["Main Canal 1","410 m³/s","82% open",tg("ok","normal")],
       ["Canal 2","250 m³/s","60% open",tg("warn","below plan")],
@@ -687,6 +690,7 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     <p class="psub" style="margin-top:14px">One transparent balance builds trust between parties sharing the same river or aquifer.</p>`;
 
   S.ai=()=>`<h1 class="ptitle">AI layer</h1><p class="psub">Agents that do real work for each user — not just a chatbot.</p>
+    ${agentNetSVG()}
     ${table(["Agent","For","What it does"],[
       ["Farmer assistant","Farmer","Voice & chat in local languages (WhatsApp, Telegram, USSD): order water, check the schedule, pay, report a leak"],
       ["Association co-pilot","Association head","Drafts the seasonal plan, flags debtors, writes the monthly report and grant applications"],
@@ -779,6 +783,34 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     var grid="";for(var g=1;g<4;g++){var y=(pad+g*(H-pad*2)/4).toFixed(1);grid+='<line class="grid" x1="'+pad+'" y1="'+y+'" x2="'+(W-pad)+'" y2="'+y+'"/>';}
     return '<svg class="achart" viewBox="0 0 '+W+' '+H+'">'+grid+'<path class="aline l2" pathLength="1" d="'+path(b)+'"/><path class="aline" pathLength="1" d="'+path(a)+'"/></svg>'
       +'<div class="legend" style="margin-top:10px"><span><i style="background:var(--aqua)"></i>'+(la||"Planned")+'</span><span><i style="background:var(--blue)"></i>'+(lb||"Actual")+'</span></div>';}
+  function flowParticles(id,n,color,dur){var s="";for(var i=0;i<n;i++){s+='<circle r="2.8" fill="'+color+'" filter="url(#fglow)"><animateMotion dur="'+dur+'s" begin="'+(i*dur/n).toFixed(2)+'s" repeatCount="indefinite"><mpath href="#'+id+'"/></animateMotion></circle>';}return s;}
+  function pulseNode(x,y,color,r){return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+color+'" filter="url(#fglow)"/><circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="none" stroke="'+color+'" stroke-width="2"><animate attributeName="r" values="'+r+';'+(r+14)+';'+r+'" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".9;0;.9" dur="2.6s" repeatCount="indefinite"/></circle>';}
+  function flowMapSVG(){
+    var paths=[["mp","M95 190 H690"],["b1","M230 190 V72"],["b2","M380 190 V300"],["b3","M520 190 V80"],["b4","M620 190 V300"]];
+    var base=paths.map(function(p){return '<path id="'+p[0]+'" d="'+p[1]+'" fill="none" stroke="#124A54" stroke-width="7" stroke-linecap="round"/>';}).join("");
+    var glow=paths.map(function(p){return '<path d="'+p[1]+'" fill="none" stroke="url(#cflow)" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 13" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-16" dur="0.5s" repeatCount="indefinite"/></path>';}).join("");
+    var parts=flowParticles("mp",6,"#8CF5E4",3)+flowParticles("b1",2,"#8CF5E4",2.2)+flowParticles("b2",2,"#8CF5E4",2.4)+flowParticles("b3",2,"#8CF5E4",2.2)+flowParticles("b4",2,"#8CF5E4",2.4);
+    var plots=[[230,60],[380,312],[520,68],[620,312],[690,190]].map(function(p){return pulseNode(p[0],p[1],"#2FE6C8",6);}).join("");
+    var grid="";for(var gx=40;gx<760;gx+=48){grid+='<line x1="'+gx+'" y1="8" x2="'+gx+'" y2="332" stroke="#0E3B45" stroke-width="1" opacity=".4"/>';}for(var gy=40;gy<340;gy+=48){grid+='<line x1="8" y1="'+gy+'" x2="752" y2="'+gy+'" stroke="#0E3B45" stroke-width="1" opacity=".4"/>';}
+    return '<svg class="flowmap" viewBox="0 0 760 340"><defs><radialGradient id="bgrad" cx="18%" cy="22%" r="95%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
+      +'<rect x="0" y="0" width="760" height="340" rx="18" fill="url(#bgrad)"/>'+grid+base+glow+parts+plots
+      +pulseNode(70,190,"#FFB15C",13)
+      +'<circle cx="520" cy="68" r="10" fill="none" stroke="#FF5C6C" stroke-width="2.5" filter="url(#fglow)"><animate attributeName="r" values="8;22;8" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0;1" dur="1.6s" repeatCount="indefinite"/></circle>'
+      +'<text x="70" y="222" fill="#CFE6E2" font-size="12" text-anchor="middle" font-family="sans-serif">Reservoir</text>'
+      +'<text x="690" y="216" fill="#7FA6A0" font-size="11" text-anchor="middle" font-family="sans-serif">Fields</text></svg>';}
+  function agentNetSVG(){
+    var labels=["Farmer","Association","Dispatcher","Ministry","Anomaly","Document AI"];
+    var cx=380,cy=160,rx=250,ry=116,spokes="",parts="",dots="",labs="";
+    for(var i=0;i<6;i++){var a=(-90+i*60)*Math.PI/180,x=cx+rx*Math.cos(a),y=cy+ry*Math.sin(a),id="sp"+i;
+      spokes+='<path id="'+id+'" d="M'+cx+' '+cy+' L'+x.toFixed(1)+' '+y.toFixed(1)+'" fill="none" stroke="#1C5560" stroke-width="2"/>';
+      spokes+='<path d="M'+cx+' '+cy+' L'+x.toFixed(1)+' '+y.toFixed(1)+'" fill="none" stroke="url(#cflow)" stroke-width="1.6" stroke-dasharray="2 10" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-12" dur="0.6s" repeatCount="indefinite"/></path>';
+      parts+='<circle r="2.4" fill="#8CF5E4" filter="url(#fglow)"><animateMotion dur="2.2s" begin="'+(i*0.3).toFixed(2)+'s" repeatCount="indefinite"><mpath href="#'+id+'"/></animateMotion></circle>';
+      dots+=pulseNode(x,y,"#2FE6C8",7);
+      labs+='<text x="'+x.toFixed(1)+'" y="'+(y>cy?y+22:y-13).toFixed(1)+'" fill="#CFE6E2" font-size="12" text-anchor="middle" font-family="sans-serif">'+labels[i]+'</text>';}
+    return '<svg class="flowmap" viewBox="0 0 760 320"><defs><radialGradient id="bgrad2" cx="50%" cy="50%" r="70%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
+      +'<rect width="760" height="320" rx="18" fill="url(#bgrad2)"/>'+spokes+parts+dots
+      +pulseNode(cx,cy,"#FFB15C",17)
+      +'<text x="'+cx+'" y="'+(cy+4)+'" fill="#06202A" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">Aquora AI</text>'+labs+'</svg>';}
   function filters(labels,action,primaryAmber){return `<div class="filters">${labels.map(l=>`<div class="fl"><label>${l}</label><div class="sel">All ${l.toLowerCase()} ▾</div></div>`).join("")}<div style="flex:1"></div><div style="display:flex;align-items:flex-end"><button class="btn ${primaryAmber?'':'primary'}" data-action style="${primaryAmber?'background:var(--amber);color:#2a1800;border-color:var(--amber);font-weight:600':''}">${action}</button></div></div>`;}
   function table(cols,rows){return `<table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;}
   function tg(k,t){return `<span class="tag ${k}">${t}</span>`;}
