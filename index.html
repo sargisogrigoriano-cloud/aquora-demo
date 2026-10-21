@@ -1131,8 +1131,9 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     if(typeof i==="number")playClip("presenter/"+i+".mp4",after);
     else { if(after)after(); }
   }
+  function fixHeard(s){ return (s||"").replace(/\bmeditation(s)?\b/gi,"melioration").replace(/\bemaciation\b/gi,"melioration").replace(/\bamelioration\b/gi,"melioration"); }
   function ask(q){
-    if(!q)return;gen++;const g=gen;stopAudio();
+    if(!q)return; q=fixHeard(q); gen++;const g=gen;stopAudio();
     var _qc=document.getElementById("qcancel"); if(_qc)_qc.disabled=false;
     const ql=q.toLowerCase();
     for(var ai=0;ai<ACTIONS.length;ai++){ if(new RegExp(ACTIONS[ai].re,"i").test(ql)){ runFlow(ACTIONS[ai].flow); return; } }
@@ -1189,7 +1190,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     var qi=document.getElementById("qin"); if(qi){qi.value="";qi.placeholder="Listening… speak your question";}
     var silence=null; function waitStop(){clearTimeout(silence);silence=setTimeout(function(){try{recog.stop();}catch(_){}} ,2500);}
     recog.onstart=()=>{listening=true;setMic(true);};
-    recog.onresult=e=>{ var t=""; for(var i=0;i<e.results.length;i++){ t+=e.results[i][0].transcript+(e.results[i].isFinal?" ":""); } if(qi)qi.value=t.trim(); waitStop(); };
+    recog.onresult=e=>{ var t=""; for(var i=0;i<e.results.length;i++){ t+=e.results[i][0].transcript+(e.results[i].isFinal?" ":""); } if(qi)qi.value=fixHeard(t.trim()); waitStop(); };
     recog.onspeechstart=waitStop;
     recog.onerror=e=>{clearTimeout(silence);listening=false;setMic(false);
       if(e.error==="not-allowed"||e.error==="service-not-allowed")cap.textContent="Microphone blocked — please allow mic access for this page.";
