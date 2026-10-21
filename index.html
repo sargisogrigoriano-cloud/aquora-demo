@@ -144,6 +144,8 @@
   .qa input{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 12px;font-size:13px;color:var(--text);font-family:var(--sans)}
   .qa input:focus{outline:none;border-color:var(--aqua)}
   .qa button{background:var(--aqua);color:#042;border:none;border-radius:9px;padding:0 15px;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--sans)}
+  #qcancel{background:#fff;color:#e03b3b;border:1px solid #e03b3b}
+  #qcancel:disabled{opacity:.4;cursor:default}
 
   .overlay{position:fixed;inset:0;background:radial-gradient(90% 70% at 50% 35%,#0B2E33,#040E0D);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;z-index:60;text-align:center;padding:24px;transition:opacity .5s}
   .overlay.hide{opacity:0;pointer-events:none}
@@ -390,7 +392,7 @@
   </div>
   <div class="cap" id="cap">Press “Start the guided tour”. I’ll open each part of the system and explain what every button does — and show how you can do it by voice too.</div>
   <div class="railmini" id="rail"></div>
-  <div class="qa"><input id="qin" placeholder="Ask me about the system…" autocomplete="off"><button id="qsend">Ask</button></div>
+  <div class="qa"><input id="qin" placeholder="Ask me about the system…" autocomplete="off"><button id="qsend">Ask</button><button id="qcancel" disabled title="Cancel / stop the answer">✕ Cancel</button></div>
   <div class="ac">
     <button id="prev" title="Previous">⏮</button><button id="playpause" class="on" title="Play / Pause">▶ Play</button><button id="stop" title="Stop">⏹ Stop</button><button id="next" title="Next">⏭</button>
     <span class="sp"></span>
@@ -422,7 +424,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     playClip("presenter/filler_"+(Math.random()<0.5?0:1)+".mp4", function(){ if(g!==gen)return;
       cap.textContent="I've checked \u2014 my assistant will answer that.";
       playClip("presenter/handoff.mp4", function(){ if(g!==gen)return;
-        cap.textContent=k.a||""; stt.textContent="Speaking\u2026"; playSrc("voice/"+k.f,function(){}); }); });
+        cap.textContent=k.a||""; stt.textContent="Speaking\u2026"; playSrc("voice/"+k.f,function(){ var qc=document.getElementById("qcancel"); if(qc)qc.disabled=true; }); }); });
     return true; }
   const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
 
@@ -1129,6 +1131,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
   }
   function ask(q){
     if(!q)return;gen++;const g=gen;stopAudio();
+    var _qc=document.getElementById("qcancel"); if(_qc)_qc.disabled=false;
     const ql=q.toLowerCase();
     for(var ai=0;ai<ACTIONS.length;ai++){ if(new RegExp(ACTIONS[ai].re,"i").test(ql)){ runFlow(ACTIONS[ai].flow); return; } }
     if(answerFemale(q,g)) return;
@@ -1200,6 +1203,11 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
   const qin=document.getElementById("qin"),qsend=document.getElementById("qsend");
   function doAsk(){const v=qin.value.trim();if(v){qin.value="";ask(v);}}
   qsend.addEventListener("click",doAsk);
+  var qcancel=document.getElementById("qcancel");
+  if(qcancel)qcancel.addEventListener("click",function(){ gen++; stopAudio(); paused=false;
+    var qi=document.getElementById("qin"); if(qi){qi.value="";qi.focus();}
+    this.disabled=true; var pp=document.getElementById("playpause"); if(pp)pp.textContent="\u25b6 Play";
+    cap.textContent="Cancelled \u2014 ask your question again."; stt.textContent="Ready"; try{setSpeaking(false);}catch(e){} });
   qin.addEventListener("keydown",e=>{if(e.key==="Enter")doAsk();});
 
   $("#start").addEventListener("click",()=>{$("#overlay").classList.add("hide");setTimeout(()=>go(0),450);});
