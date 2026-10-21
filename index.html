@@ -306,6 +306,7 @@
   .overlay .go{background:linear-gradient(135deg,#12C2B0,#6D5BF0);border-radius:999px;box-shadow:0 16px 36px rgba(93,91,240,.4)}
   .tag{font-weight:600}
   .assistant{border-radius:22px;width:460px;max-width:calc(100vw - 28px)}
+  .avbanner{aspect-ratio:4/3;object-fit:cover;object-position:50% 48%}
   .top .lang{border-radius:999px}
   .flowmap{width:100%;max-width:760px;height:auto;display:block;border-radius:20px;box-shadow:0 18px 44px rgba(10,30,40,.28);margin-bottom:12px}
   /* per-page icon badge + per-page colour (hue shifts the animated visuals) */
@@ -1117,7 +1118,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     stopAudio();
     if(!src){if(after)after();return;}
     let done=false;const fin=()=>{if(done)return;done=true;setSpeaking(false);stopMouth();if(after)after();};
-    const a=new Audio(src);curA=a;a.preload="auto";
+    const a=new Audio(src);curA=a;a.preload="auto";a.muted=!voiceOn;
     setSpeaking(true);startMouth();
     a.onended=fin;a.onerror=fin;
     a.play().catch(()=>fin());
@@ -1169,7 +1170,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     activate("dashboard");showScreen("dashboard");paintRail();setSpeaking(false);
     cap.textContent="Tour stopped. Press ▶ Play to start from the beginning, or ask me anything.";});
   document.addEventListener("keydown",e=>{if(e.key==="ArrowRight")go(idx+1);if(e.key==="ArrowLeft")go(idx-1);});
-  $("#voice").addEventListener("click",function(){voiceOn=!voiceOn;this.classList.toggle("on",voiceOn);this.textContent=voiceOn?"🔊":"🔇";try{var _v=document.getElementById("avatarVid");if(_v)_v.muted=!voiceOn;}catch(e){}if(!voiceOn){try{if("speechSynthesis" in window)speechSynthesis.cancel();}catch(e){}}});
+  $("#voice").addEventListener("click",function(){voiceOn=!voiceOn;this.classList.toggle("on",voiceOn);this.textContent=voiceOn?"🔊":"🔇";try{var _v=document.getElementById("avatarVid");if(_v)_v.muted=!voiceOn;}catch(e){}try{if(curA)curA.muted=!voiceOn;}catch(e){}if(!voiceOn){try{if("speechSynthesis" in window)speechSynthesis.cancel();}catch(e){}}});
 
   // Voice input: SpeechRecognition where available (Chrome desktop/Android).
   // iPhone Safari has no web voice input — fall back to typing; the answer still plays by voice.
