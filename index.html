@@ -318,6 +318,37 @@
   .content::before{content:"";position:fixed;top:52px;left:234px;right:0;bottom:0;background:var(--pbg,none) center/cover no-repeat;opacity:.3;z-index:-1;pointer-events:none;transition:opacity .5s}
   .content::after{content:"";position:fixed;top:52px;left:234px;right:0;bottom:0;background:linear-gradient(180deg,rgba(245,246,251,.78),rgba(245,246,251,.48));z-index:-1;pointer-events:none}
   @media(max-width:820px){.content::before,.content::after{left:62px}}
+
+  /* ===== GLASS + AURORA (Stripe/Linear/Vercel vibe) ===== */
+  .content::before{opacity:.64}
+  .content::after{background:linear-gradient(180deg,rgba(245,246,251,.52),rgba(245,246,251,.20))}
+  /* frosted glass widgets — background photo shows through */
+  .card:not(.kpi){background:rgba(255,255,255,.60);backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25);border:1px solid rgba(255,255,255,.65)}
+  .filters{background:rgba(255,255,255,.60);backdrop-filter:blur(16px) saturate(1.25);-webkit-backdrop-filter:blur(16px) saturate(1.25)}
+  table{background:rgba(255,255,255,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+  thead th{background:rgba(250,251,254,.9)}
+  .fl .sel,.btn{background:rgba(255,255,255,.7)}
+  .psub{text-shadow:0 1px 10px rgba(245,246,251,.9)}
+  /* aurora animated background accents */
+  body::before{background:
+    radial-gradient(760px 520px at 88% -8%,rgba(109,91,240,.22),transparent 70%),
+    radial-gradient(620px 460px at -4% 106%,rgba(15,181,166,.20),transparent 70%),
+    radial-gradient(500px 420px at 60% 50%,rgba(59,130,246,.10),transparent 70%)}
+
+  /* ===== DARK GREEN FRAME + GREEN MENU GRADIENT ===== */
+  .side{background:linear-gradient(180deg,#06231A 0%,#0C3A29 48%,#17563C 100%);box-shadow:1px 0 0 rgba(0,0,0,.25)}
+  .side .brand .nm{color:#EAF6EF}
+  .side .brand .tg{color:#5FD3A8}
+  .side .grp{color:#4E8770}
+  .mi{color:#B9DACA}
+  .mi:hover{background:rgba(255,255,255,.09);color:#fff}
+  .mi.active{background:linear-gradient(135deg,#22C77F,#0E7A52);color:#fff;box-shadow:0 10px 22px rgba(16,120,80,.4)}
+  .menu::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18)}
+  .top{background:linear-gradient(90deg,#0C3A29,#0E4531);box-shadow:0 1px 0 rgba(0,0,0,.2)}
+  .top .crumb{color:#86C0A8}
+  .top .usr{color:#D6ECE1}
+  .top .usr .av{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22)}
+  .top .lang{color:#8BEFC6;border-color:rgba(95,211,168,.55)}
 </style>
 
 <svg width="0" height="0" style="position:absolute"><defs>
@@ -835,60 +866,60 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       +'<text x="690" y="216" fill="#7FA6A0" font-size="11" text-anchor="middle" font-family="sans-serif">Fields</text></svg>';}
   function agentNetSVG(){
     var labels=["Farmer","Association","Dispatcher","Ministry","Anomaly","Document AI"];
-    var cx=380,cy=160,rx=250,ry=116,spokes="",parts="",dots="",labs="";
+    var cx=400,cy=198,rx=252,ry=138,spokes="",parts="",dots="",labs="";
     for(var i=0;i<6;i++){var a=(-90+i*60)*Math.PI/180,x=cx+rx*Math.cos(a),y=cy+ry*Math.sin(a),id="sp"+i;
-      spokes+='<path id="'+id+'" d="M'+cx+' '+cy+' L'+x.toFixed(1)+' '+y.toFixed(1)+'" fill="none" stroke="#1C5560" stroke-width="2"/>';
-      spokes+='<path d="M'+cx+' '+cy+' L'+x.toFixed(1)+' '+y.toFixed(1)+'" fill="none" stroke="url(#cflow)" stroke-width="1.6" stroke-dasharray="2 10" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-12" dur="0.6s" repeatCount="indefinite"/></path>';
-      parts+='<circle r="2.4" fill="#8CF5E4" filter="url(#fglow)"><animateMotion dur="2.2s" begin="'+(i*0.3).toFixed(2)+'s" repeatCount="indefinite"><mpath href="#'+id+'"/></animateMotion></circle>';
-      dots+=pulseNode(x,y,"#2FE6C8",7);
-      labs+='<text x="'+x.toFixed(1)+'" y="'+(y>cy?y+22:y-13).toFixed(1)+'" fill="#CFE6E2" font-size="12" text-anchor="middle" font-family="sans-serif">'+labels[i]+'</text>';}
-    return '<svg class="flowmap" viewBox="0 0 760 320"><defs><radialGradient id="bgrad2" cx="50%" cy="50%" r="70%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
-      +'<rect width="760" height="320" rx="18" fill="url(#bgrad2)"/>'+spokes+parts+dots
-      +pulseNode(cx,cy,"#FFB15C",17)
-      +'<text x="'+cx+'" y="'+(cy+4)+'" fill="#06202A" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">Aquora AI</text>'+labs+'</svg>';}
+      spokes+='<path id="'+id+'" d="M'+cx+' '+cy+' L'+x.toFixed(1)+' '+y.toFixed(1)+'" fill="none" stroke="#1C5560" stroke-width="2.2"/>';
+      spokes+='<path d="M'+cx+' '+cy+' L'+x.toFixed(1)+' '+y.toFixed(1)+'" fill="none" stroke="url(#cflow)" stroke-width="2" stroke-dasharray="2 10" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-12" dur="0.6s" repeatCount="indefinite"/></path>';
+      parts+='<circle r="3" fill="#8CF5E4" filter="url(#fglow)"><animateMotion dur="2.2s" begin="'+(i*0.3).toFixed(2)+'s" repeatCount="indefinite"><mpath href="#'+id+'"/></animateMotion></circle>';
+      dots+=pulseNode(x,y,"#2FE6C8",11);
+      labs+='<text x="'+x.toFixed(1)+'" y="'+(y>cy?y+28:y-19).toFixed(1)+'" fill="#DDEFEC" font-size="14" font-weight="600" text-anchor="middle" font-family="sans-serif">'+labels[i]+'</text>';}
+    return '<svg class="flowmap" viewBox="0 0 800 396"><defs><radialGradient id="bgrad2" cx="50%" cy="50%" r="70%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
+      +'<rect width="800" height="396" rx="20" fill="url(#bgrad2)"/>'+spokes+parts+dots
+      +pulseNode(cx,cy,"#FFB15C",34)
+      +'<text x="'+cx+'" y="'+(cy+5)+'" fill="#06202A" font-size="13" font-weight="800" text-anchor="middle" font-family="sans-serif">Aquora AI</text>'+labs+'</svg>';}
   function dataFlowSVG(){
-    var srcs=[[120,74,"WaPOR v3"],[250,62,"Sentinel-2"],[380,68,"Prithvi·AlphaEarth"],[510,62,"ECMWF AIFS"],[640,74,"Omnilingual"]];
-    var px=380,py=262,spokes="",parts="",dots="",labs="";
+    var srcs=[[130,86,"WaPOR v3"],[280,74,"Sentinel-2"],[420,80,"Prithvi·AlphaEarth"],[560,74,"ECMWF AIFS"],[690,86,"Omnilingual"]];
+    var px=420,py=300,spokes="",parts="",dots="",labs="";
     srcs.forEach(function(s,i){var id="ds"+i;
-      spokes+='<path id="'+id+'" d="M'+s[0]+' '+s[1]+' L'+px+' '+py+'" fill="none" stroke="#1C5560" stroke-width="2"/>';
-      spokes+='<path d="M'+s[0]+' '+s[1]+' L'+px+' '+py+'" fill="none" stroke="url(#cflow)" stroke-width="1.5" stroke-dasharray="2 11" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-13" dur="0.6s" repeatCount="indefinite"/></path>';
+      spokes+='<path id="'+id+'" d="M'+s[0]+' '+s[1]+' L'+px+' '+py+'" fill="none" stroke="#1C5560" stroke-width="2.2"/>';
+      spokes+='<path d="M'+s[0]+' '+s[1]+' L'+px+' '+py+'" fill="none" stroke="url(#cflow)" stroke-width="2" stroke-dasharray="2 11" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-13" dur="0.6s" repeatCount="indefinite"/></path>';
       parts+=flowParticles(id,2,"#8CF5E4",2.2);
-      dots+=pulseNode(s[0],s[1],"#49A7FF",7);
-      labs+='<text x="'+s[0]+'" y="'+(s[1]-14)+'" fill="#CFE6E2" font-size="11" text-anchor="middle" font-family="sans-serif">'+s[2]+'</text>';});
-    var orbit='<path id="orbit" d="M40 34 Q380 0 720 34" fill="none" stroke="#0E3B45" stroke-width="1" opacity=".5"/>'
-      +'<g filter="url(#fglow)"><rect x="-7" y="-3" width="14" height="6" rx="1.5" fill="#FFB15C"/><animateMotion dur="7s" repeatCount="indefinite" rotate="auto"><mpath href="#orbit"/></animateMotion></g>';
-    return '<svg class="flowmap" viewBox="0 0 760 320"><defs><radialGradient id="bgrad3" cx="50%" cy="18%" r="95%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
-      +'<rect width="760" height="320" rx="18" fill="url(#bgrad3)"/>'+orbit+spokes+parts+dots
-      +pulseNode(px,py,"#2FE6C8",18)
-      +'<text x="'+px+'" y="'+(py+5)+'" fill="#06202A" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">Aquora</text>'+labs+'</svg>';}
+      dots+=pulseNode(s[0],s[1],"#49A7FF",10);
+      labs+='<text x="'+s[0]+'" y="'+(s[1]-18)+'" fill="#DDEFEC" font-size="13.5" font-weight="600" text-anchor="middle" font-family="sans-serif">'+s[2]+'</text>';});
+    var orbit='<path id="orbit" d="M40 40 Q400 2 760 40" fill="none" stroke="#0E3B45" stroke-width="1" opacity=".5"/>'
+      +'<g filter="url(#fglow)"><rect x="-8" y="-3.5" width="16" height="7" rx="2" fill="#FFB15C"/><animateMotion dur="7s" repeatCount="indefinite" rotate="auto"><mpath href="#orbit"/></animateMotion></g>';
+    return '<svg class="flowmap" viewBox="0 0 800 380"><defs><radialGradient id="bgrad3" cx="50%" cy="18%" r="95%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
+      +'<rect width="800" height="380" rx="20" fill="url(#bgrad3)"/>'+orbit+spokes+parts+dots
+      +pulseNode(px,py,"#2FE6C8",30)
+      +'<text x="'+px+'" y="'+(py+5)+'" fill="#06202A" font-size="13" font-weight="800" text-anchor="middle" font-family="sans-serif">Aquora</text>'+labs+'</svg>';}
   function globeNetSVG(){
-    var hub=[380,162];
-    var cities=[[110,88,"EU"],[250,58,""],[520,66,"Gulf"],[662,104,""],[150,248,"Africa"],[330,272,""],[560,252,"Asia"],[690,214,""]];
+    var hub=[400,196];
+    var cities=[[120,104,"EU"],[280,74,""],[540,82,"Gulf"],[710,128,""],[160,300,"Africa"],[360,330,""],[620,300,"Asia"],[730,250,""]];
     var arcs="",parts="",dots="",labs="",bg="";
-    cities.forEach(function(c,i){var id="gc"+i,cx=(hub[0]+c[0])/2,cy=(hub[1]+c[1])/2-44;
+    cities.forEach(function(c,i){var id="gc"+i,cx=(hub[0]+c[0])/2,cy=(hub[1]+c[1])/2-48;
       var d="M"+hub[0]+" "+hub[1]+" Q"+cx.toFixed(0)+" "+cy.toFixed(0)+" "+c[0]+" "+c[1];
-      arcs+='<path id="'+id+'" d="'+d+'" fill="none" stroke="#164C57" stroke-width="1.6"/>';
-      arcs+='<path d="'+d+'" fill="none" stroke="url(#cflow)" stroke-width="1.4" stroke-dasharray="2 12" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-14" dur="0.7s" repeatCount="indefinite"/></path>';
-      parts+='<circle r="2.3" fill="#8CF5E4" filter="url(#fglow)"><animateMotion dur="'+(2.4+i*0.2).toFixed(1)+'s" begin="'+(i*0.25).toFixed(2)+'s" repeatCount="indefinite"><mpath href="#'+id+'"/></animateMotion></circle>';
-      dots+=pulseNode(c[0],c[1],"#2FE6C8",6);
-      if(c[2])labs+='<text x="'+c[0]+'" y="'+(c[1]>hub[1]?c[1]+20:c[1]-12)+'" fill="#CFE6E2" font-size="11" text-anchor="middle" font-family="sans-serif">'+c[2]+'</text>';});
-    for(var gx=30;gx<760;gx+=40){for(var gy=30;gy<320;gy+=40){bg+='<circle cx="'+gx+'" cy="'+gy+'" r="1" fill="#103B45"/>';}}
-    return '<svg class="flowmap" viewBox="0 0 760 320"><defs><radialGradient id="bgrad4" cx="50%" cy="45%" r="78%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
-      +'<rect width="760" height="320" rx="18" fill="url(#bgrad4)"/>'+bg+arcs+parts+dots
-      +pulseNode(hub[0],hub[1],"#FFB15C",16)
-      +'<text x="'+hub[0]+'" y="'+(hub[1]+4)+'" fill="#06202A" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">Aquora</text>'+labs+'</svg>';}
+      arcs+='<path id="'+id+'" d="'+d+'" fill="none" stroke="#164C57" stroke-width="1.8"/>';
+      arcs+='<path d="'+d+'" fill="none" stroke="url(#cflow)" stroke-width="1.7" stroke-dasharray="2 12" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-14" dur="0.7s" repeatCount="indefinite"/></path>';
+      parts+='<circle r="3" fill="#8CF5E4" filter="url(#fglow)"><animateMotion dur="'+(2.4+i*0.2).toFixed(1)+'s" begin="'+(i*0.25).toFixed(2)+'s" repeatCount="indefinite"><mpath href="#'+id+'"/></animateMotion></circle>';
+      dots+=pulseNode(c[0],c[1],"#2FE6C8",9);
+      if(c[2])labs+='<text x="'+c[0]+'" y="'+(c[1]>hub[1]?c[1]+26:c[1]-15)+'" fill="#DDEFEC" font-size="14" font-weight="600" text-anchor="middle" font-family="sans-serif">'+c[2]+'</text>';});
+    for(var gx=30;gx<800;gx+=42){for(var gy=30;gy<380;gy+=42){bg+='<circle cx="'+gx+'" cy="'+gy+'" r="1.1" fill="#103B45"/>';}}
+    return '<svg class="flowmap" viewBox="0 0 800 380"><defs><radialGradient id="bgrad4" cx="50%" cy="45%" r="78%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
+      +'<rect width="800" height="380" rx="20" fill="url(#bgrad4)"/>'+bg+arcs+parts+dots
+      +pulseNode(hub[0],hub[1],"#FFB15C",30)
+      +'<text x="'+hub[0]+'" y="'+(hub[1]+5)+'" fill="#06202A" font-size="13" font-weight="800" text-anchor="middle" font-family="sans-serif">Aquora</text>'+labs+'</svg>';}
   function radialNetSVG(labels,center){
-    var cx=380,cy=160,rx=252,ry=116,n=labels.length,spokes="",parts="",dots="",labs="";
+    var cx=400,cy=198,rx=250,ry=138,n=labels.length,spokes="",parts="",dots="",labs="";
     for(var i=0;i<n;i++){var a=(-90+i*(360/n))*Math.PI/180,x=cx+rx*Math.cos(a),y=cy+ry*Math.sin(a),id="rn"+i;
-      spokes+='<path id="'+id+'" d="M'+cx+' '+cy+' L'+x.toFixed(1)+' '+y.toFixed(1)+'" fill="none" stroke="#1C5560" stroke-width="2"/>';
-      spokes+='<path d="M'+cx+' '+cy+' L'+x.toFixed(1)+' '+y.toFixed(1)+'" fill="none" stroke="url(#cflow)" stroke-width="1.6" stroke-dasharray="2 10" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-12" dur="0.6s" repeatCount="indefinite"/></path>';
-      parts+='<circle r="2.4" fill="#8CF5E4" filter="url(#fglow)"><animateMotion dur="2.2s" begin="'+(i*0.3).toFixed(2)+'s" repeatCount="indefinite"><mpath href="#'+id+'"/></animateMotion></circle>';
-      dots+=pulseNode(x,y,"#2FE6C8",7);
-      labs+='<text x="'+x.toFixed(1)+'" y="'+(y>cy?y+22:y-13).toFixed(1)+'" fill="#CFE6E2" font-size="12" text-anchor="middle" font-family="sans-serif">'+labels[i]+'</text>';}
-    return '<svg class="flowmap" viewBox="0 0 760 320"><defs><radialGradient id="bgr_rn" cx="50%" cy="50%" r="70%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
-      +'<rect width="760" height="320" rx="18" fill="url(#bgr_rn)"/>'+spokes+parts+dots
-      +pulseNode(cx,cy,"#FFB15C",17)
-      +'<text x="'+cx+'" y="'+(cy+4)+'" fill="#06202A" font-size="11.5" font-weight="700" text-anchor="middle" font-family="sans-serif">'+center+'</text>'+labs+'</svg>';}
+      spokes+='<path id="'+id+'" d="M'+cx+' '+cy+' L'+x.toFixed(1)+' '+y.toFixed(1)+'" fill="none" stroke="#1C5560" stroke-width="2.2"/>';
+      spokes+='<path d="M'+cx+' '+cy+' L'+x.toFixed(1)+' '+y.toFixed(1)+'" fill="none" stroke="url(#cflow)" stroke-width="2" stroke-dasharray="2 10" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-12" dur="0.6s" repeatCount="indefinite"/></path>';
+      parts+='<circle r="3" fill="#8CF5E4" filter="url(#fglow)"><animateMotion dur="2.2s" begin="'+(i*0.3).toFixed(2)+'s" repeatCount="indefinite"><mpath href="#'+id+'"/></animateMotion></circle>';
+      dots+=pulseNode(x,y,"#2FE6C8",11);
+      labs+='<text x="'+x.toFixed(1)+'" y="'+(y>cy?y+28:y-19).toFixed(1)+'" fill="#DDEFEC" font-size="14" font-weight="600" text-anchor="middle" font-family="sans-serif">'+labels[i]+'</text>';}
+    return '<svg class="flowmap" viewBox="0 0 800 396"><defs><radialGradient id="bgr_rn" cx="50%" cy="50%" r="70%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
+      +'<rect width="800" height="396" rx="20" fill="url(#bgr_rn)"/>'+spokes+parts+dots
+      +pulseNode(cx,cy,"#FFB15C",34)
+      +'<text x="'+cx+'" y="'+(cy+5)+'" fill="#06202A" font-size="13" font-weight="800" text-anchor="middle" font-family="sans-serif">'+center+'</text>'+labs+'</svg>';}
   function pipelineSVG(stages){
     var W=760,n=stages.length,pad=74,step=(W-pad*2)/(n-1),y=72,line="M"+pad+" "+y+" H"+(W-pad),nodes="",labs="";
     for(var i=0;i<n;i++){var x=pad+i*step;nodes+=pulseNode(x,y,"#2FE6C8",9);
