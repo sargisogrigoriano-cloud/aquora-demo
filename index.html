@@ -382,7 +382,7 @@
 </div>
 
 <div class="assistant" id="assistant">
-  <video id="avatarVid" class="avbanner" playsinline webkit-playsinline preload="auto" poster="presenter/poster.jpg"></video>
+  <video id="avatarVid" class="avbanner" playsinline webkit-playsinline preload="auto" poster="presenter/poster_nb.jpg"></video>
   <div class="hd">
     <div class="who">Your guide<small>Aquora assistant</small></div>
     <div class="st"><span class="d"></span><span id="stt">Ready</span></div>
@@ -460,7 +460,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     stopAudio(); v.loop=true; v.muted=!voiceOn; v.onended=null; v.onerror=null;
     try{ v.src="presenter/filler_"+(Math.random()<0.5?0:1)+".mp4"; v.currentTime=0; }catch(e){}
     setSpeaking(true); var p=v.play(); if(p&&p.catch)p.catch(function(){}); }
-  function screenClip(scr){ for(var j=0;j<INTENTS.length;j++){ if(INTENTS[j].screen===scr) return "presenter/ans_"+j+".mp4"; } return "presenter/ans_13.mp4"; }
+  function screenClip(scr){ for(var j=0;j<INTENTS.length;j++){ if(INTENTS[j].screen===scr) return ""; } return ""; }
   function deliver(d,g){ if(g!==gen)return;
     if(d&&d.fallback){ handoffThenSpeak(d,g); return; }
     if(d&&d.video_url){ if(d.screen){activate(d.screen);showScreen(d.screen);} cap.textContent=d.answer||"";
@@ -1013,8 +1013,8 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
 
   /* ---------- interactive workflows (request -> receive -> pay) ---------- */
   const FLOW={req:false,del:false,paid:false};
-  function screenClipLocal(scr){ if(typeof INTENTS!=="undefined"){ for(var j=0;j<INTENTS.length;j++){ if(INTENTS[j].screen===scr) return "presenter/ans_"+j+".mp4"; } } return "presenter/ans_13.mp4"; }
-  function say2(text,scr){ cap.textContent=text; try{ if(typeof playClip==="function"){ playClip(screenClipLocal(scr),function(){}); } }catch(e){} }
+  function screenClipLocal(scr){ if(typeof INTENTS!=="undefined"){ for(var j=0;j<INTENTS.length;j++){ if(INTENTS[j].screen===scr) return ""; } } return ""; }
+  function say2(text,scr){ cap.textContent=text; try{ stt.textContent="Speaking\u2026"; speakTTS(text); }catch(e){} }
   function runFlow(step){
     if(step==="req"){ FLOW.req=true; activate("requests"); showScreen("requests"); say2("A water request is created — and it instantly becomes a ten-day irrigation plan.","requests"); }
     else if(step==="goirr"){ activate("irrigation"); showScreen("irrigation"); }
@@ -1081,6 +1081,20 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     {menu:"payments",say:"Payments. Users pay from their phone through the bank, and the system reconciles every payment on its own — tracking debt and collection in real time."},
     {menu:"reports",focus:'[data-action]',say:"Reports. Every view — requests, water balance, plan versus fact, collection, losses — filtered and exported to Excel or PDF in one click. Full transparency for the state."},
     {menu:"dashboard",say:"That's Aquora: one system for a country's irrigation and melioration — operated by hand, or simply by talking. And you can ask me anything, right here. Accessible to anyone who can speak, transparent for the government, and ready for your country."},
+    {menu:"losses",say:"Loss and theft detection. We compare the water balance of each canal with satellite signs of irrigation on plots that have no allocation, and give inspectors a ranked list of the most suspicious cases to check."},
+    {menu:"inspections",say:"Field inspections. An offline app for inspectors and repair crews, with tasks, photos, violation acts and electronic signatures, that syncs automatically when the connection returns."},
+    {menu:"maintenance",say:"Maintenance. Planned and emergency work on canals and pumps: spare parts, costs and cleaning schedules, so the whole network stays in good condition."},
+    {menu:"advice",say:"Farmer advice. Personal guidance by WhatsApp or voice. For example: irrigate plot three on Thursday with nine hundred cubic metres, and skip the next turn because rain is expected on Saturday."},
+    {menu:"climate",say:"Climate and donor reporting. We measure and verify the water and energy saved, and produce reports for donors and climate funds, with potential water or carbon credits."},
+    {menu:"finance",say:"Financial services. With the farmer's explicit consent, water-use history is shared with banks and insurers for credit scoring and drought insurance. It's a new source of revenue."},
+    {menu:"reuse",say:"Reuse and groundwater. For Gulf countries we manage well licences, well meters, and the distribution of treated and reclaimed water to farms and landscaping."},
+    {menu:"basin",say:"The transboundary basin view. A shared water balance for countries in one river basin, Central Asia, the Nile, or the Gulf aquifers, so parties sharing the same river can trust the numbers."},
+    {menu:"ai",say:"The AI layer. Six agents do real work: a farmer assistant, an association co-pilot, a dispatcher co-pilot, a ministry analyst, an anomaly agent, and a document AI. Any physical action is confirmed by a human, and every decision is logged."},
+    {menu:"data",say:"Data and satellites. Crop water use from FAO WaPOR, imagery from Sentinel-2 and Landsat, crop mapping from Prithvi and AlphaEarth, weather from ECMWF, and speech in over sixteen hundred languages."},
+    {menu:"platform",say:"Platform features. Country packs configure language, tariffs, payments and law without code, plus an open API, role-based permissions, an offline mobile app, a full audit log, accessibility, and strong security."},
+    {menu:"compliance",say:"Compliance. Aquora is built for the EU rules: NIS2 supply-chain clauses, the Cyber Resilience Act, the AI Act, the Data Act right to access sensor data, and GDPR with consent for voice."},
+    {menu:"experts",say:"Expert notes. Guidance from our legal, finance, market and language experts: on manual valve control, quota-trading law, fast revenue from billing and losses, and building translation in from day one."},
+    {menu:"roadmap",say:"The roadmap. From a real core and loss detection in the first six months, to the AI layer and satellite data at twelve months, and an open marketplace and basin view at twenty four. That's Aquora, ready for your country."},
   ];
 
   /* rail */
