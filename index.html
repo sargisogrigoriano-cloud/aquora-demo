@@ -412,10 +412,16 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     for(var i=0;i<FQ_KEYS.length;i++){var set=FQ_KEYS[i].set,s=0;for(var j=0;j<qw.length;j++){if(set.indexOf(qw[j])>=0)s++;}
       var sc=s/qw.length;if(sc>bs){bs=sc;best=FQ_KEYS[i].k;}}
     return bs>=0.34?best:null;}
-  function answerFemale(q,g){ if(g!==undefined&&g!==gen)return;
+  function answerFemale(q,g){ if(g===undefined)g=gen; if(g!==gen)return false;
     var k=FEMALE_QA[normQ(q)]||FEMALE_QA[fuzzyFQ(q)];
-    if(k){ if(k.screen){activate(k.screen);showScreen(k.screen);} cap.textContent=k.a||""; stt.textContent="Speaking…"; playSrc("voice/"+k.f,function(){}); return true; }
-    return false; }
+    if(!k) return false;
+    if(k.screen){activate(k.screen);showScreen(k.screen);}
+    cap.textContent="One moment — let me check that…"; stt.textContent="Checking…";
+    playClip("presenter/filler_"+(Math.random()<0.5?0:1)+".mp4", function(){ if(g!==gen)return;
+      cap.textContent="I've checked — my assistant will answer that.";
+      playClip("presenter/handoff.mp4", function(){ if(g!==gen)return;
+        cap.textContent=k.a||""; stt.textContent="Speaking…"; playSrc("voice/"+k.f,function(){}); }); });
+    return true; }
   const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
 
   (function(){ try{ var b=document.createElement("div"); b.textContent="build 12";
