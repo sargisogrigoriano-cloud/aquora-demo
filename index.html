@@ -429,6 +429,8 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     speechSynthesis.speak(u); }catch(e){} }
 
   var ACTIONS=[
+   {re:"закро.{0,3}.{0,6}(вод|кран)|перекро.{0,3}.{0,6}вод|отключ.{0,3}.{0,6}(вод|кран)|close .{0,12}(water|tap|valve)|shut .{0,8}(off )?.{0,6}(water|tap|valve)|turn off .{0,8}water", flow:"homeoff"},
+   {re:"откро.{0,3}.{0,6}(вод|кран)|включ.{0,3}.{0,6}(вод|кран)|open .{0,12}(water|tap|valve)|turn on .{0,8}water", flow:"homeon"},
    {re:"make .*request|new request|request water|create .*request|оформ.{0,4} заявк|подать заявк|заказать воду|хочу .{0,6}воду|нужна вода|созда.{0,4} заявк|заявк. на вод", flow:"req"},
    {re:"receive water|get water|sign .{0,6}act|confirm .*deliver|подтверд.{0,5} подач|подач.{0,3} вод|получ.{0,5} воду|подписать акт|акт прием", flow:"del"},
    {re:"\bpay\b|pay .{0,6}bill|pay for water|оплати|оплатить|заплат|оплата воды", flow:"pay"}
@@ -599,7 +601,7 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
         <div class="li" style="border:none;padding:11px 14px;background:var(--panel2);border-radius:12px"><span>⚠️ Auto-shutoff on leak</span><span class="tag crit">+ alert</span></div>
         <div class="li" style="border:none;padding:11px 14px;background:var(--panel2);border-radius:12px"><span>💳 Pay drinking water</span><span class="tag ok">by phone</span></div>
       </div>
-      <p class="psub" style="margin:12px 0 0">A household abonent controls their own drinking-water supply from the phone — and the system meters it live.</p></div>
+      <p class="psub" style="margin:12px 0 0">A household abonent controls their own drinking-water supply from the phone — and the system meters it live. <b style="color:var(--aqua-dim)">Try the assistant →</b> say or type "<i>close the water at home</i>".</p></div>
     <p class="psub" style="margin-top:14px">Flow, levels and soil moisture stream in every second — enabling leak detection and automatic valve control.</p>`;
 
   S.melioration=()=>`<h1 class="ptitle">Melioration</h1><p class="psub">Protecting the land itself — drainage, salinity and groundwater.</p>
@@ -1006,6 +1008,18 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     else if(step==="del"){ FLOW.req=true; FLOW.del=true; activate("irrigation"); showScreen("irrigation"); say2("The water is delivered and the acceptance act is signed. The charge is built from the real metered volume.","irrigation"); }
     else if(step==="gopay"){ activate("payments"); showScreen("payments"); }
     else if(step==="pay"){ FLOW.req=true; FLOW.del=true; FLOW.paid=true; activate("payments"); showScreen("payments"); say2("Paid from the phone through the bank. The system reconciles it and clears the debt automatically.","payments"); }
+    else if(step==="homeoff"||step==="homeon"){ var on=(step==="homeon"); activate("sensors"); showScreen("sensors");
+      cap.textContent=on?"Opening your home water now — the smart valve is open again.":"Closing your home water now. I've shut the valve at your home and notified you.";
+      setTimeout(function(){ demoHomeValve(on); },280); }
+  }
+  function demoHomeValve(on){
+    var c=document.createElement("div");c.className="card";c.style.cssText="max-width:560px;margin-top:16px";
+    c.innerHTML='<div class="stripe '+(on?"good":"crit")+'"></div><div class="lbl">🏠 Home tap — '+(on?"OPENED":"CLOSED")+' by voice</div>'
+      +'<div style="font-size:16px;margin:8px 0 8px">🎙️ "'+(on?"open the water at home":"close the water at home")+'"</div>'
+      +'<div class="li" style="padding:8px 0;border:none"><span>Smart valve '+(on?"opened":"closed")+'</span><span class="tag '+(on?"ok":"crit")+'">'+(on?"water flowing":"water stopped")+'</span></div>'
+      +'<div class="li" style="padding:8px 0;border:none"><span>Confirmation sent to your phone</span><span class="tag ok">done</span></div>';
+    content.appendChild(c);
+    try{ c.scrollIntoView({behavior:"smooth",block:"center"}); }catch(e){}
   }
   content.addEventListener("click",function(e){ var b=e.target.closest&&e.target.closest("[data-flow]"); if(b){ runFlow(b.getAttribute("data-flow")); } });
 
