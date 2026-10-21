@@ -224,6 +224,40 @@
   .donut .darc{stroke-linecap:round}
   @keyframes donutin{from{opacity:0;transform:rotate(-40deg) scale(.82)}to{opacity:1;transform:none}}
 
+  /* ===== PREMIUM / MAX VISUALS ===== */
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;background:
+    radial-gradient(640px 420px at 88% -6%,rgba(15,181,166,.18),transparent 70%),
+    radial-gradient(540px 380px at 2% 104%,rgba(59,130,246,.14),transparent 70%),
+    radial-gradient(420px 320px at 50% 50%,rgba(16,185,129,.06),transparent 70%);
+    animation:floatbg 15s ease-in-out infinite alternate}
+  @keyframes floatbg{from{transform:translateY(0) scale(1)}to{transform:translateY(26px) scale(1.04)}}
+  .shell{position:relative;z-index:1}
+  .ptitle{background:linear-gradient(90deg,#0B3A40 10%,#0FB5A6);-webkit-background-clip:text;background-clip:text;color:transparent;display:inline-block}
+  .ptitle,.psub{animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
+  .content > *{animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
+  .content > .kpis{animation:none}
+  @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+  .kpi{background:linear-gradient(180deg,#fff,#FAFEFE)}
+  .kpi::after{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(135deg,#12C2B0,#0C9488);opacity:.95;z-index:1}
+  .kpi.blue::after{background:linear-gradient(135deg,#60A5FA,#3B82F6)}
+  .kpi.good::after{background:linear-gradient(135deg,#34D399,#10B981)}
+  .kpi.amber::after{background:linear-gradient(135deg,#FBBF24,#E78B09)}
+  .kpi.crit::after{background:linear-gradient(135deg,#FB7185,#F43F5E)}
+  .kpi .big{background:linear-gradient(90deg,#0B3A40,#143A42);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+  .btn.primary{background:linear-gradient(135deg,#12C2B0,#0C9488);border:none;box-shadow:0 7px 20px rgba(15,181,166,.34)}
+  .btn.primary:hover{filter:brightness(1.06);transform:translateY(-1px)}
+  .overlay .go{background:linear-gradient(135deg,#12C2B0,#0C9488);box-shadow:0 14px 34px rgba(15,181,166,.42)}
+  .mi.active{box-shadow:inset 3px 0 0 var(--aqua),0 3px 16px rgba(15,181,166,.12)}
+  .side .brand svg{filter:drop-shadow(0 4px 10px rgba(15,181,166,.42))}
+
+  .card{position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;inset:0;background:linear-gradient(120deg,transparent 32%,rgba(255,255,255,.55) 50%,transparent 68%);transform:translateX(-130%);pointer-events:none;opacity:0}
+  .card:hover::before{opacity:1;transform:translateX(130%);transition:transform .85s ease}
+  .ringwrap{box-shadow:0 10px 26px rgba(15,181,166,.18)}
+  .achart .aline.l2{stroke:var(--blue);animation-delay:.45s}
+
   /* keep content clear of the fixed assistant panel on wide screens */
   @media(min-width:1024px){.content{padding-right:430px}}
   @media(min-width:1600px){.content{padding-right:40px;max-width:1120px}}
@@ -453,11 +487,13 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       ["#1041-2","Wheat","4,200 m³/ha","8","8,400 m³"],
       ["#1044-1","Rice","12,500 m³/ha","20","12,500 m³"],
     ])}
-    <div style="margin-top:16px;max-width:560px"><div class="psub" style="margin-bottom:6px">Watering across the season (m³/decade)</div><div class="bars" id="planbars"></div></div>`;
+    <div style="margin-top:16px;max-width:560px"><div class="psub" style="margin-bottom:6px">Watering across the season (m³/decade)</div><div class="bars" id="planbars"></div></div>
+    <div class="card" style="margin-top:18px"><div class="lbl">Crop water demand vs supply (season)</div><div id="irrchart" style="margin-top:12px"></div></div>`;
 
   S.limits=()=>`<h1 class="ptitle">Water limits</h1><p class="psub">Seasonal allocation tracked against demand.</p>
     <div class="kpis" style="grid-template-columns:repeat(3,1fr);max-width:620px">
       ${kpi("Allocated","5.00","M m³","aqua")}${kpi("Requested","3.21","M m³","blue")}${kpi("Remaining","1.79","M m³","good")}</div>
+    <div class="card" style="margin-bottom:16px;max-width:620px"><div class="lbl">Allocation used vs remaining</div><div id="limdonut" style="margin-top:12px"></div></div>
     ${table(["Region","Allocated","Used","Remaining"],[
       ["Zone A","2.0 M m³","1.3 M m³","0.7 M m³"],["Zone B","1.5 M m³","1.1 M m³","0.4 M m³"],["Zone C","1.5 M m³","0.8 M m³","0.7 M m³"],
     ])}`;
@@ -469,6 +505,7 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       ${gauge("Irrigation","124","m³ / mo","var(--good)",40)}</div>
     <div class="kpis" style="grid-template-columns:repeat(3,1fr);max-width:660px">
       ${kpi("Soil moisture","62","%","good")}${kpi("Canal 1 flow","410","m³/s","blue")}${kpi("Canal water level","3.4","m","aqua")}</div>
+    <div class="card" style="margin-top:16px"><div class="lbl">Canal 1 flow — last 12 hours (m³/s)</div><div id="senschart" style="margin-top:12px"></div></div>
     <p class="psub" style="margin-top:14px">Flow, levels and soil moisture stream in every second — enabling leak detection and automatic valve control.</p>`;
 
   S.melioration=()=>`<h1 class="ptitle">Melioration</h1><p class="psub">Protecting the land itself — drainage, salinity and groundwater.</p>
@@ -488,10 +525,12 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       ["Canal 2","300 m³/s","250 m³/s",tg("warn","below")],
       ["Canal 3","180 m³/s","182 m³/s",tg("ok","on plan")],
     ])}
-    <div style="margin-top:16px;max-width:520px"><div class="psub" style="margin-bottom:6px">Delivered vs planned, last 6 days</div><div class="bars" id="dispbars"></div></div>`;
+    <div style="margin-top:16px;max-width:520px"><div class="psub" style="margin-bottom:6px">Delivered vs planned, last 6 days</div><div class="bars" id="dispbars"></div></div>
+    <div class="card" style="margin-top:18px"><div class="lbl">Flow per canal — planned vs actual (m³/s)</div><div id="dispdual" style="margin-top:12px"></div></div>`;
 
   S.billing=()=>`<h1 class="ptitle">Billing</h1><p class="psub">Charges built from the real metered volume.</p>
     ${filters(["Year","Month","Status"],"+ Charge",true)}
+    <div class="card" style="margin-bottom:16px;max-width:620px"><div class="lbl">Collection status</div><div id="billdonut" style="margin-top:12px"></div></div>
     ${table(["#","Water user","Volume","Tariff","Charged","Debt","Status"],
       (FLOW.del?[["1596","Water User 1041","4,120 m³","0.05 $/m³","206.00",(FLOW.paid?"0.00":"206.00"),FLOW.paid?tg("ok","paid"):tg("crit","unpaid")]]:[]).concat([
         ["1595","Water User 1041","1,983 m³","0.05 $/m³","99.15","89.15",tg("warn","partial")],
@@ -528,6 +567,9 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       ["3","Main Canal 1 · offtake 3","−17%","Flow exceeds metered delivery",tg("warn","64%"),tg("warn","review")],
       ["4","Canal 3 · plot #1890","−11%","Minor mismatch",tg("aqua","52%"),tg("ok","watch")],
     ])}
+    <div class="card" style="margin-top:16px;max-width:560px"><div class="lbl">Water-balance gap by canal (%)</div>
+      <div class="bars autobars" data-vals="38,29,17,11,14,8" data-pct="1" data-scale="2" style="margin-top:22px"></div>
+      <div class="legend" style="margin-top:10px"><span>C2</span><span>C5</span><span>C1</span><span>C3</span><span>C4</span><span>C6</span></div></div>
     <p class="psub" style="margin-top:14px">Inspectors get the ranked list on the field app; confirmed cases become violation acts and recovered volume.</p>`;
 
   S.inspections=()=>`<h1 class="ptitle">Field inspections & works</h1><p class="psub">Offline app for inspectors and repair crews — tasks, photos, violation acts, e-signature.</p>
@@ -568,6 +610,8 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       ["Irrigation results","World Bank indicators","2026",tg("ok","verified")],
       ["Carbon / water credits","Gold Standard (draft)","2026",tg("warn","in review")],
     ])}
+    <div class="card" style="margin-top:16px;max-width:560px"><div class="lbl">Water saved by month (k m³)</div>
+      <div class="bars autobars" data-vals="55,62,70,78,85,92,88,80,72,65,58,60" style="margin-top:22px"></div></div>
     <p class="psub" style="margin-top:14px">Savings are measured and verified (MRV), so they can back donor reports and potential water or carbon credits.</p>`;
 
   S.finance=()=>`<h1 class="ptitle">Financial services</h1><p class="psub">With the farmer's explicit consent, water-use history supports credit scoring and drought insurance — a new revenue stream.</p>
@@ -688,6 +732,11 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       arcs+='<circle class="darc" r="54" cx="80" cy="80" fill="none" stroke="'+s.color+'" stroke-width="22" stroke-dasharray="'+len.toFixed(1)+' '+(C-len).toFixed(1)+'" stroke-dashoffset="'+(-off).toFixed(1)+'" transform="rotate(-90 80 80)"/>';off+=len;
       leg+='<div class="li" style="padding:7px 0;border:none"><span><i style="display:inline-block;width:11px;height:11px;border-radius:3px;background:'+s.color+';margin-right:9px;vertical-align:-1px"></i>'+s.label+'</span><span class="num">'+Math.round(frac*100)+'%</span></div>';});
     return '<div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><svg width="160" height="160" viewBox="0 0 160 160" class="donut">'+arcs+'</svg><div style="flex:1;min-width:150px">'+leg+'</div></div>';}
+  function dualLine(a,b,la,lb){var W=620,H=170,pad=12,all=a.concat(b),max=Math.max.apply(null,all)*1.15,n=a.length,step=(W-pad*2)/(n-1);
+    function path(v){return v.map(function(x,i){return (i?"L":"M")+(pad+i*step).toFixed(1)+" "+(H-pad-(x/max)*(H-pad*2)).toFixed(1);}).join(" ");}
+    var grid="";for(var g=1;g<4;g++){var y=(pad+g*(H-pad*2)/4).toFixed(1);grid+='<line class="grid" x1="'+pad+'" y1="'+y+'" x2="'+(W-pad)+'" y2="'+y+'"/>';}
+    return '<svg class="achart" viewBox="0 0 '+W+' '+H+'">'+grid+'<path class="aline l2" pathLength="1" d="'+path(b)+'"/><path class="aline" pathLength="1" d="'+path(a)+'"/></svg>'
+      +'<div class="legend" style="margin-top:10px"><span><i style="background:var(--aqua)"></i>'+(la||"Planned")+'</span><span><i style="background:var(--blue)"></i>'+(lb||"Actual")+'</span></div>';}
   function filters(labels,action,primaryAmber){return `<div class="filters">${labels.map(l=>`<div class="fl"><label>${l}</label><div class="sel">All ${l.toLowerCase()} ▾</div></div>`).join("")}<div style="flex:1"></div><div style="display:flex;align-items:flex-end"><button class="btn ${primaryAmber?'':'primary'}" data-action style="${primaryAmber?'background:var(--amber);color:#2a1800;border-color:var(--amber);font-weight:600':''}">${action}</button></div></div>`;}
   function table(cols,rows){return `<table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;}
   function tg(k,t){return `<span class="tag ${k}">${t}</span>`;}
@@ -709,7 +758,20 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     const dc=el.querySelector("#dashchart");
     if(dc){dc.innerHTML=areaChart([1.20,1.42,1.31,1.60,1.48,1.72,1.66,1.81,1.74,1.90,1.83,2.01,1.95,1.84]);}
     const dd=el.querySelector("#dashdonut");
-    if(dd){dd.innerHTML=donut([{v:72,color:"#10B981",label:"Delivered to fields"},{v:14,color:"#E78B09",label:"Losses (NRW)"},{v:14,color:"#3B82F6",label:"In canals / buffer"}]);}}
+    if(dd){dd.innerHTML=donut([{v:72,color:"#10B981",label:"Delivered to fields"},{v:14,color:"#E78B09",label:"Losses (NRW)"},{v:14,color:"#3B82F6",label:"In canals / buffer"}]);}
+    el.querySelectorAll(".autobars").forEach(function(bc){var vals=(bc.dataset.vals||"").split(",").map(Number);
+      bc.innerHTML=vals.map(function(v){return '<div class="b"><span>'+v+(bc.dataset.pct?"%":"")+'</span></div>';}).join("");
+      requestAnimationFrame(function(){bc.querySelectorAll(".b").forEach(function(b,i){b.style.height=Math.min(100,vals[i]*(bc.dataset.scale?+bc.dataset.scale:1))+"%";});});});
+    const ic=el.querySelector("#irrchart");
+    if(ic){ic.innerHTML=dualLine([980,1130,1210,1180,1260,1340,1290,1210,1120,980],[940,1090,1180,1150,1210,1280,1250,1180,1090,950],"Demand","Supply");}
+    const sc=el.querySelector("#senschart");
+    if(sc){sc.innerHTML=areaChart([360,380,402,395,410,430,418,405,398,412,425,410]);}
+    const bd=el.querySelector("#billdonut");
+    if(bd){bd.innerHTML=donut([{v:74,color:"#10B981",label:"Paid"},{v:12,color:"#E78B09",label:"Partial"},{v:14,color:"#F43F5E",label:"Unpaid"}]);}
+    const dp=el.querySelector("#dispdual");
+    if(dp){dp.innerHTML=dualLine([420,300,180,360,260,340],[410,250,182,352,250,338],"Planned","Actual");}
+    const ld=el.querySelector("#limdonut");
+    if(ld){ld.innerHTML=donut([{v:64,color:"#0FB5A6",label:"Used"},{v:36,color:"#3B82F6",label:"Remaining"}]);}}
   function countTo(el,target,dur,raw){const start=performance.now(),dec=(target%1!==0)?(raw&&raw.indexOf('.')>=0?1:1):0,hasComma=raw&&raw.indexOf(',')>=0,prefix=raw&&/^\D/.test(raw)?"":"";
     function fmt(n){let s=(target%1!==0)?n.toFixed(1):Math.round(n).toString();if(hasComma)s=Math.round(n).toLocaleString("en-US");return s;}
     function f(now){const p=Math.min(1,(now-start)/dur);el.textContent=fmt(target*p);if(p<1)requestAnimationFrame(f);else el.textContent=raw;}requestAnimationFrame(f);}
