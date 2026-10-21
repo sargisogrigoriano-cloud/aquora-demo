@@ -1132,10 +1132,15 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
   $("#next").addEventListener("click",()=>{paused=false;go(Math.min(TOUR.length-1,idx+1));});
   $("#prev").addEventListener("click",()=>{paused=false;go(Math.max(0,idx-1));});
   $("#playpause").addEventListener("click",function(){var v=document.getElementById("avatarVid");
-    if(!paused){paused=true;try{v.pause();}catch(e){}try{if("speechSynthesis"in window)speechSynthesis.pause();}catch(e){}setSpeaking(false);this.textContent="▶ Play";}
-    else{paused=false;this.textContent="⏸ Pause";try{if("speechSynthesis"in window)speechSynthesis.resume();}catch(e){}
-      if(v.src&&v.currentTime>0&&v.paused&&!v.ended){setSpeaking(true);v.play().catch(function(){});}else{go(idx>=0?idx:0);}}});
-  $("#stop").addEventListener("click",function(){gen++;stopAudio();paused=false;idx=0;var p=document.getElementById("playpause");if(p)p.textContent="▶ Play";activate("dashboard");showScreen("dashboard");paintRail();cap.textContent="Tour stopped. Press ▶ to start again, or ask me anything.";});
+    var wantPlay=this.textContent.indexOf("Play")>=0;
+    if(wantPlay){ paused=false; this.textContent="⏸ Pause"; try{if("speechSynthesis"in window)speechSynthesis.resume();}catch(e){}
+      if(v.src&&v.currentTime>0&&v.paused&&!v.ended){setSpeaking(true);v.play().catch(function(){});} else { go(idx>=0?idx:0); } }
+    else { paused=true; try{v.pause();}catch(e){} try{if("speechSynthesis"in window)speechSynthesis.pause();}catch(e){} setSpeaking(false); this.textContent="▶ Play"; } });
+  $("#stop").addEventListener("click",function(){gen++;stopAudio();paused=false;idx=0;
+    var v=document.getElementById("avatarVid"); try{v.pause();v.removeAttribute("src");v.load();}catch(e){}
+    var p=document.getElementById("playpause");if(p)p.textContent="▶ Play";
+    activate("dashboard");showScreen("dashboard");paintRail();setSpeaking(false);
+    cap.textContent="Tour stopped. Press ▶ Play to start from the beginning, or ask me anything.";});
   document.addEventListener("keydown",e=>{if(e.key==="ArrowRight")go(idx+1);if(e.key==="ArrowLeft")go(idx-1);});
   $("#voice").addEventListener("click",function(){voiceOn=!voiceOn;this.classList.toggle("on",voiceOn);this.textContent=voiceOn?"🔊":"🔇";try{var _v=document.getElementById("avatarVid");if(_v)_v.muted=!voiceOn;}catch(e){}if(!voiceOn){try{if("speechSynthesis" in window)speechSynthesis.cancel();}catch(e){}}});
 
