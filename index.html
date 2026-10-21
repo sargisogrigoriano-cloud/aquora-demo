@@ -391,7 +391,7 @@
   <div class="railmini" id="rail"></div>
   <div class="qa"><input id="qin" placeholder="Ask me about the system…" autocomplete="off"><button id="qsend">Ask</button></div>
   <div class="ac">
-    <button id="prev" title="Previous">⏮</button><button id="playpause" title="Play / Pause">⏸</button><button id="stop" title="Stop">⏹</button><button id="next" title="Next">⏭</button>
+    <button id="prev" title="Previous">⏮</button><button id="playpause" class="on" title="Play / Pause">▶ Play</button><button id="stop" title="Stop">⏹ Stop</button><button id="next" title="Next">⏭</button>
     <span class="sp"></span>
     <button class="on" id="voice" title="Voice">🔊</button>
     <button id="mic" title="Talk">🎤</button>
@@ -1126,16 +1126,16 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     activate(t.menu);showScreen(t.menu);paintRail();cap.textContent=t.say;
     if(t.focus)setTimeout(()=>focus(t.focus),300);
     if(t.after)setTimeout(()=>{if(g===gen)t.after();},600);
-    var pp0=document.getElementById("playpause"); if(pp0)pp0.textContent="⏸";
-    speak(t.say,()=>{if(g!==gen)return;if(!paused&&idx<TOUR.length-1)setTimeout(()=>{if(g===gen&&!paused)go(idx+1);},900);else{var p=document.getElementById("playpause");if(p&&idx>=TOUR.length-1)p.textContent="▶";}},i);}
+    var pp0=document.getElementById("playpause"); if(pp0)pp0.textContent="⏸ Pause";
+    speak(t.say,()=>{if(g!==gen)return;if(!paused&&idx<TOUR.length-1)setTimeout(()=>{if(g===gen&&!paused)go(idx+1);},900);else{var p=document.getElementById("playpause");if(p&&idx>=TOUR.length-1)p.textContent="▶ Play";}},i);}
   var paused=false;
   $("#next").addEventListener("click",()=>{paused=false;go(Math.min(TOUR.length-1,idx+1));});
   $("#prev").addEventListener("click",()=>{paused=false;go(Math.max(0,idx-1));});
   $("#playpause").addEventListener("click",function(){var v=document.getElementById("avatarVid");
-    if(!paused){paused=true;try{v.pause();}catch(e){}try{if("speechSynthesis"in window)speechSynthesis.pause();}catch(e){}setSpeaking(false);this.textContent="▶";}
-    else{paused=false;this.textContent="⏸";try{if("speechSynthesis"in window)speechSynthesis.resume();}catch(e){}
+    if(!paused){paused=true;try{v.pause();}catch(e){}try{if("speechSynthesis"in window)speechSynthesis.pause();}catch(e){}setSpeaking(false);this.textContent="▶ Play";}
+    else{paused=false;this.textContent="⏸ Pause";try{if("speechSynthesis"in window)speechSynthesis.resume();}catch(e){}
       if(v.src&&v.currentTime>0&&v.paused&&!v.ended){setSpeaking(true);v.play().catch(function(){});}else{go(idx>=0?idx:0);}}});
-  $("#stop").addEventListener("click",function(){gen++;stopAudio();paused=false;idx=0;var p=document.getElementById("playpause");if(p)p.textContent="▶";activate("dashboard");showScreen("dashboard");paintRail();cap.textContent="Tour stopped. Press ▶ to start again, or ask me anything.";});
+  $("#stop").addEventListener("click",function(){gen++;stopAudio();paused=false;idx=0;var p=document.getElementById("playpause");if(p)p.textContent="▶ Play";activate("dashboard");showScreen("dashboard");paintRail();cap.textContent="Tour stopped. Press ▶ to start again, or ask me anything.";});
   document.addEventListener("keydown",e=>{if(e.key==="ArrowRight")go(idx+1);if(e.key==="ArrowLeft")go(idx-1);});
   $("#voice").addEventListener("click",function(){voiceOn=!voiceOn;this.classList.toggle("on",voiceOn);this.textContent=voiceOn?"🔊":"🔇";try{var _v=document.getElementById("avatarVid");if(_v)_v.muted=!voiceOn;}catch(e){}if(!voiceOn){try{if("speechSynthesis" in window)speechSynthesis.cancel();}catch(e){}}});
 
