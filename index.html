@@ -265,6 +265,48 @@
   /* nicer scrollbars */
   .menu::-webkit-scrollbar,.content::-webkit-scrollbar{width:9px;height:9px}
   .menu::-webkit-scrollbar-thumb,.content::-webkit-scrollbar-thumb{background:#D3E0E6;border-radius:9px;border:2px solid transparent;background-clip:content-box}
+
+  /* ===== REVOLUT-STYLE BOLD FINTECH ===== */
+  :root{--r:20px}
+  body,body::before{}
+  body{background:#F5F6FB}
+  body::before{background:
+    radial-gradient(720px 500px at 93% -8%,rgba(109,91,240,.15),transparent 70%),
+    radial-gradient(560px 420px at -2% 106%,rgba(15,181,166,.15),transparent 70%)}
+  .side{background:#fff;box-shadow:1px 0 0 #EEF1F7}
+  .ptitle{background:none;-webkit-text-fill-color:#0C2A33;color:#0C2A33;font-weight:800;letter-spacing:-.8px;font-size:27px}
+  .card{border:1px solid #EEF1F7;border-radius:20px;box-shadow:0 2px 6px rgba(20,30,60,.04),0 14px 32px rgba(20,30,60,.06)}
+  table,.filters,.list{border-radius:18px}
+  thead th{background:#FAFBFE}
+
+  /* KPI -> vibrant gradient tiles */
+  .kpis{gap:16px}
+  .kpi{border:none;border-radius:22px;color:#fff;box-shadow:0 12px 28px rgba(20,30,60,.16)}
+  .kpi::after{display:none}.kpi .stripe{display:none}
+  .kpi .lbl{color:rgba(255,255,255,.85)}
+  .kpi .big{color:#fff;-webkit-text-fill-color:#fff;background:none}
+  .kpi .u{color:rgba(255,255,255,.88)}
+  .kpi.aqua{background:linear-gradient(140deg,#13C6B5,#0E9AD6)}
+  .kpi.blue{background:linear-gradient(140deg,#5B8DEF,#6D5BF0)}
+  .kpi.good{background:linear-gradient(140deg,#24C7A8,#12A08F)}
+  .kpi.amber{background:linear-gradient(140deg,#FBA94C,#F6637E)}
+  .kpi.crit{background:linear-gradient(140deg,#FB7185,#E23D6E)}
+  .kpi .spark .sl{stroke:#fff;opacity:.95}.kpi .spark .sa{fill:#fff;opacity:.18}
+  .kpi:hover{transform:translateY(-4px)}
+
+  /* pill menu */
+  .mi{margin:2px 10px;border-radius:14px;padding:10px 12px;border-left:none}
+  .mi:hover{background:#EFF2F8;color:var(--text)}
+  .mi.active{background:linear-gradient(135deg,#12C2B0,#6D5BF0);color:#fff;border-left:none;box-shadow:0 10px 22px rgba(93,91,240,.28)}
+  @keyframes flash{0%,100%{filter:brightness(1)}50%{filter:brightness(1.18)}}
+
+  /* pill buttons */
+  .btn{border-radius:999px;font-weight:600}
+  .btn.primary{background:linear-gradient(135deg,#12C2B0,#6D5BF0);border:none;box-shadow:0 10px 24px rgba(93,91,240,.30)}
+  .overlay .go{background:linear-gradient(135deg,#12C2B0,#6D5BF0);border-radius:999px;box-shadow:0 16px 36px rgba(93,91,240,.4)}
+  .tag{font-weight:600}
+  .assistant{border-radius:22px}
+  .top .lang{border-radius:999px}
 </style>
 
 <svg width="0" height="0" style="position:absolute"><defs>
@@ -718,7 +760,7 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     ])}`;
 
   /* ---------- helpers ---------- */
-  function kpi(l,v,u,c){var sp=sparkPath();return `<div class="card kpi"><div class="stripe ${c}"></div><div class="lbl">${l}</div><div class="big"><b data-t="${v.replace(/,/g,'')}" data-raw="${v}">0</b><span class="u"> ${u}</span></div><svg class="spark ${c}" viewBox="0 0 120 36" preserveAspectRatio="none"><path class="sa" d="${sp.area}"/><path class="sl" pathLength="1" d="${sp.line}"/></svg></div>`;}
+  function kpi(l,v,u,c){var sp=sparkPath();return `<div class="card kpi ${c}"><div class="stripe ${c}"></div><div class="lbl">${l}</div><div class="big"><b data-t="${v.replace(/,/g,'')}" data-raw="${v}">0</b><span class="u"> ${u}</span></div><svg class="spark ${c}" viewBox="0 0 120 36" preserveAspectRatio="none"><path class="sa" d="${sp.area}"/><path class="sl" pathLength="1" d="${sp.line}"/></svg></div>`;}
   function sparkPath(){var n=11,step=120/(n-1),pts=[];for(var i=0;i<n;i++){var y=8+Math.round(20*(0.5+0.5*Math.sin(i*0.8+Math.random()*2)));pts.push([Math.round(i*step),Math.min(30,Math.max(5,y))]);}var d=pts.map(function(p,i){return (i?"L":"M")+p[0]+" "+p[1];}).join(" ");return {line:d,area:d+" L120 36 L0 36 Z"};}
   function areaChart(vals,unit){var W=620,H=170,pad=12,max=Math.max.apply(null,vals)*1.15,n=vals.length,step=(W-pad*2)/(n-1);
     var pts=vals.map(function(v,i){return [pad+i*step,H-pad-(v/max)*(H-pad*2)];});
