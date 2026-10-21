@@ -3,13 +3,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
   :root{
-    --ground:#071317;--panel:#0C1E23;--panel2:#102A30;--side:#081A1E;--line:#17424A;
-    --aqua:#2FE6C8;--aqua-dim:#1C8E82;--amber:#FFB15C;--blue:#49A7FF;
-    --good:#36D399;--warn:#FFC857;--crit:#FF5C6C;
-    --text:#DCEFEC;--muted:#7A9893;--faint:#49655F;
+    --ground:#EEF4F8;--panel:#FFFFFF;--panel2:#F3F8FA;--side:#FFFFFF;--line:#E3ECF1;
+    --aqua:#0FB5A6;--aqua-dim:#0C9488;--amber:#E78B09;--blue:#3B82F6;
+    --good:#10B981;--warn:#E78B09;--crit:#F43F5E;
+    --text:#10343B;--muted:#5E7A84;--faint:#9FB4BC;
     --mono:ui-monospace,"Hack","DejaVu Sans Mono","SF Mono",Menlo,monospace;
     --sans:"SF Pro Display","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
-    --r:12px;
+    --r:14px;
+    --shadow:0 1px 2px rgba(16,52,59,.05),0 6px 20px rgba(16,52,59,.06);
+    --shadow-lg:0 14px 44px rgba(16,52,59,.14);
   }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
@@ -152,10 +154,88 @@
   .figbig{width:96px;height:96px;border-radius:50%;background:var(--panel2);border:1px solid var(--aqua-dim);display:grid;place-items:center}
   .figbig svg{width:62px;height:62px}
   @media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.08s!important}}
+
+  /* ====== LIGHT THEME OVERRIDES + MODERN VISUALS ====== */
+  body{background:radial-gradient(1200px 600px at 100% -10%,#E4F3F1,transparent),var(--ground)}
+  .side{background:var(--side);box-shadow:1px 0 0 var(--line)}
+  .side .brand .tg{color:var(--aqua-dim)}
+  .mi:hover{background:rgba(15,181,166,.07)}
+  .mi.active{color:var(--aqua-dim);background:rgba(15,181,166,.10);border-left-color:var(--aqua)}
+  @keyframes flash{0%,100%{background:rgba(15,181,166,.10)}50%{background:rgba(15,181,166,.26)}}
+  .top{background:var(--panel);box-shadow:0 1px 0 var(--line)}
+  .content{background:transparent}
+  .ptitle{letter-spacing:-.5px}
+
+  .card{background:var(--panel);box-shadow:var(--shadow);transition:box-shadow .22s ease,transform .22s ease;animation:cardin .5s cubic-bezier(.2,.7,.2,1) both}
+  .card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px)}
+  .kpis .card:nth-child(2){animation-delay:.05s}.kpis .card:nth-child(3){animation-delay:.1s}.kpis .card:nth-child(4){animation-delay:.15s}
+  @keyframes cardin{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+  .card .big{letter-spacing:-1.5px}
+  .stripe{width:4px;border-radius:4px 0 0 4px}
+
+  .filters{background:var(--panel);box-shadow:var(--shadow)}
+  .fl .sel,.btn{background:var(--panel2)}
+  .btn:hover{border-color:var(--aqua);color:var(--aqua-dim)}
+  table{box-shadow:var(--shadow);border-radius:var(--r)}
+  thead th{background:#F7FBFC}
+  tbody tr{transition:background .15s}
+  tbody tr:hover td{background:#F6FBFC}
+  .list{box-shadow:var(--shadow)}
+
+  .ringwrap{background:conic-gradient(var(--gc,var(--aqua)) var(--p,0%),#E7EEF2 0)}
+  .bars .b{box-shadow:0 2px 8px rgba(15,181,166,.25)}
+  svg.map,.map{background:#F2F8F9;box-shadow:var(--shadow)}
+  .tl{background:#EAF2F5}
+  .bub.bot{background:var(--panel2)}
+
+  /* assistant frame -> light (video/avatar logic untouched) */
+  .assistant{background:var(--panel);border:1px solid var(--line);box-shadow:var(--shadow-lg)}
+  .assistant .cap{color:var(--text)}
+  .ac{background:#F7FBFC;border-top:1px solid var(--line)}
+  .ac button{background:var(--panel2)}
+  .qa input{background:var(--panel2)}
+
+  .overlay{background:radial-gradient(90% 70% at 50% 28%,#FFFFFF,#DCEBEF)}
+  .figbig{background:var(--panel2);box-shadow:var(--shadow)}
+
+  /* sparkline inside every KPI */
+  .kpi{position:relative;overflow:hidden}
+  .kpi .lbl,.kpi .big{position:relative;z-index:1}
+  .spark{position:absolute;left:0;right:0;bottom:0;width:100%;height:36px;z-index:0}
+  .spark .sl{fill:none;stroke:var(--aqua);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.3s ease .15s forwards}
+  .spark .sa{fill:var(--aqua);opacity:.09}
+  .spark.amber .sl{stroke:var(--amber)}.spark.amber .sa{fill:var(--amber)}
+  .spark.good .sl{stroke:var(--good)}.spark.good .sa{fill:var(--good)}
+  .spark.blue .sl{stroke:var(--blue)}.spark.blue .sa{fill:var(--blue)}
+  .spark.crit .sl{stroke:var(--crit)}.spark.crit .sa{fill:var(--crit)}
+
+  /* area / line chart */
+  .achart{width:100%;height:auto;display:block;overflow:visible}
+  .achart .grid{stroke:var(--line);stroke-width:1}
+  .achart .aline{fill:none;stroke:var(--aqua);stroke-width:2.6;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.5s ease .2s forwards}
+  .achart .aarea{fill:url(#aqgrad);opacity:0;animation:fadein 1s ease .7s forwards}
+  .achart .dot{fill:#fff;stroke:var(--aqua);stroke-width:2.4;opacity:0;animation:pop .45s ease forwards}
+  @keyframes draw{to{stroke-dashoffset:0}}
+  @keyframes fadein{to{opacity:1}}
+  @keyframes pop{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
+
+  /* donut */
+  .donut{transform-box:fill-box;transform-origin:center;animation:donutin 1s cubic-bezier(.2,.7,.2,1) both}
+  .donut .darc{stroke-linecap:round}
+  @keyframes donutin{from{opacity:0;transform:rotate(-40deg) scale(.82)}to{opacity:1;transform:none}}
+
+  /* keep content clear of the fixed assistant panel on wide screens */
+  @media(min-width:1024px){.content{padding-right:430px}}
+  @media(min-width:1600px){.content{padding-right:40px;max-width:1120px}}
+
+  /* nicer scrollbars */
+  .menu::-webkit-scrollbar,.content::-webkit-scrollbar{width:9px;height:9px}
+  .menu::-webkit-scrollbar-thumb,.content::-webkit-scrollbar-thumb{background:#D3E0E6;border-radius:9px;border:2px solid transparent;background-clip:content-box}
 </style>
 
 <svg width="0" height="0" style="position:absolute"><defs>
   <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2FE6C8"/><stop offset="1" stop-color="#1C8E82"/></linearGradient>
+  <linearGradient id="aqgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0FB5A6" stop-opacity=".30"/><stop offset="1" stop-color="#0FB5A6" stop-opacity="0"/></linearGradient>
   <symbol id="person" viewBox="0 0 64 64"><circle cx="32" cy="21" r="12" fill="url(#g1)"/><path d="M11 57c0-13 9-18 21-18s21 5 21 18Z" fill="url(#g1)"/></symbol>
   <symbol id="drop" viewBox="0 0 48 48"><path d="M24 3C24 3 7 22 7 33a17 17 0 0 0 34 0C41 22 24 3 24 3Z" fill="url(#g1)"/><circle cx="18" cy="31" r="3" fill="#042"/><circle cx="30" cy="31" r="3" fill="#042"/></symbol>
 </defs></svg>
@@ -298,7 +378,7 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     ["grp","Intelligence & data"],
     ["ai","🤖","AI layer"],["data","🛰️","Data & satellites"],
     ["grp","Platform & trust"],
-    ["platform","🧩","Platform"],["compliance","🛡️","Compliance (EU)"],["roadmap","🧭","Roadmap"],
+    ["platform","🧩","Platform"],["compliance","🛡️","Compliance (EU)"],["experts","🧠","Expert notes"],["roadmap","🧭","Roadmap"],
   ];
   MENU.forEach(m=>{
     if(m[0]==="grp"){const g=document.createElement("div");g.className="grp";g.textContent=m[1];menuEl.appendChild(g);return;}
@@ -315,6 +395,9 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     <div class="kpis">
       ${kpi("Accounts","1,240","active","aqua")}${kpi("Delivered today","1.84","M m³","blue")}
       ${kpi("Collection","91","%","good")}${kpi("Losses (NRW)","14.7","%","amber")}</div>
+    <div class="row" style="margin-bottom:20px">
+      <div style="flex:2;min-width:320px"><div class="card"><div class="lbl">Water delivered — last 14 days (M m³)</div><div id="dashchart" style="margin-top:14px"></div></div></div>
+      <div style="flex:1;min-width:260px"><div class="card"><div class="lbl">Water balance</div><div id="dashdonut" style="margin-top:12px"></div></div></div></div>
     <div class="row"><div style="flex:1;min-width:280px"><div class="card"><div class="lbl">Service status</div>
       ${["PostgreSQL","Sensors network","Bank gateway","Email service"].map(s=>`<div class="li" style="padding:10px 0;border-color:rgba(23,66,74,.4)"><span>${s}</span><span class="tag ok">up</span></div>`).join("")}</div></div>
     <div style="flex:1;min-width:280px"><div class="card"><div class="lbl">Accounts by role</div>
@@ -556,7 +639,17 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     ${info("Data Act","good",["ok","farmer right"],"Farmers have the right to access their own sensor data — built in.")}
     ${info("GDPR","aqua",["ok","privacy"],"Data-protection impact assessment (DPIA), client data-processing agreements (DPA), and opt-in consent for voice.")}`;
 
+  S.experts=()=>`<h1 class="ptitle">Expert notes</h1><p class="psub">Guidance from legal, finance, market and language experts shaping the build.</p>
+    ${info("Legal","blue",["aqua","law"],"Valve automation must keep a <b>manual override</b> and human confirmation. Quota trading needs a legal basis in each country — Spain, Morocco and Australia already have one. Transferring data for credit scoring requires the farmer's <b>explicit consent</b>.")}
+    ${info("Finance","good",["ok","revenue"],"The fastest revenue comes from <b>billing, payments and loss detection</b> — they prove a measurable return (more collected, less water lost) that buyers and investors can verify.")}
+    ${info("Market","amber",["warn","go-to-market"],"Subsidised digitalisation categories (web portal, GIS, telecontrol) should map <b>one-to-one</b> to the MVP modules, so sales can be funded through subsidies.")}
+    ${info("Language","aqua",["aqua","i18n"],"Translation must be built into the platform <b>from day one</b>: a single central glossary plus AI translation, verified by humans.")}`;
+
   S.roadmap=()=>`<h1 class="ptitle">Roadmap</h1><p class="psub">From demo to platform — MVP (6 months), v2 (12 months), v3 (24 months).</p>
+    <div class="card" style="margin-bottom:14px"><div class="stripe"></div><div class="lbl">In short</div>
+      <div style="margin-top:8px;line-height:1.6">Today's demo has 13 solid modules, but they are separate screens with illustrative data. To become a platform investors take seriously — and adaptable for the EU, the Gulf and Africa — Aquora needs three layers: a <b>real core</b> (live data, the full request → payment flow, a complete audit log), an <b>AI layer</b> that does useful work for every user, and <b>platform features</b> (country configuration, open API, multi-tenancy, offline).</div></div>
+    <div class="card" style="margin-bottom:20px"><div class="stripe aqua"></div><div class="lbl">One platform, adaptable everywhere</div>
+      <div style="margin-top:8px;line-height:1.6">Aquora adapts <b>to any country</b> (local law, water-rights model, tariffs, payments, data residency), <b>any scale</b> (from a single water-user association to a national ministry), <b>any language</b> (interface, voice and documents, including right-to-left Arabic) and <b>any water system</b> (irrigation and drinking water). Adaptation is done through country packs and settings — without rewriting the core.</div></div>
     <div class="row">
       <div style="flex:1;min-width:230px"><div class="card"><div class="stripe good"></div><div class="lbl">MVP · 6 months</div>
         <div style="margin-top:8px;line-height:1.7">Live data core · request → delivery → payment · full audit log · billing &amp; payments · loss detection</div></div></div>
@@ -581,7 +674,20 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     ])}`;
 
   /* ---------- helpers ---------- */
-  function kpi(l,v,u,c){return `<div class="card"><div class="stripe ${c}"></div><div class="lbl">${l}</div><div class="big"><b data-t="${v.replace(/,/g,'')}" data-raw="${v}">0</b><span class="u"> ${u}</span></div></div>`;}
+  function kpi(l,v,u,c){var sp=sparkPath();return `<div class="card kpi"><div class="stripe ${c}"></div><div class="lbl">${l}</div><div class="big"><b data-t="${v.replace(/,/g,'')}" data-raw="${v}">0</b><span class="u"> ${u}</span></div><svg class="spark ${c}" viewBox="0 0 120 36" preserveAspectRatio="none"><path class="sa" d="${sp.area}"/><path class="sl" pathLength="1" d="${sp.line}"/></svg></div>`;}
+  function sparkPath(){var n=11,step=120/(n-1),pts=[];for(var i=0;i<n;i++){var y=8+Math.round(20*(0.5+0.5*Math.sin(i*0.8+Math.random()*2)));pts.push([Math.round(i*step),Math.min(30,Math.max(5,y))]);}var d=pts.map(function(p,i){return (i?"L":"M")+p[0]+" "+p[1];}).join(" ");return {line:d,area:d+" L120 36 L0 36 Z"};}
+  function areaChart(vals,unit){var W=620,H=170,pad=12,max=Math.max.apply(null,vals)*1.15,n=vals.length,step=(W-pad*2)/(n-1);
+    var pts=vals.map(function(v,i){return [pad+i*step,H-pad-(v/max)*(H-pad*2)];});
+    var line=pts.map(function(p,i){return (i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1);}).join(" ");
+    var area=line+" L"+(W-pad)+" "+(H-pad)+" L"+pad+" "+(H-pad)+" Z";
+    var grid="";for(var g=1;g<4;g++){var y=(pad+g*(H-pad*2)/4).toFixed(1);grid+='<line class="grid" x1="'+pad+'" y1="'+y+'" x2="'+(W-pad)+'" y2="'+y+'"/>';}
+    var dots=pts.map(function(p,i){return '<circle class="dot" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="3.4" style="animation-delay:'+(0.7+i*0.05).toFixed(2)+'s"/>';}).join("");
+    return '<svg class="achart" viewBox="0 0 '+W+' '+H+'">'+grid+'<path class="aarea" d="'+area+'"/><path class="aline" pathLength="1" d="'+line+'"/>'+dots+'</svg>';}
+  function donut(segs){var total=segs.reduce(function(a,s){return a+s.v;},0),C=2*Math.PI*54,off=0,arcs="",leg="";
+    segs.forEach(function(s){var frac=s.v/total,len=C*frac;
+      arcs+='<circle class="darc" r="54" cx="80" cy="80" fill="none" stroke="'+s.color+'" stroke-width="22" stroke-dasharray="'+len.toFixed(1)+' '+(C-len).toFixed(1)+'" stroke-dashoffset="'+(-off).toFixed(1)+'" transform="rotate(-90 80 80)"/>';off+=len;
+      leg+='<div class="li" style="padding:7px 0;border:none"><span><i style="display:inline-block;width:11px;height:11px;border-radius:3px;background:'+s.color+';margin-right:9px;vertical-align:-1px"></i>'+s.label+'</span><span class="num">'+Math.round(frac*100)+'%</span></div>';});
+    return '<div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap"><svg width="160" height="160" viewBox="0 0 160 160" class="donut">'+arcs+'</svg><div style="flex:1;min-width:150px">'+leg+'</div></div>';}
   function filters(labels,action,primaryAmber){return `<div class="filters">${labels.map(l=>`<div class="fl"><label>${l}</label><div class="sel">All ${l.toLowerCase()} ▾</div></div>`).join("")}<div style="flex:1"></div><div style="display:flex;align-items:flex-end"><button class="btn ${primaryAmber?'':'primary'}" data-action style="${primaryAmber?'background:var(--amber);color:#2a1800;border-color:var(--amber);font-weight:600':''}">${action}</button></div></div>`;}
   function table(cols,rows){return `<table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;}
   function tg(k,t){return `<span class="tag ${k}">${t}</span>`;}
@@ -599,7 +705,11 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     if(pb){const v=[30,55,80,95,80,60,40,70,50,35];pb.innerHTML=v.map(x=>`<div class="b"></div>`).join("");requestAnimationFrame(()=>pb.querySelectorAll(".b").forEach((b,i)=>b.style.height=v[i]+"%"));}
     if(db){const v=[88,92,80,95,90,97];db.innerHTML=v.map(x=>`<div class="b"><span>${x}%</span></div>`).join("");requestAnimationFrame(()=>db.querySelectorAll(".b").forEach((b,i)=>b.style.height=v[i]+"%"));}
     const cb=el.querySelector("#cropbars");
-    if(cb){const v=[100,72,36,56,30];cb.innerHTML=v.map(()=>`<div class="b"></div>`).join("");requestAnimationFrame(()=>cb.querySelectorAll(".b").forEach((b,i)=>b.style.height=v[i]+"%"));}}
+    if(cb){const v=[100,72,36,56,30];cb.innerHTML=v.map(()=>`<div class="b"></div>`).join("");requestAnimationFrame(()=>cb.querySelectorAll(".b").forEach((b,i)=>b.style.height=v[i]+"%"));}
+    const dc=el.querySelector("#dashchart");
+    if(dc){dc.innerHTML=areaChart([1.20,1.42,1.31,1.60,1.48,1.72,1.66,1.81,1.74,1.90,1.83,2.01,1.95,1.84]);}
+    const dd=el.querySelector("#dashdonut");
+    if(dd){dd.innerHTML=donut([{v:72,color:"#10B981",label:"Delivered to fields"},{v:14,color:"#E78B09",label:"Losses (NRW)"},{v:14,color:"#3B82F6",label:"In canals / buffer"}]);}}
   function countTo(el,target,dur,raw){const start=performance.now(),dec=(target%1!==0)?(raw&&raw.indexOf('.')>=0?1:1):0,hasComma=raw&&raw.indexOf(',')>=0,prefix=raw&&/^\D/.test(raw)?"":"";
     function fmt(n){let s=(target%1!==0)?n.toFixed(1):Math.round(n).toString();if(hasComma)s=Math.round(n).toLocaleString("en-US");return s;}
     function f(now){const p=Math.min(1,(now-start)/dur);el.textContent=fmt(target*p);if(p<1)requestAnimationFrame(f);else el.textContent=raw;}requestAnimationFrame(f);}
