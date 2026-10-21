@@ -308,6 +308,15 @@
   .assistant{border-radius:22px;width:320px;max-width:calc(100vw - 28px)}
   .top .lang{border-radius:999px}
   .flowmap{width:100%;max-width:760px;height:auto;display:block;border-radius:20px;box-shadow:0 18px 44px rgba(10,30,40,.28);margin-bottom:12px}
+  /* per-page icon badge + per-page colour (hue shifts the animated visuals) */
+  .picon{display:inline-flex;align-items:center;justify-content:center;width:50px;height:50px;border-radius:16px;font-size:25px;line-height:1;margin-bottom:12px;box-shadow:0 12px 24px rgba(20,30,60,.20);animation:cardin .5s both}
+  .flowmap{filter:hue-rotate(var(--phue,0deg))}
+  .achart,.ringwrap{filter:hue-rotate(var(--phue,0deg))}
+  .bars .b{filter:hue-rotate(var(--phue,0deg))}
+  .kpi::after{filter:hue-rotate(var(--phue,0deg))}
+  .content{position:relative;z-index:0}
+  .content::before{content:var(--picon,"");position:absolute;top:30px;right:380px;font-size:280px;line-height:1;opacity:.05;z-index:-1;pointer-events:none;user-select:none}
+  @media(max-width:1023px){.content::before{right:20px;font-size:190px;opacity:.04}}
 </style>
 
 <svg width="0" height="0" style="position:absolute"><defs>
@@ -928,7 +937,19 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     function f(now){const p=Math.min(1,(now-start)/dur);el.textContent=fmt(target*p);if(p<1)requestAnimationFrame(f);else el.textContent=raw;}requestAnimationFrame(f);}
   function focus(sel,el){const t=(el||content).querySelector(sel);if(t){t.classList.add("focus-ring");setTimeout(()=>t.classList.remove("focus-ring"),6000);}}
 
-  function showScreen(id){content.innerHTML=(S[id]||S.dashboard)();animNums(content);}
+  const PALETTE=[
+    ["linear-gradient(135deg,#12C2B0,#0C9488)",0],["linear-gradient(135deg,#5B8DEF,#6D5BF0)",40],
+    ["linear-gradient(135deg,#34D399,#10B981)",315],["linear-gradient(135deg,#8B5CF6,#EC4899)",95],
+    ["linear-gradient(135deg,#22D3EE,#3B82F6)",18],["linear-gradient(135deg,#6D5BF0,#A855F7)",80],
+    ["linear-gradient(135deg,#0EA5E9,#2563EB)",30],["linear-gradient(135deg,#14B8A6,#0891B2)",345]];
+  const ACC={};(function(){var k=0;MENU.forEach(function(m){if(m[0]==="grp")return;ACC[m[0]]=PALETTE[k%PALETTE.length];k++;});})();
+  function showScreen(id){const m=MENU.find(x=>x[0]===id),acc=ACC[id]||PALETTE[0];
+    content.style.setProperty("--phue",acc[1]+"deg");
+    content.style.setProperty("--picon",m?('"'+m[1]+'"'):'""');
+    content.innerHTML=(S[id]||S.dashboard)();
+    const t=content.querySelector(".ptitle");
+    if(t&&m){const b=document.createElement("span");b.className="picon";b.textContent=m[1];b.style.background=acc[0];t.parentNode.insertBefore(b,t);}
+    animNums(content);}
 
   /* ---------- interactive workflows (request -> receive -> pay) ---------- */
   const FLOW={req:false,del:false,paid:false};
