@@ -311,11 +311,14 @@
   .assistant .avbanner{flex:0 0 auto}
   .assistant .cap{flex:1 1 auto;max-height:none;overflow:auto}
   @media(max-width:820px){
-    .assistant{left:6px;right:6px;bottom:6px;top:auto;width:auto;max-width:none;max-height:52vh;border-radius:16px}
-    .assistant .avbanner{aspect-ratio:auto;height:24vh;flex:0 0 auto;object-fit:cover}
-    .assistant .cap{flex:1 1 auto;max-height:none;min-height:34px;overflow:auto}
+    .assistant{left:6px;right:6px;bottom:6px;top:auto;width:auto;max-width:none;max-height:40vh;border-radius:16px}
+    .assistant .avbanner{aspect-ratio:auto;height:16vh;flex:0 0 auto;object-fit:cover}
+    .assistant .hd{display:none}
     .assistant .railmini{display:none}
-    .content{padding-right:14px;padding-bottom:calc(52vh + 14px)}
+    .assistant .cap{flex:1 1 auto;max-height:none;min-height:24px;overflow:auto;padding:6px 14px;font-size:13px;line-height:1.35}
+    .assistant .ac{padding:7px 12px}
+    .assistant .qa{padding:0 12px 8px}
+    .content{padding-right:14px;padding-bottom:calc(40vh + 12px)}
     .assistant .qa input{font-size:16px}
   }
   .avbanner{aspect-ratio:4/3;object-fit:cover;object-position:50% 48%}
