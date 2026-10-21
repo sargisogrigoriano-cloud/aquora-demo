@@ -311,15 +311,16 @@
   .assistant .avbanner{flex:0 0 auto}
   .assistant .cap{flex:1 1 auto;max-height:none;overflow:auto}
   @media(max-width:820px){
-    .assistant{left:6px;right:6px;bottom:6px;top:auto;width:auto;max-width:none;max-height:40vh;border-radius:16px}
-    .assistant .avbanner{aspect-ratio:auto;height:16vh;flex:0 0 auto;object-fit:cover}
-    .assistant .hd{display:none}
+    html,body{height:auto;overflow-y:auto;overflow-x:hidden}
+    body{display:flex;flex-direction:column}
+    .assistant{order:0;position:static;width:auto;max-width:none;max-height:none;margin:10px 10px 0;top:auto;right:auto;bottom:auto;left:auto;border-radius:16px}
+    .assistant .avbanner{aspect-ratio:16/9;height:auto;flex:0 0 auto;object-position:50% 30%}
     .assistant .railmini{display:none}
-    .assistant .cap{flex:1 1 auto;max-height:none;min-height:24px;overflow:auto;padding:6px 14px;font-size:13px;line-height:1.35}
-    .assistant .ac{padding:7px 12px}
-    .assistant .qa{padding:0 12px 8px}
-    .content{padding-right:14px;padding-bottom:calc(40vh + 12px)}
+    .assistant .cap{flex:0 1 auto;max-height:none;overflow:visible;font-size:13.5px}
     .assistant .qa input{font-size:16px}
+    .shell{order:1;height:auto}
+    .main{min-height:0}
+    .content{height:auto;max-height:none;overflow:visible;padding-right:14px;padding-bottom:24px}
   }
   .avbanner{aspect-ratio:4/3;object-fit:cover;object-position:50% 48%}
   .top .lang{border-radius:999px}
