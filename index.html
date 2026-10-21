@@ -171,7 +171,6 @@
 <div class="shell">
   <nav class="side">
     <div class="brand"><svg><use href="#drop"/></svg><div class="txt"><div class="nm">Aquora</div><div class="tg">water system</div></div></div>
-    <div class="grp">Main</div>
     <div class="menu" id="menu"></div>
   </nav>
   <div class="main">
@@ -287,14 +286,26 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
   let voiceOn=true, idx=0, chosenVoice=null, gen=0, speaking=false;
 
   const MENU=[
+    ["grp","Core"],
     ["dashboard","🏠","Dashboard"],["users","👥","Water users"],["crops","🌱","Crops & sowing"],
     ["map","🗺️","Map & canals"],["requests","💧","Requests"],["irrigation","📅","Irrigation plan"],
     ["limits","⚖️","Water limits"],["sensors","📡","Sensors (IoT)"],["melioration","🏞️","Melioration"],
     ["dispatch","🔀","Dispatching"],["billing","🧾","Billing"],["payments","💳","Payments"],["reports","📊","Reports"],
+    ["grp","Extended modules"],
+    ["losses","🔎","Loss & theft"],["inspections","📋","Field inspections"],["maintenance","🔧","Maintenance"],
+    ["advice","💬","Farmer advice"],["climate","🌍","Climate & donors"],["finance","🏦","Financial services"],
+    ["reuse","♻️","Reuse & groundwater"],["basin","🌊","Transboundary basin"],
+    ["grp","Intelligence & data"],
+    ["ai","🤖","AI layer"],["data","🛰️","Data & satellites"],
+    ["grp","Platform & trust"],
+    ["platform","🧩","Platform"],["compliance","🛡️","Compliance (EU)"],["roadmap","🧭","Roadmap"],
   ];
-  MENU.forEach(m=>{const d=document.createElement("div");d.className="mi";d.dataset.id=m[0];
+  MENU.forEach(m=>{
+    if(m[0]==="grp"){const g=document.createElement("div");g.className="grp";g.textContent=m[1];menuEl.appendChild(g);return;}
+    const d=document.createElement("div");d.className="mi";d.dataset.id=m[0];
     d.innerHTML=`<span class="ic">${m[1]}</span><span class="lb">${m[2]}</span>`;
-    d.addEventListener("click",()=>{const t=TOUR.findIndex(s=>s.menu===m[0]);if(t>=0)go(t);});menuEl.appendChild(d);});
+    d.addEventListener("click",()=>{const t=TOUR.findIndex(s=>s.menu===m[0]);if(t>=0){go(t);}else{gen++;stopAudio();activate(m[0]);showScreen(m[0]);}});
+    menuEl.appendChild(d);});
   function activate(id){menuEl.querySelectorAll(".mi").forEach(mi=>{const on=mi.dataset.id===id;mi.classList.toggle("active",on);if(on){mi.classList.remove("flash");void mi.offsetWidth;mi.classList.add("flash");}});
     const m=MENU.find(x=>x[0]===id);crumb.textContent=m?m[2]:"";}
 
@@ -420,6 +431,154 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
   S.reports=()=>`<h1 class="ptitle">Reports</h1><p class="psub">Everything, filtered and exported in one click.</p>
     ${filters(["Report","Period","Region"],"⬇ Export")}
     <div class="list">${["Requests","Water balance","Plan vs fact","Billing & collection","Sensor readings","Losses (NRW)"].map(r=>`<div class="li"><span>${r}</span><span style="display:flex;gap:8px"><span class="btn ghost" style="padding:5px 10px">Excel</span><span class="btn ghost" style="padding:5px 10px">PDF</span></span></div>`).join("")}</div>`;
+
+  /* ---------- NEW SCREENS (customer roadmap, AI, data, platform, EU) ---------- */
+  function info(title,stripeClass,badge,body){return `<div class="card" style="margin-bottom:14px"><div class="stripe ${stripeClass||''}"></div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><div class="lbl" style="font-size:12px;letter-spacing:.6px">${title}</div>${badge?`<span class="tag ${badge[0]}">${badge[1]}</span>`:''}</div><div style="margin-top:8px;font-size:14px;line-height:1.5;color:var(--text)">${body}</div></div>`;}
+
+  S.losses=()=>`<h1 class="ptitle">Loss & theft detection</h1><p class="psub">Water-balance gaps per canal, cross-checked with satellite irrigation signals — a ranked list of suspicious cases.</p>
+    <div class="kpis">
+      ${kpi("Non-revenue water","14.7","%","amber")}${kpi("Cases flagged","23","open","crit")}
+      ${kpi("Volume recovered","0.42","M m³","good")}${kpi("Revenue at risk","61,300","$","blue")}</div>
+    ${table(["Rank","Location","Balance gap","Satellite signal","Confidence","Status"],[
+      ["1","Canal 2 · block 14","−38%","Irrigation on plot with no allocation",tg("crit","92%"),tg("crit","inspect")],
+      ["2","Canal 5 · plot #2271","−29%","Green-up without a water request",tg("warn","78%"),tg("warn","review")],
+      ["3","Main Canal 1 · offtake 3","−17%","Flow exceeds metered delivery",tg("warn","64%"),tg("warn","review")],
+      ["4","Canal 3 · plot #1890","−11%","Minor mismatch",tg("aqua","52%"),tg("ok","watch")],
+    ])}
+    <p class="psub" style="margin-top:14px">Inspectors get the ranked list on the field app; confirmed cases become violation acts and recovered volume.</p>`;
+
+  S.inspections=()=>`<h1 class="ptitle">Field inspections & works</h1><p class="psub">Offline app for inspectors and repair crews — tasks, photos, violation acts, e-signature.</p>
+    ${filters(["Zone","Type","Status"],"+ New task")}
+    ${table(["Task","Type","Assigned to","Location","Evidence","Status"],[
+      ["INS-1042","Suspected theft","Inspector A.","Canal 2 · block 14","3 photos · GPS",tg("crit","open")],
+      ["INS-1041","Gate damage","Crew 2","Main Canal · gate 3","2 photos",tg("warn","in progress")],
+      ["INS-1039","Meter check","Inspector B.","Plot #1041-1","signed act",tg("ok","closed")],
+    ])}
+    <p class="psub" style="margin-top:14px">Works fully offline; data and signatures sync automatically when the connection returns.</p>`;
+
+  S.maintenance=()=>`<h1 class="ptitle">Maintenance</h1><p class="psub">Planned and emergency maintenance of canals and pumps — spare parts, costs, cleaning schedule.</p>
+    <div class="kpis">
+      ${kpi("Open work orders","9","active","aqua")}${kpi("Preventive","72","%","good")}
+      ${kpi("Downtime (mo)","4.1","h","amber")}${kpi("Avg. repair","6.5","h","blue")}</div>
+    ${table(["Asset","Work","Type","Due","Cost est.","Status"],[
+      ["Pump station 2","Bearing replacement","Emergency","today","1,200 $",tg("crit","urgent")],
+      ["Main Canal 1","Sediment cleaning","Planned","in 5 days","800 $",tg("warn","scheduled")],
+      ["Gate 3","Actuator service","Planned","in 12 days","350 $",tg("ok","planned")],
+    ])}`;
+
+  S.advice=()=>`<h1 class="ptitle">Farmer advice</h1><p class="psub">Personal guidance by WhatsApp or voice — in the farmer's own language.</p>
+    <div class="chatline" style="max-width:600px">
+      <div class="bub bot">💧 Irrigate plot 3 on Thursday — 900 m³. Rain is expected Saturday, so you can skip the next turn.</div>
+      <div class="bub user">Ok, thanks</div>
+      <div class="bub bot">🌱 Cotton on plot 1 enters peak demand next decade. I've pre-filled a water request — confirm?</div>
+    </div>
+    <div class="kpis" style="grid-template-columns:repeat(3,1fr);max-width:620px;margin-top:8px">
+      ${kpi("Farmers reached","1,180","on any phone","aqua")}${kpi("Tips sent (mo)","3,420","","blue")}${kpi("Water saved","8","%","good")}</div>
+    <p class="psub" style="margin-top:14px">Channels: WhatsApp, Telegram, voice call and USSD — works on any phone, in 1,600+ languages.</p>`;
+
+  S.climate=()=>`<h1 class="ptitle">Climate & donor reporting</h1><p class="psub">Measured, verified water and energy savings — ready for donors and climate funds.</p>
+    <div class="kpis">
+      ${kpi("Water saved","2.3","M m³/yr","good")}${kpi("Energy saved","410","MWh/yr","aqua")}
+      ${kpi("CO₂e avoided","290","t/yr","blue")}${kpi("Credits potential","38,000","$/yr","amber")}</div>
+    ${table(["Report","Framework","Period","Status"],[
+      ["Water-use efficiency","EU water reporting","2026 H1",tg("ok","verified")],
+      ["Irrigation results","World Bank indicators","2026",tg("ok","verified")],
+      ["Carbon / water credits","Gold Standard (draft)","2026",tg("warn","in review")],
+    ])}
+    <p class="psub" style="margin-top:14px">Savings are measured and verified (MRV), so they can back donor reports and potential water or carbon credits.</p>`;
+
+  S.finance=()=>`<h1 class="ptitle">Financial services</h1><p class="psub">With the farmer's explicit consent, water-use history supports credit scoring and drought insurance — a new revenue stream.</p>
+    <div class="kpis" style="grid-template-columns:repeat(3,1fr);max-width:640px">
+      ${kpi("Opted-in farmers","430","consented","aqua")}${kpi("Credit checks","112","this year","blue")}${kpi("Insured area","6,200","ha","good")}</div>
+    ${table(["Partner","Service","Data shared","Consent","Status"],[
+      ["AgriBank","Credit scoring","Usage history (opt-in)",tg("ok","granted"),tg("ok","live")],
+      ["DroughtSure","Index insurance","Delivery vs plan",tg("ok","granted"),tg("ok","live")],
+      ["Regional co-op","Input financing","Season volumes",tg("warn","pending"),tg("warn","onboarding")],
+    ])}
+    <div class="card" style="max-width:640px;margin-top:14px"><div class="stripe"></div><div class="lbl">Rule</div><div style="margin-top:6px">Data leaves Aquora only after the farmer gives explicit, revocable opt-in consent (GDPR / Data Act).</div></div>`;
+
+  S.reuse=()=>`<h1 class="ptitle">Reuse & groundwater</h1><p class="psub">Treated wastewater and groundwater — built for Gulf countries: well licences, well meters, reuse distribution.</p>
+    <div class="kpis">
+      ${kpi("Licensed wells","142","registered","aqua")}${kpi("Treated water","1.1","M m³/yr","good")}
+      ${kpi("Reuse to farms","64","%","blue")}${kpi("Aquifer level","−0.4","m/yr","amber")}</div>
+    ${table(["Well / source","Licence","Meter","Allocation","Status"],[
+      ["Well GW-201","valid → 2028","smart meter","120,000 m³/yr",tg("ok","active")],
+      ["Well GW-202","renewal due","smart meter","90,000 m³/yr",tg("warn","renew")],
+      ["TWW plant 1","municipal","flow meter","reuse: farms + landscaping",tg("ok","active")],
+    ])}`;
+
+  S.basin=()=>`<h1 class="ptitle">Transboundary basin</h1><p class="psub">A shared water balance for countries in one river basin — Central Asia, the Nile, Gulf aquifers.</p>
+    <div class="kpis" style="grid-template-columns:repeat(3,1fr);max-width:640px">
+      ${kpi("Basin inflow","24.5","B m³/yr","blue")}${kpi("Allocated","22.0","B m³","aqua")}${kpi("Shared buffer","2.5","B m³","good")}</div>
+    ${table(["Country / party","Allocation","Used","Balance","Status"],[
+      ["Upstream A","9.0 B m³","8.4 B m³","+0.6",tg("ok","within")],
+      ["Midstream B","7.5 B m³","7.6 B m³","−0.1",tg("warn","over")],
+      ["Downstream C","5.5 B m³","4.9 B m³","+0.6",tg("ok","within")],
+    ])}
+    <p class="psub" style="margin-top:14px">One transparent balance builds trust between parties sharing the same river or aquifer.</p>`;
+
+  S.ai=()=>`<h1 class="ptitle">AI layer</h1><p class="psub">Agents that do real work for each user — not just a chatbot.</p>
+    ${table(["Agent","For","What it does"],[
+      ["Farmer assistant","Farmer","Voice & chat in local languages (WhatsApp, Telegram, USSD): order water, check the schedule, pay, report a leak"],
+      ["Association co-pilot","Association head","Drafts the seasonal plan, flags debtors, writes the monthly report and grant applications"],
+      ["Dispatcher co-pilot","Dispatcher","Forecasts 10-day demand, suggests gate positions, explains any shortfall"],
+      ["Ministry analyst","Regulator","Answers plain-language questions (\"which zones lost &gt;20% in July?\") with charts"],
+      ["Anomaly agent","System","Watches sensors and billing 24/7 and raises tickets automatically"],
+      ["Document AI","Operators","Reads scanned water rights, IDs and contracts and fills the registry"],
+    ])}
+    <div class="card" style="margin-top:14px"><div class="stripe amber"></div><div class="lbl">Rules for every AI agent</div>
+      <div style="margin-top:8px;line-height:1.7">
+        • Any physical action (valves, gates) is confirmed by a human.<br>
+        • Every AI decision is written to the audit log.<br>
+        • The user is clearly told they are talking to an AI.<br>
+        • Government customers can run an in-country hosted model.</div></div>`;
+
+  S.data=()=>`<h1 class="ptitle">Data & satellites</h1><p class="psub">Open, commercially-licensed data powering crops, planning and the assistant.</p>
+    ${info("FAO WaPOR v3 — crop water use","good",["ok","every 10 days"],"Global actual evapotranspiration and crop water consumption, refreshed every 10 days. Feeds the <b>irrigation plan</b>.")}
+    ${info("Sentinel-2 &amp; Landsat — imagery","blue",["aqua","open data"],"Free optical satellite imagery for field monitoring and change detection. Feeds <b>Map &amp; canals</b> and <b>Crops</b>.")}
+    ${info("Prithvi-EO-2.0 &amp; AlphaEarth — field mapping","aqua",["aqua","CC-BY"],"NASA/IBM Prithvi foundation model and Google AlphaEarth embeddings for crop and field recognition — cross-checks what the farmer declared. Feeds <b>Crops &amp; sowing</b>.")}
+    ${info("ECMWF AIFS — weather","blue",["ok","commercial-use licence"],"AI-based weather forecasts whose licence allows commercial use. Feeds the daily re-calculation of the <b>irrigation plan</b>.")}
+    ${info("Meta Omnilingual ASR — speech","good",["ok","Apache-2.0"],"Speech recognition in 1,600+ languages — powers the voice assistant on any phone.")}`;
+
+  S.platform=()=>`<h1 class="ptitle">Platform</h1><p class="psub">Configure per country, open up, and keep working anywhere.</p>
+    ${info("Country packs (no-code)","aqua",null,"Language, units, calendars, water-rights model, tariffs, payment channels, legal texts and hosting region — all configured without code.")}
+    ${info("Open API &amp; connector marketplace","blue",null,"For equipment makers, banks, ERP systems and satellite-data providers.")}
+    ${info("Roles &amp; approval chains","aqua",null,"Granular permissions for every level of the water hierarchy, with approval chains.")}
+    ${info("Offline mobile","good",null,"Mobile app works offline and syncs when connectivity returns.")}
+    ${info("Full audit log","amber",null,"Who changed what, and when — essential in water-allocation disputes.")}
+    ${info("Accessibility","good",null,"Low-literacy mode (icons + voice), large buttons, right-to-left scripts.")}
+    ${info("Security","blue",null,"SSO, two-factor auth, encryption, backups, and ISO 27001 readiness.")}`;
+
+  S.compliance=()=>`<h1 class="ptitle">Compliance — EU readiness</h1><p class="psub">How Aquora meets the EU rules that matter to water operators.</p>
+    ${info("NIS2 Directive","blue",["aqua","supply-chain"],"Irrigation is likely out of direct scope, but water utilities will pass these security clauses down to us — so we meet them.")}
+    ${info("Cyber Resilience Act (CRA)","amber",["warn","2026 / 2027"],"Vulnerability reporting applies since <b>11 Sep 2026</b>; full CE marking of valve controllers applies from <b>11 Dec 2027</b>.")}
+    ${info("AI Act","crit",["warn","2026 / 2027"],"The AI-disclosure duty applies since <b>2 Aug 2026</b>. If AI controls a water supply we treat it as <b>high-risk</b>, with the deadline at <b>2 Dec 2027</b>.")}
+    ${info("Data Act","good",["ok","farmer right"],"Farmers have the right to access their own sensor data — built in.")}
+    ${info("GDPR","aqua",["ok","privacy"],"Data-protection impact assessment (DPIA), client data-processing agreements (DPA), and opt-in consent for voice.")}`;
+
+  S.roadmap=()=>`<h1 class="ptitle">Roadmap</h1><p class="psub">From demo to platform — MVP (6 months), v2 (12 months), v3 (24 months).</p>
+    <div class="row">
+      <div style="flex:1;min-width:230px"><div class="card"><div class="stripe good"></div><div class="lbl">MVP · 6 months</div>
+        <div style="margin-top:8px;line-height:1.7">Live data core · request → delivery → payment · full audit log · billing &amp; payments · loss detection</div></div></div>
+      <div style="flex:1;min-width:230px"><div class="card"><div class="stripe aqua"></div><div class="lbl">v2 · 12 months</div>
+        <div style="margin-top:8px;line-height:1.7">AI layer (farmer / dispatcher / ministry) · satellite crop &amp; water data · field inspection app · country packs</div></div></div>
+      <div style="flex:1;min-width:230px"><div class="card"><div class="stripe blue"></div><div class="lbl">v3 · 24 months</div>
+        <div style="margin-top:8px;line-height:1.7">Open API &amp; marketplace · transboundary basin view · reuse &amp; groundwater · financial &amp; climate services</div></div></div>
+    </div>
+    <div class="psub" style="margin:22px 0 8px">Improvements to existing modules</div>
+    ${table(["Module","Now","Planned improvement"],[
+      ["Dashboard","Fixed KPIs","Per-role live views, drill-down to canal &amp; plot, alerts feed"],
+      ["Water users","List + add","Digital ID/KYC, map-drawn plots, document upload, self-registration"],
+      ["Crops","Area by crop","AI crop recognition from satellite vs farmer-declared, country crop calendars"],
+      ["Map &amp; canals","Static layers","Full GIS (PostGIS), asset registry, satellite basemaps, field app"],
+      ["Requests","Simple request","Full flow: limit check, AI feasibility, approval, scheduling, digital act"],
+      ["Irrigation plan","Fixed norms","Satellite + AI weather, re-computed daily; drought what-if scenarios"],
+      ["Water limits","Seasonal split","Water-rights registry, quota transfer/trade, drought rationing rules"],
+      ["Sensors","Live claimed","Device management, vendor-neutral connectors (MQTT, LoRaWAN, OPC-UA)"],
+      ["Billing","Volume × tariff","Configurable tariffs, corrections/storno, e-invoicing (VeriFactu, ZATCA)"],
+      ["Payments","Bank reconcile","SEPA, cards, Mada/SADAD, M-Pesa/MTN MoMo; pay-as-you-go"],
+      ["Reports","Excel/PDF","Report builder, donor &amp; regulator templates, scheduled email"],
+    ])}`;
 
   /* ---------- helpers ---------- */
   function kpi(l,v,u,c){return `<div class="card"><div class="stripe ${c}"></div><div class="lbl">${l}</div><div class="big"><b data-t="${v.replace(/,/g,'')}" data-raw="${v}">0</b><span class="u"> ${u}</span></div></div>`;}
