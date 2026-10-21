@@ -715,6 +715,7 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     ${info("Meta Omnilingual ASR — speech","good",["ok","Apache-2.0"],"Speech recognition in 1,600+ languages — powers the voice assistant on any phone.")}`;
 
   S.platform=()=>`<h1 class="ptitle">Platform</h1><p class="psub">Configure per country, open up, and keep working anywhere.</p>
+    ${globeNetSVG()}
     ${info("Country packs (no-code)","aqua",null,"Language, units, calendars, water-rights model, tariffs, payment channels, legal texts and hosting region — all configured without code.")}
     ${info("Open API &amp; connector marketplace","blue",null,"For equipment makers, banks, ERP systems and satellite-data providers.")}
     ${info("Roles &amp; approval chains","aqua",null,"Granular permissions for every level of the water hierarchy, with approval chains.")}
@@ -827,6 +828,22 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
       +'<rect width="760" height="320" rx="18" fill="url(#bgrad3)"/>'+orbit+spokes+parts+dots
       +pulseNode(px,py,"#2FE6C8",18)
       +'<text x="'+px+'" y="'+(py+5)+'" fill="#06202A" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">Aquora</text>'+labs+'</svg>';}
+  function globeNetSVG(){
+    var hub=[380,162];
+    var cities=[[110,88,"EU"],[250,58,""],[520,66,"Gulf"],[662,104,""],[150,248,"Africa"],[330,272,""],[560,252,"Asia"],[690,214,""]];
+    var arcs="",parts="",dots="",labs="",bg="";
+    cities.forEach(function(c,i){var id="gc"+i,cx=(hub[0]+c[0])/2,cy=(hub[1]+c[1])/2-44;
+      var d="M"+hub[0]+" "+hub[1]+" Q"+cx.toFixed(0)+" "+cy.toFixed(0)+" "+c[0]+" "+c[1];
+      arcs+='<path id="'+id+'" d="'+d+'" fill="none" stroke="#164C57" stroke-width="1.6"/>';
+      arcs+='<path d="'+d+'" fill="none" stroke="url(#cflow)" stroke-width="1.4" stroke-dasharray="2 12" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-14" dur="0.7s" repeatCount="indefinite"/></path>';
+      parts+='<circle r="2.3" fill="#8CF5E4" filter="url(#fglow)"><animateMotion dur="'+(2.4+i*0.2).toFixed(1)+'s" begin="'+(i*0.25).toFixed(2)+'s" repeatCount="indefinite"><mpath href="#'+id+'"/></animateMotion></circle>';
+      dots+=pulseNode(c[0],c[1],"#2FE6C8",6);
+      if(c[2])labs+='<text x="'+c[0]+'" y="'+(c[1]>hub[1]?c[1]+20:c[1]-12)+'" fill="#CFE6E2" font-size="11" text-anchor="middle" font-family="sans-serif">'+c[2]+'</text>';});
+    for(var gx=30;gx<760;gx+=40){for(var gy=30;gy<320;gy+=40){bg+='<circle cx="'+gx+'" cy="'+gy+'" r="1" fill="#103B45"/>';}}
+    return '<svg class="flowmap" viewBox="0 0 760 320"><defs><radialGradient id="bgrad4" cx="50%" cy="45%" r="78%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
+      +'<rect width="760" height="320" rx="18" fill="url(#bgrad4)"/>'+bg+arcs+parts+dots
+      +pulseNode(hub[0],hub[1],"#FFB15C",16)
+      +'<text x="'+hub[0]+'" y="'+(hub[1]+4)+'" fill="#06202A" font-size="12" font-weight="700" text-anchor="middle" font-family="sans-serif">Aquora</text>'+labs+'</svg>';}
   function filters(labels,action,primaryAmber){return `<div class="filters">${labels.map(l=>`<div class="fl"><label>${l}</label><div class="sel">All ${l.toLowerCase()} ▾</div></div>`).join("")}<div style="flex:1"></div><div style="display:flex;align-items:flex-end"><button class="btn ${primaryAmber?'':'primary'}" data-action style="${primaryAmber?'background:var(--amber);color:#2a1800;border-color:var(--amber);font-weight:600':''}">${action}</button></div></div>`;}
   function table(cols,rows){return `<table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;}
   function tg(k,t){return `<span class="tag ${k}">${t}</span>`;}
