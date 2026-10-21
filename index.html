@@ -592,6 +592,14 @@ const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
     <div class="kpis" style="grid-template-columns:repeat(3,1fr);max-width:660px">
       ${kpi("Soil moisture","62","%","good")}${kpi("Canal 1 flow","410","m³/s","blue")}${kpi("Canal water level","3.4","m","aqua")}</div>
     <div class="card" style="margin-top:16px"><div class="lbl">Canal 1 flow — last 12 hours (m³/s)</div><div id="senschart" style="margin-top:12px"></div></div>
+    <div class="card" style="margin-top:16px;max-width:660px"><div class="stripe"></div><div class="lbl">🏠 Home app — drinking water, in your pocket</div>
+      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px">
+        <div class="li" style="border:none;padding:11px 14px;background:var(--panel2);border-radius:12px"><span>🚰 Close / open the tap</span><span class="tag ok">from phone</span></div>
+        <div class="li" style="border:none;padding:11px 14px;background:var(--panel2);border-radius:12px"><span>✈️ Pause water while away</span><span class="tag aqua">1–15 May</span></div>
+        <div class="li" style="border:none;padding:11px 14px;background:var(--panel2);border-radius:12px"><span>⚠️ Auto-shutoff on leak</span><span class="tag crit">+ alert</span></div>
+        <div class="li" style="border:none;padding:11px 14px;background:var(--panel2);border-radius:12px"><span>💳 Pay drinking water</span><span class="tag ok">by phone</span></div>
+      </div>
+      <p class="psub" style="margin:12px 0 0">A household abonent controls their own drinking-water supply from the phone — and the system meters it live.</p></div>
     <p class="psub" style="margin-top:14px">Flow, levels and soil moisture stream in every second — enabling leak detection and automatic valve control.</p>`;
 
   S.melioration=()=>`<h1 class="ptitle">Melioration</h1><p class="psub">Protecting the land itself — drainage, salinity and groundwater.</p>
