@@ -261,8 +261,8 @@
   .achart .aline.l2{stroke:var(--blue);animation-delay:.45s}
 
   /* keep content clear of the fixed assistant panel on wide screens */
-  @media(min-width:1024px){.content{padding-right:600px}}
-  @media(min-width:1600px){.content{padding-right:600px}}
+  @media(min-width:1024px){.content{padding-right:680px}}
+  @media(min-width:1600px){.content{padding-right:680px}}
 
   /* nicer scrollbars */
   .menu::-webkit-scrollbar,.content::-webkit-scrollbar{width:9px;height:9px}
@@ -307,7 +307,7 @@
   .btn.primary{background:linear-gradient(135deg,#12C2B0,#6D5BF0);border:none;box-shadow:0 10px 24px rgba(93,91,240,.30)}
   .overlay .go{background:linear-gradient(135deg,#12C2B0,#6D5BF0);border-radius:999px;box-shadow:0 16px 36px rgba(93,91,240,.4)}
   .tag{font-weight:600}
-  .assistant{border-radius:22px;width:560px;max-width:calc(100vw - 28px)}
+  .assistant{border-radius:22px;width:640px;max-width:calc(100vw - 28px)}
   .avbanner{aspect-ratio:4/3;object-fit:cover;object-position:50% 48%}
   .top .lang{border-radius:999px}
   .flowmap{width:100%;max-width:760px;height:auto;display:block;border-radius:20px;box-shadow:0 18px 44px rgba(10,30,40,.28);margin-bottom:12px}
@@ -1183,14 +1183,18 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
   function srFlow(){
     if(listening){try{recog&&recog.stop();}catch(_){}return;}
     stopAudio();
-    recog=new SR();recog.lang="en-US";recog.interimResults=false;recog.maxAlternatives=1;
+    recog=new SR();recog.lang="en-US";recog.interimResults=true;recog.continuous=true;recog.maxAlternatives=1;
+    var qi=document.getElementById("qin"); if(qi){qi.value="";qi.placeholder="Listening… speak your question";}
+    var silence=null; function waitStop(){clearTimeout(silence);silence=setTimeout(function(){try{recog.stop();}catch(_){}} ,2500);}
     recog.onstart=()=>{listening=true;setMic(true);};
-    recog.onresult=e=>{const t=e.results[0][0].transcript;cap.textContent="You asked: “"+t+"”";ask(t);};
-    recog.onerror=e=>{listening=false;setMic(false);
+    recog.onresult=e=>{ var t=""; for(var i=0;i<e.results.length;i++){ t+=e.results[i][0].transcript+(e.results[i].isFinal?" ":""); } if(qi)qi.value=t.trim(); waitStop(); };
+    recog.onspeechstart=waitStop;
+    recog.onerror=e=>{clearTimeout(silence);listening=false;setMic(false);
       if(e.error==="not-allowed"||e.error==="service-not-allowed")cap.textContent="Microphone blocked — please allow mic access for this page.";
       else if(e.error==="no-speech")cap.textContent="I didn't hear anything — tap 🎤 and speak again.";};
-    recog.onend=()=>{listening=false;setMic(false);};
+    recog.onend=()=>{clearTimeout(silence);listening=false;setMic(false); if(qi)qi.placeholder="Ask me about the system…"; var v=qi?qi.value.trim():""; if(v){ask(v);} };
     try{recog.start();}catch(_){listening=false;setMic(false);}
+    silence=setTimeout(function(){try{recog.stop();}catch(_){}} ,8000);
   }
   function toggleListen(){
     if(SR)return srFlow();
