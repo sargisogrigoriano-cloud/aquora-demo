@@ -494,7 +494,8 @@
   .gauges>div:nth-child(3) .ringwrap{background:conic-gradient(#34D399 0,#0FB5A6 var(--p,0%),#E3F2EC 0)!important;box-shadow:0 10px 26px rgba(16,185,129,.15)}
   .ringwrap::before{inset:13px;background:#fff}
   .ringwrap .v{font-size:28px;font-weight:900;color:#0C2A33}
-  .ringwrap .v small{font-size:12px;font-weight:700;color:#33505A}
+  .ringwrap .v small{font-size:16px;font-weight:800;color:#0C2A33;margin-top:4px;letter-spacing:0}
+  .kpi .big .u{font-size:18px!important;font-weight:800!important;opacity:1!important}
   .gauges .gl{margin-top:12px;font-size:15px;font-weight:800;color:#0C2A33}
   .legend{background:rgba(255,255,255,.95);border-radius:14px;padding:8px 14px;display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;box-shadow:0 6px 16px rgba(20,30,60,.08)}
   .legend span{color:#0C2A33!important;font-weight:700}
@@ -1088,17 +1089,18 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
 
   const WGN={basin:[330,52,"River basin","#F2A93B"],res:[150,120,"Reservoir","#F2A93B"],main:[330,150,"Main canal","#49A7FF"],
     k1:[140,250,"Canal K-1","#49A7FF"],k2:[340,270,"Canal K-2","#49A7FF"],k3:[540,240,"Canal K-3","#49A7FF"],
+    w7:[110,360,"WUA North","#8B5CF6"],w12:[300,400,"WUA Central","#8B5CF6"],w19:[652,345,"WUA East","#8B5CF6"],
     g4:[470,330,"Gauge G-4","#EC4899"],sat:[620,120,"Satellite ET","#A78BFA"],wx:[600,420,"Weather","#A78BFA"],
     p1:[85,470,"Plot 1041-3","#2FE6C8"],p2:[200,480,"Plot 1044-1","#2FE6C8"],p3:[360,500,"Plot 1102-2","#2FE6C8"],p4:[470,470,"Plot 1187-1","#2FE6C8"],
     loss:[230,320,"Losses 18%","#FF5C6C"],surge:[110,560,"Night surge","#FF5C6C"],plan:[640,520,"Irrigation plan","#34D399"],
     acts:[480,560,"Acceptance acts","#34D399"],bill:[650,610,"Billing","#34D399"],pay:[330,610,"Payments","#34D399"]};
   const WGE=[["basin","res"],["basin","main"],["res","main"],["main","k1"],["main","k2"],["main","k3"],["k2","g4"],["k2","loss"],["sat","loss"],["sat","k3"],
-    ["k1","p1"],["k1","p2"],["k2","p3"],["k3","p4"],["p3","loss"],["p2","surge"],["wx","plan"],["plan","p1"],["plan","p4"],
-    ["p4","acts"],["p3","acts"],["acts","bill"],["bill","pay"],["g4","acts"],["sat","p4"],["wx","p4"]];
+    ["k1","w7"],["k2","w12"],["k3","w19"],["w7","p1"],["w7","p2"],["w12","p3"],["w19","p4"],["w12","loss"],["p2","surge"],["wx","plan"],["plan","p1"],["plan","p4"],
+    ["p4","acts"],["p3","acts"],["acts","bill"],["bill","pay"],["g4","acts"],["sat","w19"],["wx","w19"]];
   const WGS=[
     {path:["k2","loss"],chip:"Canal K-2 → Losses",ev:"Gauge G-4 at the canal head logged 120,400 m³ this decade; water users' signed acts accept only 98,700 m³.",src:"Gauge G-4 + acts — decade 2, July",
-     it:"About 18% of the water leaves Canal K-2 between the gate and the farms. Satellite ET shows irrigation on 3 plots along the canal that have no allocation — a likely unauthorised offtake.",status:"Needs field check"},
-    {path:["wx","plan","p1"],chip:"Weather → Plan",ev:"ECMWF forecast: 14 mm of rain on Saturday over the Canal K-1 area.",src:"Weather feed — updated 06:00",
+     it:"About 18% of the water leaves Canal K-2 between the gate and the farms. Satellite ET shows irrigation on 3 plots near WUA Central that have no allocation — a likely unauthorised offtake.",status:"Needs field check"},
+    {path:["wx","plan","p1"],chip:"Weather → Plan",ev:"ECMWF forecast: 14 mm of rain on Saturday over the WUA North area.",src:"Weather feed — updated 06:00",
      it:"The next irrigation turn for Plot 1041-3 is skipped automatically, saving about 900 m³. The farmer gets a message on WhatsApp.",status:"Applied by AI, confirmed by operator"},
     {path:["p2","surge"],chip:"Plot 1044-1 → Night surge",ev:"Flow at 03:10 was 3× the normal night level and kept rising for 12 minutes.",src:"Smart valve sensor V-1044",
      it:"A likely pipe burst. The valve was closed automatically and the user was notified before any damage.",status:"Resolved"},
@@ -1121,8 +1123,8 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     +'<div class="lbl2" style="margin-top:12px">Related connections</div><div class="chips">'+WGS.map(function(x,i){return '<span class="chip'+(i===sel?' on':'')+'" onclick="wgSel('+i+')">'+x.chip+'</span>';}).join("")+'</div></div>';}
   window.wgSel=function(i){const w=document.getElementById("wgbox");if(!w)return;w.innerHTML='<div class="gsv">'+wgSVG(i)+'</div>'+wgPanel(i)+WGLEG;};
   window.wgPick=function(k){for(var i=0;i<WGS.length;i++){if(WGS[i].path.indexOf(k)>=0){wgSel(i);return;}}};
-  const WGLEG='<div class="legend2"><span><i style="background:#F2A93B"></i>Sources</span><span><i style="background:#49A7FF"></i>Canals</span><span><i style="background:#2FE6C8"></i>Plots</span><span><i style="background:#EC4899"></i>Gauges</span><span><i style="background:#A78BFA"></i>Satellite & weather</span><span><i style="background:#FF5C6C"></i>Alerts</span><span><i style="background:#34D399"></i>Plan & money</span></div>';
-  S.graph=()=>`<h1 class="ptitle">Water graph</h1><p class="psub">Everything is connected — basins, canals, plots, sensors and money. Click a node or a connection.</p>
+  const WGLEG='<div class="legend2"><span><i style="background:#F2A93B"></i>Sources</span><span><i style="background:#49A7FF"></i>Canals</span><span><i style="background:#8B5CF6"></i>WUA</span><span><i style="background:#2FE6C8"></i>Plots</span><span><i style="background:#EC4899"></i>Gauges</span><span><i style="background:#A78BFA"></i>Satellite & weather</span><span><i style="background:#FF5C6C"></i>Alerts</span><span><i style="background:#34D399"></i>Plan & money</span></div>';
+  S.graph=()=>`<h1 class="ptitle">Water graph</h1><p class="psub">Everything is connected — basins, canals, WUAs, plots, sensors and money. Click a node or a connection.</p>
     <div class="wg" id="wgbox"><div class="gsv">${wgSVG(0)}</div>${wgPanel(0)}${WGLEG}</div>`;
 
   function kpi(l,v,u,c){var sp=sparkPath();return `<div class="card kpi ${c}"><div class="stripe ${c}"></div><div class="lbl">${l}</div><div class="big"><b data-t="${v.replace(/,/g,'')}" data-raw="${v}">0</b><span class="u"> ${u}</span></div><svg class="spark ${c}" viewBox="0 0 120 36" preserveAspectRatio="none"><path class="sa" d="${sp.area}"/><path class="sl" pathLength="1" d="${sp.line}"/></svg></div>`;}
