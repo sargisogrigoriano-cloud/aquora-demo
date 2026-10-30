@@ -996,7 +996,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     ${info("Language","aqua",["aqua","i18n"],"Translation must be built into the platform <b>from day one</b>: a single central glossary plus AI translation, verified by humans.")}`;
 
   S.roadmap=()=>`<h1 class="ptitle">Roadmap</h1><p class="psub">From demo to platform — MVP (6 months), v2 (12 months), v3 (24 months).</p>
-    ${pipelineSVG(["MVP · 6 mo","v2 · 12 mo","v3 · 24 mo"])}
+    ${photoPipeSVG(["MVP · 6 mo","v2 · 12 mo","v3 · 24 mo"],["🚀","🛰️","🌍"],"img/roadmap.jpg","PRODUCT ROADMAP")}
     <div class="card" style="margin-bottom:14px"><div class="stripe"></div><div class="lbl">In short</div>
       <div style="margin-top:8px;line-height:1.6">Today's demo has 13 solid modules, but they are separate screens with illustrative data. To become a platform investors take seriously — and adaptable for the EU, the Gulf and Africa — Aquora needs three layers: a <b>real core</b> (live data, the full request → payment flow, a complete audit log), an <b>AI layer</b> that does useful work for every user, and <b>platform features</b> (country configuration, open API, multi-tenancy, offline).</div></div>
     <div class="card" style="margin-bottom:20px"><div class="stripe aqua"></div><div class="lbl">One platform, adaptable everywhere</div>
@@ -1262,7 +1262,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     return '<svg class="flowmap" viewBox="0 0 800 396"><defs><radialGradient id="bgr_rn" cx="50%" cy="50%" r="70%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
       +'<rect width="800" height="396" rx="20" fill="url(#bgr_rn)"/>'+spokes+parts+dots
       +(icon?hubIcon(icon,cx,cy,center):pulseNode(cx,cy,"#FFB15C",34)+'<text x="'+cx+'" y="'+(cy+5)+'" fill="#06202A" font-size="13" font-weight="800" text-anchor="middle" font-family="sans-serif">'+center+'</text>')+labs+'</svg>';}
-  function photoPipeSVG(stages,icons,photo){
+  function photoPipeSVG(stages,icons,photo,title){title=title||"REQUEST LIFECYCLE";
     var W=760,H=200,n=stages.length,pad=84,step=(W-pad*2)/(n-1),y=92,line="M"+pad+" "+y+" H"+(W-pad),nodes="",cyc=n*1.2;
     for(var i=0;i<n;i++){var x=pad+i*step,b=(i*1.2).toFixed(1)+"s";
       nodes+='<circle cx="'+x+'" cy="'+y+'" r="34" fill="#2FE6C8" opacity="0"><animate attributeName="opacity" values="0;.55;0" keyTimes="0;.12;.3" dur="'+cyc+'s" begin="'+b+'" repeatCount="indefinite"/><animate attributeName="r" values="30;44;30" keyTimes="0;.12;.3" dur="'+cyc+'s" begin="'+b+'" repeatCount="indefinite"/></circle>'
@@ -1278,7 +1278,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
       +'<path id="ppipe" d="'+line+'" fill="none" stroke="#7FEAE6" stroke-width="14" stroke-opacity=".25" stroke-linecap="round"/>'
       +'<path d="'+line+'" fill="none" stroke="#E9FFFE" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="10 14"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/></path>'
       +flowParticles("ppipe",4,"#FFFFFF",3.4)+nodes
-      +'<rect x="14" y="14" width="168" height="24" rx="12" fill="rgba(8,22,28,.75)"/><text x="98" y="30" fill="#7FEAE6" font-size="11" font-weight="800" text-anchor="middle" font-family="sans-serif" letter-spacing="1">REQUEST LIFECYCLE</text>'
+      +'<rect x="14" y="14" width="'+(title.length*8.2+26)+'" height="24" rx="12" fill="rgba(8,22,28,.75)"/><text x="'+(14+(title.length*8.2+26)/2)+'" y="30" fill="#7FEAE6" font-size="11" font-weight="800" text-anchor="middle" font-family="sans-serif" letter-spacing="1">'+title+'</text>'
       +'</g></svg>';}
   function pipelineSVG(stages){
     var W=760,n=stages.length,pad=80,step=(W-pad*2)/(n-1),y=66,line="M"+pad+" "+y+" H"+(W-pad),nodes="",labs="";
