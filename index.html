@@ -474,6 +474,17 @@
   .filters{background:rgba(255,255,255,.95)}
   table{background:rgba(255,255,255,.97)}
   td{color:#0C2A33;font-weight:600}
+  /* all phones: Request teal + Delivery cyan-blue, constantly flowing */
+  .ph,.ph.rainbow,.ph.aqua{--c1:#12C2B0;--c2:#3B82F6;background:linear-gradient(135deg,#12C2B0,#0C9488,#22D3EE,#3B82F6,#22D3EE,#12C2B0)!important;background-size:400% 400%!important;
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.5),inset 0 -10px 24px rgba(0,0,0,.15),0 30px 60px -14px rgba(34,160,220,.55)}
+  .ph{animation:gradflow 8s linear infinite}
+  .ph.spin{animation:phspin 9s ease-in-out infinite,gradflow 8s linear infinite}
+  .bigwrap .ph{animation:gradflow 8s linear infinite}
+  .bigwrap .ph.flip{animation:bflip 1.1s cubic-bezier(.55,.05,.35,1),gradflow 8s linear infinite}
+  .jrny.sync .ph{animation:gradflow 8s linear infinite}
+  .jrny.sync .st:nth-child(2) .ph{animation-delay:-1.1s}.jrny.sync .st:nth-child(3) .ph{animation-delay:-2.2s}.jrny.sync .st:nth-child(4) .ph{animation-delay:-3.3s}
+  .jrny.sync .st:nth-child(5) .ph{animation-delay:-4.4s}.jrny.sync .st:nth-child(6) .ph{animation-delay:-5.5s}.jrny.sync .st:nth-child(7) .ph{animation-delay:-6.6s}
+  .jrny .st h4{color:#0FB5A6!important}.jrny .st:nth-child(even) h4{color:#2B8FE0!important}
 </style>
 
 <svg width="0" height="0" style="position:absolute"><defs>
@@ -1045,7 +1056,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     ["Charge","charge","A charge that's <em>always fair</em>","Built from the real metered volume and the tariff — never estimated, always explainable."],
     ["Pay","pay","Pay in <em>seconds</em>","By personal account number through the bank — reconciled automatically, debt cleared at once."],
     ["Support","support","Help that <em>comes to you</em>","Advice by WhatsApp and voice, leak and rain alerts, and complaints tracked to resolution."]];
-  const JCOL=[["#12C2B0","#0C9488"],["#5B8DEF","#6D5BF0"],["#22D3EE","#3B82F6"],["#34D399","#10B981"],["#8B5CF6","#EC4899"],["#F59E0B","#EF4444"],["#6D5BF0","#A855F7"]];
+  const JCOL=[["#12C2B0","#0C9488"],["#22D3EE","#3B82F6"],["#12C2B0","#0C9488"],["#22D3EE","#3B82F6"],["#12C2B0","#0C9488"],["#22D3EE","#3B82F6"],["#12C2B0","#0C9488"]];
   let jIdx=0,jTimer=null;
   function jShow(n,anim){const ph=document.getElementById("bigph"),cap=document.getElementById("bigcap");if(!ph||!cap){clearInterval(jTimer);jTimer=null;return false;}
     jIdx=(n+JST.length)%JST.length;const s=JST[jIdx];
