@@ -739,7 +739,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     ])}</div>`;
 
   S.requests=()=>`<h1 class="ptitle">Requests</h1><p class="psub">Users ask for water; the system turns it into a plan.</p>
-    ${pipelineSVG(["Request","Limit check","Plan","Delivery","Invoice"])}
+    ${photoPipeSVG(["Request","Limit check","Plan","Delivery","Invoice"],["📝","⚖️","📅","💧","🧾"],"img/requests.jpg")}
     <div style="margin:4px 0 14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <button class="btn primary" data-flow="req">💧 Make a water request</button>
       ${FLOW.req?'<span class="tag ok">request created ✓</span>':'<span class="psub">— click to request water, as a farmer would</span>'}</div>
@@ -1262,6 +1262,24 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     return '<svg class="flowmap" viewBox="0 0 800 396"><defs><radialGradient id="bgr_rn" cx="50%" cy="50%" r="70%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
       +'<rect width="800" height="396" rx="20" fill="url(#bgr_rn)"/>'+spokes+parts+dots
       +(icon?hubIcon(icon,cx,cy,center):pulseNode(cx,cy,"#FFB15C",34)+'<text x="'+cx+'" y="'+(cy+5)+'" fill="#06202A" font-size="13" font-weight="800" text-anchor="middle" font-family="sans-serif">'+center+'</text>')+labs+'</svg>';}
+  function photoPipeSVG(stages,icons,photo){
+    var W=760,H=200,n=stages.length,pad=84,step=(W-pad*2)/(n-1),y=92,line="M"+pad+" "+y+" H"+(W-pad),nodes="",cyc=n*1.2;
+    for(var i=0;i<n;i++){var x=pad+i*step,b=(i*1.2).toFixed(1)+"s";
+      nodes+='<circle cx="'+x+'" cy="'+y+'" r="34" fill="#2FE6C8" opacity="0"><animate attributeName="opacity" values="0;.55;0" keyTimes="0;.12;.3" dur="'+cyc+'s" begin="'+b+'" repeatCount="indefinite"/><animate attributeName="r" values="30;44;30" keyTimes="0;.12;.3" dur="'+cyc+'s" begin="'+b+'" repeatCount="indefinite"/></circle>'
+        +'<circle cx="'+x+'" cy="'+y+'" r="29" fill="rgba(255,255,255,.22)" stroke="url(#silv)" stroke-width="3"/>'
+        +'<circle cx="'+x+'" cy="'+y+'" r="24" fill="rgba(8,30,38,.55)"/>'
+        +'<text x="'+x+'" y="'+(y+8)+'" font-size="22" text-anchor="middle">'+icons[i]+'</text>'
+        +'<circle cx="'+(x+22)+'" cy="'+(y-22)+'" r="10" fill="#0C2A33" stroke="#fff" stroke-width="1.6"/><text x="'+(x+22)+'" y="'+(y-18)+'" fill="#7FEAE6" font-size="11" font-weight="900" text-anchor="middle" font-family="sans-serif">'+(i+1)+'</text>';
+      var w=stages[i].length*7.6+24;
+      nodes+='<rect x="'+(x-w/2)+'" y="'+(y+40)+'" width="'+w+'" height="26" rx="13" fill="rgba(8,22,28,.82)" stroke="#7FEAE6" stroke-opacity=".7"/><text x="'+x+'" y="'+(y+57)+'" fill="#FFFFFF" font-size="13" font-weight="800" text-anchor="middle" font-family="sans-serif">'+stages[i]+'</text>';}
+    return '<svg class="flowmap nohue" viewBox="0 0 '+W+' '+H+'"><defs><clipPath id="ppClip"><rect width="'+W+'" height="'+H+'" rx="18"/></clipPath>'
+      +'<linearGradient id="ppShade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#03141A" stop-opacity=".35"/><stop offset=".55" stop-color="#03141A" stop-opacity=".15"/><stop offset="1" stop-color="#03141A" stop-opacity=".6"/></linearGradient></defs>'
+      +'<g clip-path="url(#ppClip)"><image href="'+photo+'" x="0" y="0" width="'+W+'" height="'+H+'" preserveAspectRatio="xMidYMid slice"/><rect width="'+W+'" height="'+H+'" fill="url(#ppShade)"/>'
+      +'<path id="ppipe" d="'+line+'" fill="none" stroke="#7FEAE6" stroke-width="14" stroke-opacity=".25" stroke-linecap="round"/>'
+      +'<path d="'+line+'" fill="none" stroke="#E9FFFE" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="10 14"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/></path>'
+      +flowParticles("ppipe",4,"#FFFFFF",3.4)+nodes
+      +'<rect x="14" y="14" width="168" height="24" rx="12" fill="rgba(8,22,28,.75)"/><text x="98" y="30" fill="#7FEAE6" font-size="11" font-weight="800" text-anchor="middle" font-family="sans-serif" letter-spacing="1">REQUEST LIFECYCLE</text>'
+      +'</g></svg>';}
   function pipelineSVG(stages){
     var W=760,n=stages.length,pad=80,step=(W-pad*2)/(n-1),y=66,line="M"+pad+" "+y+" H"+(W-pad),nodes="",labs="";
     for(var i=0;i<n;i++){var x=pad+i*step;
