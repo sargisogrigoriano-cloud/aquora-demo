@@ -726,11 +726,11 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
 
   S.map=()=>`<h1 class="ptitle">Map & canals</h1><p class="psub">Live water flow across the network — from the reservoir to every field.</p>
     ${flowMapSVG()}
-    <div class="legend"><span><i style="background:#2CCBD3"></i>Reservoir (source)</span><span><i style="background:#E9FFFE;border:1px solid #9ADBDD"></i>Water flow</span><span><i style="background:#14B0C8"></i>Canals</span><span><i style="background:#C3CBD4"></i>Gates (% open)</span><span><i style="background:#8DBF5A"></i>Fields</span><span><i style="background:#FF5C6C"></i>Sensor alert</span></div>
+    <div class="legend"><span><i style="background:#E9FFFE;border:1px solid #7FEAE6"></i>Live water flow</span><span><i style="background:#C3CBD4"></i>Gates & weirs (% open)</span><span><i style="background:rgba(127,234,230,.4);border:1px dashed #0C2A33"></i>Plot boundaries</span><span><i style="background:#FF5C6C"></i>Sensor alert</span><span style="opacity:.75">Base: aerial imagery</span></div>
     <div style="margin-top:16px">${table(["Canal","Flow","Gate","Status"],[
-      ["Main Canal 1","410 m³/s","82% open",tg("ok","normal")],
-      ["Canal 2","250 m³/s","60% open",tg("warn","below plan")],
-      ["Canal 3","182 m³/s","90% open",tg("ok","normal")],
+      ["Main canal · Weir W-1","410 m³/s","82% open",tg("ok","normal")],
+      ["Main canal · Gate G-2","250 m³/s","60% open",tg("warn","below plan")],
+      ["Canal K-2 · Offtake","182 m³/s","90% open",tg("ok","normal")],
     ])}</div>`;
 
   S.requests=()=>`<h1 class="ptitle">Requests</h1><p class="psub">Users ask for water; the system turns it into a plan.</p>
@@ -1158,36 +1158,31 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
   function flowParticles(id,n,color,dur){var s="";for(var i=0;i<n;i++){s+='<circle r="2.8" fill="'+color+'" filter="url(#fglow)"><animateMotion dur="'+dur+'s" begin="'+(i*dur/n).toFixed(2)+'s" repeatCount="indefinite"><mpath href="#'+id+'"/></animateMotion></circle>';}return s;}
   function pulseNode(x,y,color,r){return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+color+'" filter="url(#fglow)"/><circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="none" stroke="'+color+'" stroke-width="2"><animate attributeName="r" values="'+r+';'+(r+14)+';'+r+'" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".9;0;.9" dur="2.6s" repeatCount="indefinite"/></circle>';}
   function flowMapSVG(){
-    var paths=[["mp","M118 190 H700"],["b1","M230 190 V64"],["b2","M380 190 V306"],["b3","M520 190 V72"],["b4","M620 190 V306"]];
-    var pal=["#6FA84B","#8DBF5A","#C9B458","#A8C76A","#5E9A45","#D4C27A","#7DB356","#B9A64E"],fields="",k=0;
-    for(var fx=128;fx<740;fx+=64){for(var fy=16;fy<330;fy+=50){k++;
-      if(Math.abs(fy+21-190)<30)continue;
-      var hit=[[230,64,190],[380,190,306],[520,72,190],[620,190,306]].some(function(c){return fx-10<c[0]&&fx+64>c[0]&&fy+42>c[1]-6&&fy<c[2]+6;});
-      if(hit)continue;
-      var col=pal[(k*7+Math.floor(fx/64))%pal.length];
-      fields+='<rect x="'+fx+'" y="'+fy+'" width="56" height="42" rx="5" fill="'+col+'" stroke="#3C5A2C" stroke-width="1" opacity=".92"/><rect x="'+fx+'" y="'+fy+'" width="56" height="42" rx="5" fill="url(#fmRows)" opacity=".35"/>';}}
-    var water=paths.map(function(p,i){var w=i?9:15;return '<path id="'+p[0]+'" d="'+p[1]+'" fill="none" stroke="#06627A" stroke-width="'+(w+5)+'" stroke-linecap="round"/>'
-      +'<path d="'+p[1]+'" fill="none" stroke="'+(i?'#2CCBD3':'#3FD6DA')+'" stroke-width="'+w+'" stroke-linecap="round"/>'
-      +'<path d="'+p[1]+'" fill="none" stroke="#E9FFFE" stroke-width="'+(i?1.6:2.4)+'" stroke-linecap="round" stroke-dasharray="6 18" opacity=".85"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="'+(i?1.1:0.8)+'s" repeatCount="indefinite"/></path>';}).join("");
-    var parts=flowParticles("mp",6,"#FFFFFF",2.6)+flowParticles("b1",2,"#FFFFFF",2)+flowParticles("b2",2,"#FFFFFF",2)+flowParticles("b3",2,"#FFFFFF",2)+flowParticles("b4",2,"#FFFFFF",2);
-    function gate(x,y,pct){return '<g transform="translate('+x+' '+y+')"><rect x="-10" y="-10" width="20" height="20" rx="4" fill="url(#silv)" stroke="#5E6B79" stroke-width="1.4"/><rect x="-6" y="-3" width="12" height="6" rx="1.5" fill="#2A3646"/>'
-      +'<rect x="13" y="-11" width="40" height="22" rx="11" fill="rgba(5,40,52,.82)" stroke="#5EE0E4" stroke-width="1"/><text x="33" y="4.5" fill="#E9FFFE" font-size="11" font-weight="800" text-anchor="middle" font-family="sans-serif">'+pct+'</text></g>';}
-    function tag(x,y,t){var w=t.length*7+18;return '<rect x="'+(x-w/2)+'" y="'+(y-11)+'" width="'+w+'" height="22" rx="11" fill="rgba(5,40,52,.85)"/><text x="'+x+'" y="'+(y+4)+'" fill="#E9FFFE" font-size="11.5" font-weight="700" text-anchor="middle" font-family="sans-serif">'+t+'</text>';}
-    var lake='<path d="M14 120 Q30 92 70 96 Q112 100 118 140 Q126 186 112 230 Q96 276 56 272 Q18 268 14 222 Q6 170 14 120 Z" fill="url(#fmLake)" stroke="#E9FFFE" stroke-opacity=".5" stroke-width="1.5"/>'
-      +[0,1,2].map(function(i){return '<ellipse cx="62" cy="186" rx="10" ry="6" fill="none" stroke="#FFFFFF" stroke-opacity=".6" stroke-width="1.2"><animate attributeName="rx" values="8;44" dur="3.6s" begin="'+(i*1.2)+'s" repeatCount="indefinite"/><animate attributeName="ry" values="5;26" dur="3.6s" begin="'+(i*1.2)+'s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".7;0" dur="3.6s" begin="'+(i*1.2)+'s" repeatCount="indefinite"/></ellipse>';}).join("")
-      +'<rect x="112" y="176" width="10" height="28" rx="2" fill="url(#silv)" stroke="#5E6B79" stroke-width="1.2"/>';
-    var compass='<g transform="translate(722 302)"><circle r="18" fill="rgba(5,40,52,.75)" stroke="url(#silv)" stroke-width="2"/><path d="M0 -13 L4 0 L0 13 L-4 0 Z" fill="url(#silv)"/><path d="M0 -13 L4 0 L-4 0 Z" fill="#FF5C6C"/><text y="-21" fill="#E9FFFE" font-size="9" font-weight="800" text-anchor="middle" font-family="sans-serif">N</text></g>'
-      +'<g transform="translate(560 322)"><rect x="0" y="-3" width="100" height="6" rx="1" fill="url(#silv)"/><rect x="0" y="-3" width="50" height="6" rx="1" fill="#2A3646"/><text x="50" y="-7" fill="#E9FFFE" font-size="9.5" font-weight="700" text-anchor="middle" font-family="sans-serif">2 km</text></g>';
-    return '<svg class="flowmap nohue" viewBox="0 0 760 340"><defs>'
-      +'<linearGradient id="fmGround" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3E5A2E"/><stop offset=".5" stop-color="#4E6B36"/><stop offset="1" stop-color="#3A5530"/></linearGradient>'
-      +'<linearGradient id="fmWater" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7FEAE6"/><stop offset=".5" stop-color="#2CCBD3"/><stop offset="1" stop-color="#14B0C8"/></linearGradient>'
-      +'<radialGradient id="fmLake" cx=".45" cy=".45" r=".7"><stop offset="0" stop-color="#9AF1EC"/><stop offset=".45" stop-color="#2CCBD3"/><stop offset="1" stop-color="#0A7C96"/></radialGradient>'
-      +'<pattern id="fmRows" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="6" stroke="#203818" stroke-width="1.4"/></pattern></defs>'
-      +'<rect width="760" height="340" rx="18" fill="url(#fmGround)"/>'+fields+lake+water+parts
-      +gate(150,190,"82%")+gate(230,160,"60%")+gate(380,220,"90%")+gate(520,160,"75%")+gate(620,220,"68%")
-      +'<circle cx="520" cy="80" r="10" fill="none" stroke="#FF5C6C" stroke-width="3"><animate attributeName="r" values="8;24;8" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0;1" dur="1.6s" repeatCount="indefinite"/></circle><circle cx="520" cy="80" r="6" fill="#FF5C6C" stroke="#fff" stroke-width="2"/>'
-      +tag(520,46,"⚠ Sensor alert · −18%")+tag(62,292,"Reservoir")+tag(420,176,"Main canal")+tag(275,98,"Canal 2")+tag(425,282,"Canal 3")+tag(565,108,"Canal 4")+tag(665,282,"Canal 5")
-      +compass+'</svg>';}
+    var main="M0 287 L250 268 L392 254 Q468 260 520 300 L600 362 L690 428",br="M376 206 L373 150 L366 100 L344 36";
+    function flow(id,d,w){return '<path id="'+id+'" d="'+d+'" fill="none" stroke="#7FEAE6" stroke-width="'+(w+6)+'" stroke-opacity=".22" stroke-linecap="round"/>'
+      +'<path d="'+d+'" fill="none" stroke="#E9FFFE" stroke-width="'+w+'" stroke-linecap="round" stroke-dasharray="10 14" opacity=".9"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.9s" repeatCount="indefinite"/></path>';}
+    function pin(x,y,t,sub){var w=Math.max(t.length,sub.length)*6.4+26;return '<g transform="translate('+x+' '+y+')"><circle r="7" fill="url(#silv)" stroke="#2A3646" stroke-width="1.5"/><circle r="2.6" fill="#2A3646"/>'
+      +'<line x1="0" y1="-7" x2="0" y2="-18" stroke="#E9FFFE" stroke-width="1.4"/><rect x="'+(-w/2)+'" y="-52" width="'+w+'" height="34" rx="8" fill="rgba(8,22,28,.82)" stroke="#7FEAE6" stroke-opacity=".7"/>'
+      +'<text y="-37" fill="#FFFFFF" font-size="11.5" font-weight="800" text-anchor="middle" font-family="sans-serif">'+t+'</text><text y="-24" fill="#7FEAE6" font-size="10.5" font-weight="700" text-anchor="middle" font-family="sans-serif">'+sub+'</text></g>';}
+    function plot(pts,lx,ly,t,sub){return '<polygon points="'+pts+'" fill="rgba(127,234,230,.10)" stroke="#E9FFFE" stroke-width="1.6" stroke-dasharray="6 4"><animate attributeName="stroke-dashoffset" from="0" to="-20" dur="2s" repeatCount="indefinite"/></polygon>'
+      +'<rect x="'+(lx-4)+'" y="'+(ly-13)+'" width="'+(Math.max(t.length,sub.length)*6.3+12)+'" height="31" rx="6" fill="rgba(8,22,28,.75)"/><text x="'+(lx+2)+'" y="'+ly+'" fill="#FFFFFF" font-size="11" font-weight="800" font-family="sans-serif">'+t+'</text><text x="'+(lx+2)+'" y="'+(ly+13)+'" fill="#C9F5D8" font-size="10" font-weight="600" font-family="sans-serif">'+sub+'</text>';}
+    function lab(x,y,t,rot){return '<g transform="translate('+x+' '+y+') rotate('+(rot||0)+')"><text fill="#FFFFFF" font-size="12.5" font-weight="900" text-anchor="middle" font-family="sans-serif" stroke="rgba(0,0,0,.65)" stroke-width="3" paint-order="stroke">'+t+'</text></g>';}
+    var compass='<g transform="translate(724 36)"><circle r="18" fill="rgba(8,22,28,.75)" stroke="url(#silv)" stroke-width="2"/><path d="M0 -13 L4 0 L0 13 L-4 0 Z" fill="url(#silv)"/><path d="M0 -13 L4 0 L-4 0 Z" fill="#FF5C6C"/><text y="-21" fill="#FFFFFF" font-size="9" font-weight="800" text-anchor="middle" font-family="sans-serif">N</text></g>'
+      +'<g transform="translate(24 404)"><rect x="-6" y="-16" width="124" height="26" rx="6" fill="rgba(8,22,28,.7)"/><rect x="0" y="0" width="100" height="5" fill="#fff"/><rect x="0" y="0" width="50" height="5" fill="#2A3646"/><text x="50" y="-4" fill="#FFFFFF" font-size="9.5" font-weight="700" text-anchor="middle" font-family="sans-serif">200 m</text></g>';
+    return '<svg class="flowmap nohue" viewBox="0 0 760 428"><defs><radialGradient id="fmVig" cx=".5" cy=".5" r=".75"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".45"/></radialGradient>'
+      +'<clipPath id="fmClip"><rect width="760" height="428" rx="18"/></clipPath></defs><g clip-path="url(#fmClip)">'
+      +'<image href="img/map.jpg" x="0" y="0" width="760" height="428" preserveAspectRatio="xMidYMid slice"/>'
+      +'<rect width="760" height="428" fill="url(#fmVig)"/>'
+      +plot("92,58 250,52 252,192 96,196",104,76,"Plot 1041-1","cotton · sown 10 Apr")
+      +plot("402,70 500,40 520,140 420,170",428,96,"Plot 1044-1","wheat · 2.0 ha")
+      +plot("560,118 680,84 712,190 596,222",586,140,"Plot 1102-2","rice · 1.0 ha")
+      +flow("mp",main,3.2)+flow("b1",br,2.4)
+      +flowParticles("mp",5,"#FFFFFF",3)+flowParticles("b1",2,"#FFFFFF",2.4)
+      +pin(394,255,"Weir W-1","82% open")+pin(502,280,"Gate G-2","60% open")+pin(371,140,"Offtake K-2","90% open")
+      +'<circle cx="622" cy="330" r="9" fill="none" stroke="#FF5C6C" stroke-width="3"><animate attributeName="r" values="7;24;7" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0;1" dur="1.6s" repeatCount="indefinite"/></circle><circle cx="622" cy="330" r="6" fill="#FF5C6C" stroke="#fff" stroke-width="2"/>'
+      +'<rect x="636" y="320" width="118" height="22" rx="11" fill="rgba(160,20,40,.85)"/><text x="695" y="335" fill="#FFFFFF" font-size="11" font-weight="800" text-anchor="middle" font-family="sans-serif">⚠ Sensor S-7 · −18%</text>'
+      +lab(150,292,"MAIN CANAL",-4)+lab(256,40,"Storage pond",0)
+      +compass+'</g></svg>';}
   function agentNetSVG(){
     var labels=["Farmer","Association","Dispatcher","Ministry","Anomaly","Document AI"];
     var cx=400,cy=198,rx=252,ry=138,spokes="",parts="",dots="",labs="";
