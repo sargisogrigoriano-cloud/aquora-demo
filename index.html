@@ -396,8 +396,8 @@
   .ms .nav b{color:#0FB5A6}
   .outc .oc{display:flex;gap:14px;align-items:center;margin-bottom:18px;animation:rise .6s both}
   .outc .oc:nth-child(2){animation-delay:.15s}.outc .oc:nth-child(3){animation-delay:.3s}.outc .oc:nth-child(4){animation-delay:.45s}.outc .oc:nth-child(5){animation-delay:.6s}
-  .outc .ic{width:52px;height:52px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:#E3F7F4}
-  .outc .v{font-size:28px;font-weight:800;color:#0FB5A6;letter-spacing:-1px;line-height:1}
+  .outc .ic{width:52px;height:52px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:#DCEFFB}
+  .outc .v{font-size:28px;font-weight:800;color:#0277BD;letter-spacing:-1px;line-height:1}
   .outc .t{font-size:14px;font-weight:600;color:#0C2A33}
   .outc .note{font-size:11px;color:var(--muted);margin-top:6px}
   .tgt{display:inline-block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#E78B09;border:1px solid #F5D3A0;border-radius:20px;padding:3px 10px;margin-bottom:14px}
@@ -463,6 +463,17 @@
   .jrny.sync .st.on .ph{transform:translateY(-6px) scale(1.04);box-shadow:inset 0 0 0 2px rgba(255,255,255,.7),0 0 0 4px rgba(255,255,255,.9),0 0 0 7px var(--c1),0 26px 44px -6px var(--c2)}
   .jrny .st{cursor:pointer}
   .ph.aqua{background:linear-gradient(135deg,#0FB5A6,#22D3EE,#3B82F6,#0FB5A6);background-size:300% 300%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.5),inset 0 -10px 24px rgba(0,0,0,.15),0 34px 70px -12px rgba(59,130,246,.55)}
+  /* readability: solid cards, bold dark text (all screens) */
+  .card:not(.kpi){background:rgba(255,255,255,.95);backdrop-filter:none;-webkit-backdrop-filter:none;border:1px solid #E3ECF1}
+  .card:not(.kpi) .lbl{color:#0C2A33;font-weight:800}
+  .card.info .lbl{font-size:13px!important;letter-spacing:.4px!important}
+  .card.info .ibody{font-size:15px!important;font-weight:600;color:#0C2A33!important}
+  .card.info .ibody b{font-weight:800;color:#0A7C8C}
+  .card .tag{font-weight:700}
+  .content .psub{color:#0C2A33;font-weight:700;font-size:14.5px;background:rgba(255,255,255,.9);display:table;padding:6px 12px;border-radius:12px;text-shadow:none;box-shadow:0 4px 14px rgba(20,30,60,.08)}
+  .filters{background:rgba(255,255,255,.95)}
+  table{background:rgba(255,255,255,.97)}
+  td{color:#0C2A33;font-weight:600}
 </style>
 
 <svg width="0" height="0" style="position:absolute"><defs>
@@ -793,7 +804,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     <div class="list">${["Requests","Water balance","Plan vs fact","Billing & collection","Sensor readings","Losses (NRW)"].map(r=>`<div class="li"><span>${r}</span><span style="display:flex;gap:8px"><span class="btn ghost" style="padding:5px 10px">Excel</span><span class="btn ghost" style="padding:5px 10px">PDF</span></span></div>`).join("")}</div>`;
 
   /* ---------- NEW SCREENS (customer roadmap, AI, data, platform, EU) ---------- */
-  function info(title,stripeClass,badge,body){return `<div class="card" style="margin-bottom:14px"><div class="stripe ${stripeClass||''}"></div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><div class="lbl" style="font-size:12px;letter-spacing:.6px">${title}</div>${badge?`<span class="tag ${badge[0]}">${badge[1]}</span>`:''}</div><div style="margin-top:8px;font-size:14px;line-height:1.5;color:var(--text)">${body}</div></div>`;}
+  function info(title,stripeClass,badge,body){return `<div class="card info" style="margin-bottom:14px"><div class="stripe ${stripeClass||''}"></div><div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><div class="lbl" style="font-size:12px;letter-spacing:.6px">${title}</div>${badge?`<span class="tag ${badge[0]}">${badge[1]}</span>`:''}</div><div class="ibody" style="margin-top:8px;font-size:14px;line-height:1.5;color:var(--text)">${body}</div></div>`;}
 
   S.losses=()=>`<h1 class="ptitle">Loss & theft detection</h1><p class="psub">Water-balance gaps per canal, cross-checked with satellite irrigation signals — a ranked list of suspicious cases.</p>
     <div class="kpis">
