@@ -486,6 +486,19 @@
   .jrny.sync .st:nth-child(2) .ph{animation-delay:-1.1s}.jrny.sync .st:nth-child(3) .ph{animation-delay:-2.2s}.jrny.sync .st:nth-child(4) .ph{animation-delay:-3.3s}
   .jrny.sync .st:nth-child(5) .ph{animation-delay:-4.4s}.jrny.sync .st:nth-child(6) .ph{animation-delay:-5.5s}.jrny.sync .st:nth-child(7) .ph{animation-delay:-6.6s}
   .jrny .st h4{color:#0FB5A6!important}.jrny .st:nth-child(even) h4{color:#2B8FE0!important}
+  /* sensors gauges: readable cards with gradient rings */
+  .gauges{gap:18px;max-width:700px}
+  .gauges>div{background:#fff;border:1px solid #E3ECF1;border-radius:20px;padding:18px 10px 14px;box-shadow:0 10px 26px rgba(20,30,60,.08);text-align:center}
+  .ringwrap{width:138px;height:138px;filter:none!important;background:conic-gradient(#12C2B0 0,#3B82F6 var(--p,0%),#E3EEF3 0)!important;box-shadow:0 10px 26px rgba(59,130,246,.18)}
+  .gauges>div:nth-child(2) .ringwrap{background:conic-gradient(#F59E0B 0,#EF4444 var(--p,0%),#F3E9E1 0)!important;box-shadow:0 10px 26px rgba(239,68,68,.15)}
+  .gauges>div:nth-child(3) .ringwrap{background:conic-gradient(#34D399 0,#0FB5A6 var(--p,0%),#E3F2EC 0)!important;box-shadow:0 10px 26px rgba(16,185,129,.15)}
+  .ringwrap::before{inset:13px;background:#fff}
+  .ringwrap .v{font-size:28px;font-weight:900;color:#0C2A33}
+  .ringwrap .v small{font-size:12px;font-weight:700;color:#33505A}
+  .gauges .gl{margin-top:12px;font-size:15px;font-weight:800;color:#0C2A33}
+  .legend{background:rgba(255,255,255,.95);border-radius:14px;padding:8px 14px;display:flex;flex-wrap:wrap;gap:6px 16px;margin-top:10px;box-shadow:0 6px 16px rgba(20,30,60,.08)}
+  .legend span{color:#0C2A33!important;font-weight:700}
+  .list .li>span:first-child{color:#0C2A33;font-weight:700;font-size:15px}
 </style>
 
 <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="silv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FBFCFD"/><stop offset=".3" stop-color="#C3CBD4"/><stop offset=".55" stop-color="#F1F4F7"/><stop offset=".8" stop-color="#8E99A5"/><stop offset="1" stop-color="#D5DBE1"/></linearGradient><linearGradient id="silvD" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9AA6B3"/><stop offset=".5" stop-color="#5E6B79"/><stop offset="1" stop-color="#7C8896"/></linearGradient><linearGradient id="silvShine" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".4" stop-color="#fff" stop-opacity="0"/></linearGradient><radialGradient id="hubHalo"><stop offset="0" stop-color="#2FE6C8" stop-opacity=".42"/><stop offset=".55" stop-color="#2FE6C8" stop-opacity=".12"/><stop offset="1" stop-color="#2FE6C8" stop-opacity="0"/></radialGradient>
@@ -703,7 +716,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
 
   S.map=()=>`<h1 class="ptitle">Map & canals</h1><p class="psub">Live water flow across the network — from the reservoir to every field.</p>
     ${flowMapSVG()}
-    <div class="legend"><span><i style="background:#FFB15C"></i>Reservoir (source)</span><span><i style="background:#2FE6C8"></i>Water flow</span><span><i style="background:#49A7FF"></i>Canals</span><span><i style="background:#FF5C6C"></i>Sensor alert</span></div>
+    <div class="legend"><span><i style="background:#2CCBD3"></i>Reservoir (source)</span><span><i style="background:#E9FFFE;border:1px solid #9ADBDD"></i>Water flow</span><span><i style="background:#14B0C8"></i>Canals</span><span><i style="background:#C3CBD4"></i>Gates (% open)</span><span><i style="background:#8DBF5A"></i>Fields</span><span><i style="background:#FF5C6C"></i>Sensor alert</span></div>
     <div style="margin-top:16px">${table(["Canal","Flow","Gate","Status"],[
       ["Main Canal 1","410 m³/s","82% open",tg("ok","normal")],
       ["Canal 2","250 m³/s","60% open",tg("warn","below plan")],
@@ -1134,18 +1147,36 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
   function flowParticles(id,n,color,dur){var s="";for(var i=0;i<n;i++){s+='<circle r="2.8" fill="'+color+'" filter="url(#fglow)"><animateMotion dur="'+dur+'s" begin="'+(i*dur/n).toFixed(2)+'s" repeatCount="indefinite"><mpath href="#'+id+'"/></animateMotion></circle>';}return s;}
   function pulseNode(x,y,color,r){return '<circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="'+color+'" filter="url(#fglow)"/><circle cx="'+x+'" cy="'+y+'" r="'+r+'" fill="none" stroke="'+color+'" stroke-width="2"><animate attributeName="r" values="'+r+';'+(r+14)+';'+r+'" dur="2.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".9;0;.9" dur="2.6s" repeatCount="indefinite"/></circle>';}
   function flowMapSVG(){
-    var paths=[["mp","M95 190 H690"],["b1","M230 190 V72"],["b2","M380 190 V300"],["b3","M520 190 V80"],["b4","M620 190 V300"]];
-    var base=paths.map(function(p){return '<path id="'+p[0]+'" d="'+p[1]+'" fill="none" stroke="#124A54" stroke-width="7" stroke-linecap="round"/>';}).join("");
-    var glow=paths.map(function(p){return '<path d="'+p[1]+'" fill="none" stroke="url(#cflow)" stroke-width="3" stroke-linecap="round" stroke-dasharray="3 13" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-16" dur="0.5s" repeatCount="indefinite"/></path>';}).join("");
-    var parts=flowParticles("mp",6,"#8CF5E4",3)+flowParticles("b1",2,"#8CF5E4",2.2)+flowParticles("b2",2,"#8CF5E4",2.4)+flowParticles("b3",2,"#8CF5E4",2.2)+flowParticles("b4",2,"#8CF5E4",2.4);
-    var plots=[[230,60],[380,312],[520,68],[620,312],[690,190]].map(function(p){return pulseNode(p[0],p[1],"#2FE6C8",6);}).join("");
-    var grid="";for(var gx=40;gx<760;gx+=48){grid+='<line x1="'+gx+'" y1="8" x2="'+gx+'" y2="332" stroke="#0E3B45" stroke-width="1" opacity=".4"/>';}for(var gy=40;gy<340;gy+=48){grid+='<line x1="8" y1="'+gy+'" x2="752" y2="'+gy+'" stroke="#0E3B45" stroke-width="1" opacity=".4"/>';}
-    return '<svg class="flowmap" viewBox="0 0 760 340"><defs><radialGradient id="bgrad" cx="18%" cy="22%" r="95%"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#05141A"/></radialGradient></defs>'
-      +'<rect x="0" y="0" width="760" height="340" rx="18" fill="url(#bgrad)"/>'+grid+base+glow+parts+plots
-      +pulseNode(70,190,"#FFB15C",13)
-      +'<circle cx="520" cy="68" r="10" fill="none" stroke="#FF5C6C" stroke-width="2.5" filter="url(#fglow)"><animate attributeName="r" values="8;22;8" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0;1" dur="1.6s" repeatCount="indefinite"/></circle>'
-      +'<text x="70" y="222" fill="#CFE6E2" font-size="12" text-anchor="middle" font-family="sans-serif">Reservoir</text>'
-      +'<text x="690" y="216" fill="#7FA6A0" font-size="11" text-anchor="middle" font-family="sans-serif">Fields</text></svg>';}
+    var paths=[["mp","M118 190 H700"],["b1","M230 190 V64"],["b2","M380 190 V306"],["b3","M520 190 V72"],["b4","M620 190 V306"]];
+    var pal=["#6FA84B","#8DBF5A","#C9B458","#A8C76A","#5E9A45","#D4C27A","#7DB356","#B9A64E"],fields="",k=0;
+    for(var fx=128;fx<740;fx+=64){for(var fy=16;fy<330;fy+=50){k++;
+      if(Math.abs(fy+21-190)<30)continue;
+      var hit=[[230,64,190],[380,190,306],[520,72,190],[620,190,306]].some(function(c){return fx-10<c[0]&&fx+64>c[0]&&fy+42>c[1]-6&&fy<c[2]+6;});
+      if(hit)continue;
+      var col=pal[(k*7+Math.floor(fx/64))%pal.length];
+      fields+='<rect x="'+fx+'" y="'+fy+'" width="56" height="42" rx="5" fill="'+col+'" stroke="#3C5A2C" stroke-width="1" opacity=".92"/><rect x="'+fx+'" y="'+fy+'" width="56" height="42" rx="5" fill="url(#fmRows)" opacity=".35"/>';}}
+    var water=paths.map(function(p,i){var w=i?9:15;return '<path id="'+p[0]+'" d="'+p[1]+'" fill="none" stroke="#06627A" stroke-width="'+(w+5)+'" stroke-linecap="round"/>'
+      +'<path d="'+p[1]+'" fill="none" stroke="'+(i?'#2CCBD3':'#3FD6DA')+'" stroke-width="'+w+'" stroke-linecap="round"/>'
+      +'<path d="'+p[1]+'" fill="none" stroke="#E9FFFE" stroke-width="'+(i?1.6:2.4)+'" stroke-linecap="round" stroke-dasharray="6 18" opacity=".85"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="'+(i?1.1:0.8)+'s" repeatCount="indefinite"/></path>';}).join("");
+    var parts=flowParticles("mp",6,"#FFFFFF",2.6)+flowParticles("b1",2,"#FFFFFF",2)+flowParticles("b2",2,"#FFFFFF",2)+flowParticles("b3",2,"#FFFFFF",2)+flowParticles("b4",2,"#FFFFFF",2);
+    function gate(x,y,pct){return '<g transform="translate('+x+' '+y+')"><rect x="-10" y="-10" width="20" height="20" rx="4" fill="url(#silv)" stroke="#5E6B79" stroke-width="1.4"/><rect x="-6" y="-3" width="12" height="6" rx="1.5" fill="#2A3646"/>'
+      +'<rect x="13" y="-11" width="40" height="22" rx="11" fill="rgba(5,40,52,.82)" stroke="#5EE0E4" stroke-width="1"/><text x="33" y="4.5" fill="#E9FFFE" font-size="11" font-weight="800" text-anchor="middle" font-family="sans-serif">'+pct+'</text></g>';}
+    function tag(x,y,t){var w=t.length*7+18;return '<rect x="'+(x-w/2)+'" y="'+(y-11)+'" width="'+w+'" height="22" rx="11" fill="rgba(5,40,52,.85)"/><text x="'+x+'" y="'+(y+4)+'" fill="#E9FFFE" font-size="11.5" font-weight="700" text-anchor="middle" font-family="sans-serif">'+t+'</text>';}
+    var lake='<path d="M14 120 Q30 92 70 96 Q112 100 118 140 Q126 186 112 230 Q96 276 56 272 Q18 268 14 222 Q6 170 14 120 Z" fill="url(#fmLake)" stroke="#E9FFFE" stroke-opacity=".5" stroke-width="1.5"/>'
+      +[0,1,2].map(function(i){return '<ellipse cx="62" cy="186" rx="10" ry="6" fill="none" stroke="#FFFFFF" stroke-opacity=".6" stroke-width="1.2"><animate attributeName="rx" values="8;44" dur="3.6s" begin="'+(i*1.2)+'s" repeatCount="indefinite"/><animate attributeName="ry" values="5;26" dur="3.6s" begin="'+(i*1.2)+'s" repeatCount="indefinite"/><animate attributeName="stroke-opacity" values=".7;0" dur="3.6s" begin="'+(i*1.2)+'s" repeatCount="indefinite"/></ellipse>';}).join("")
+      +'<rect x="112" y="176" width="10" height="28" rx="2" fill="url(#silv)" stroke="#5E6B79" stroke-width="1.2"/>';
+    var compass='<g transform="translate(722 302)"><circle r="18" fill="rgba(5,40,52,.75)" stroke="url(#silv)" stroke-width="2"/><path d="M0 -13 L4 0 L0 13 L-4 0 Z" fill="url(#silv)"/><path d="M0 -13 L4 0 L-4 0 Z" fill="#FF5C6C"/><text y="-21" fill="#E9FFFE" font-size="9" font-weight="800" text-anchor="middle" font-family="sans-serif">N</text></g>'
+      +'<g transform="translate(560 322)"><rect x="0" y="-3" width="100" height="6" rx="1" fill="url(#silv)"/><rect x="0" y="-3" width="50" height="6" rx="1" fill="#2A3646"/><text x="50" y="-7" fill="#E9FFFE" font-size="9.5" font-weight="700" text-anchor="middle" font-family="sans-serif">2 km</text></g>';
+    return '<svg class="flowmap nohue" viewBox="0 0 760 340"><defs>'
+      +'<linearGradient id="fmGround" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3E5A2E"/><stop offset=".5" stop-color="#4E6B36"/><stop offset="1" stop-color="#3A5530"/></linearGradient>'
+      +'<linearGradient id="fmWater" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#7FEAE6"/><stop offset=".5" stop-color="#2CCBD3"/><stop offset="1" stop-color="#14B0C8"/></linearGradient>'
+      +'<radialGradient id="fmLake" cx=".45" cy=".45" r=".7"><stop offset="0" stop-color="#9AF1EC"/><stop offset=".45" stop-color="#2CCBD3"/><stop offset="1" stop-color="#0A7C96"/></radialGradient>'
+      +'<pattern id="fmRows" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="6" stroke="#203818" stroke-width="1.4"/></pattern></defs>'
+      +'<rect width="760" height="340" rx="18" fill="url(#fmGround)"/>'+fields+lake+water+parts
+      +gate(150,190,"82%")+gate(230,160,"60%")+gate(380,220,"90%")+gate(520,160,"75%")+gate(620,220,"68%")
+      +'<circle cx="520" cy="80" r="10" fill="none" stroke="#FF5C6C" stroke-width="3"><animate attributeName="r" values="8;24;8" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values="1;0;1" dur="1.6s" repeatCount="indefinite"/></circle><circle cx="520" cy="80" r="6" fill="#FF5C6C" stroke="#fff" stroke-width="2"/>'
+      +tag(520,46,"⚠ Sensor alert · −18%")+tag(62,292,"Reservoir")+tag(420,176,"Main canal")+tag(275,98,"Canal 2")+tag(425,282,"Canal 3")+tag(565,108,"Canal 4")+tag(665,282,"Canal 5")
+      +compass+'</svg>';}
   function agentNetSVG(){
     var labels=["Farmer","Association","Dispatcher","Ministry","Anomaly","Document AI"];
     var cx=400,cy=198,rx=252,ry=138,spokes="",parts="",dots="",labs="";
@@ -1221,14 +1252,18 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
       +'<rect width="800" height="396" rx="20" fill="url(#bgr_rn)"/>'+spokes+parts+dots
       +(icon?hubIcon(icon,cx,cy,center):pulseNode(cx,cy,"#FFB15C",34)+'<text x="'+cx+'" y="'+(cy+5)+'" fill="#06202A" font-size="13" font-weight="800" text-anchor="middle" font-family="sans-serif">'+center+'</text>')+labs+'</svg>';}
   function pipelineSVG(stages){
-    var W=760,n=stages.length,pad=74,step=(W-pad*2)/(n-1),y=72,line="M"+pad+" "+y+" H"+(W-pad),nodes="",labs="";
-    for(var i=0;i<n;i++){var x=pad+i*step;nodes+=pulseNode(x,y,"#2FE6C8",9);
-      labs+='<text x="'+x+'" y="'+(y+32)+'" fill="#CFE6E2" font-size="12" text-anchor="middle" font-family="sans-serif">'+stages[i]+'</text>';}
-    return '<svg class="flowmap" viewBox="0 0 760 150"><defs><linearGradient id="bgr_pp" x1="0" x2="1"><stop offset="0" stop-color="#0C2E38"/><stop offset="1" stop-color="#06202A"/></linearGradient></defs>'
-      +'<rect width="760" height="150" rx="18" fill="url(#bgr_pp)"/>'
-      +'<path id="pipe" d="'+line+'" fill="none" stroke="#124A54" stroke-width="5" stroke-linecap="round"/>'
-      +'<path d="'+line+'" fill="none" stroke="url(#cflow)" stroke-width="2.5" stroke-dasharray="3 12" filter="url(#fglow)"><animate attributeName="stroke-dashoffset" from="0" to="-15" dur="0.5s" repeatCount="indefinite"/></path>'
-      +flowParticles("pipe",4,"#8CF5E4",3)+nodes+labs+'</svg>';}
+    var W=760,n=stages.length,pad=80,step=(W-pad*2)/(n-1),y=66,line="M"+pad+" "+y+" H"+(W-pad),nodes="",labs="";
+    for(var i=0;i<n;i++){var x=pad+i*step;
+      nodes+='<circle cx="'+x+'" cy="'+y+'" r="30" fill="url(#hubHalo)"><animate attributeName="r" values="26;36;26" dur="2.6s" begin="'+(i*0.4)+'s" repeatCount="indefinite"/></circle>'
+        +'<circle cx="'+x+'" cy="'+y+'" r="19" fill="url(#silv)" stroke="#5E6B79" stroke-width="1.6"/><circle cx="'+x+'" cy="'+y+'" r="13" fill="#05506A"/>'
+        +'<text x="'+x+'" y="'+(y+5)+'" fill="#7FEAE6" font-size="14" font-weight="900" text-anchor="middle" font-family="sans-serif">'+(i+1)+'</text>';
+      var w=stages[i].length*7.4+22;
+      labs+='<rect x="'+(x-w/2)+'" y="'+(y+30)+'" width="'+w+'" height="24" rx="12" fill="rgba(4,58,74,.85)" stroke="#7FEAE6" stroke-opacity=".6"/><text x="'+x+'" y="'+(y+46)+'" fill="#FFFFFF" font-size="12.5" font-weight="800" text-anchor="middle" font-family="sans-serif">'+stages[i]+'</text>';}
+    return '<svg class="flowmap nohue" viewBox="0 0 760 140"><defs><radialGradient id="bgr_pp" cx=".4" cy=".4" r=".9"><stop offset="0" stop-color="#7FEAE6"/><stop offset=".4" stop-color="#2CCBD3"/><stop offset=".75" stop-color="#0E9FB5"/><stop offset="1" stop-color="#08708A"/></radialGradient></defs>'
+      +'<rect width="760" height="140" rx="18" fill="url(#bgr_pp)"/>'
+      +'<path id="pipe" d="'+line+'" fill="none" stroke="#05506A" stroke-width="12" stroke-linecap="round" opacity=".55"/>'
+      +'<path d="'+line+'" fill="none" stroke="#E9FFFE" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 16"><animate attributeName="stroke-dashoffset" from="0" to="-24" dur="0.8s" repeatCount="indefinite"/></path>'
+      +flowParticles("pipe",4,"#FFFFFF",3.4)+nodes+labs+'</svg>';}
   function filters(labels,action,primaryAmber){return `<div class="filters">${labels.map(l=>`<div class="fl"><label>${l}</label><div class="sel">All ${l.toLowerCase()} ▾</div></div>`).join("")}<div style="flex:1"></div><div style="display:flex;align-items:flex-end"><button class="btn ${primaryAmber?'':'primary'}" data-action style="${primaryAmber?'background:var(--amber);color:#2a1800;border-color:var(--amber);font-weight:600':''}">${action}</button></div></div>`;}
   function table(cols,rows){return `<table><thead><tr>${cols.map(c=>`<th>${c}</th>`).join("")}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join("")}</tr>`).join("")}</tbody></table>`;}
   function tg(k,t){return `<span class="tag ${k}">${t}</span>`;}
