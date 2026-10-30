@@ -682,10 +682,10 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     ["reuse","♻️","Reuse & groundwater"],["basin","🌊","Transboundary basin"],
     ["grp","Intelligence & data"],
     ["ai","🤖","AI layer"],["data","🛰️","Data & satellites"],
-    ["grp","Platform & trust"],
-    ["platform","🧩","Platform"],["compliance","🛡️","Compliance (EU)"],["experts","🧠","Expert notes"],["roadmap","🧭","Roadmap"],
     ["grp","Mobile app"],
     ["app","📱","Farmer app"],["journey","🔄","App journey"],["graph","🕸️","Water graph"],
+    ["grp","Platform & trust"],
+    ["platform","🧩","Platform"],["compliance","🛡️","Compliance (EU)"],["experts","🧠","Expert notes"],["roadmap","🧭","Roadmap"],
   ];
   MENU.forEach(m=>{
     if(m[0]==="grp"){const g=document.createElement("div");g.className="grp";g.textContent=m[1];menuEl.appendChild(g);return;}
@@ -1433,13 +1433,13 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     {menu:"basin",say:"The transboundary basin view. A shared water balance for countries in one river basin, Central Asia, the Nile, or the Gulf aquifers, so parties sharing the same river can trust the numbers."},
     {menu:"ai",say:"The AI layer. Six agents do real work: a farmer assistant, an association co-pilot, a dispatcher co-pilot, a ministry analyst, an anomaly agent, and a document AI. Any physical action is confirmed by a human, and every decision is logged."},
     {menu:"data",say:"Data and satellites. Crop water use from FAO WaPOR, imagery from Sentinel-2 and Landsat, crop mapping from Prithvi and AlphaEarth, weather from ECMWF, and speech in over sixteen hundred languages."},
+    {menu:"app",say:"And this is Aquora in the farmer's pocket. Request water, follow your schedule, confirm delivery and pay — all from one phone. The numbers on the right are our targets for the first pilot season."},
+    {menu:"journey",say:"Here is the whole journey on the phone. A request becomes a plan, water is delivered, the act is signed, the charge is built from the real volume, and the farmer pays — in minutes, not weeks."},
+    {menu:"graph",say:"Behind the app, everything is connected: basins, canals, water user associations, plots, sensors and money. When water goes missing, Aquora shows exactly where — and explains why."},
     {menu:"platform",say:"Platform features. Country packs configure language, tariffs, payments and law without code, plus an open API, role-based permissions, an offline mobile app, a full audit log, accessibility, and strong security."},
     {menu:"compliance",say:"Compliance. Aquora is built for the EU rules: NIS2 supply-chain clauses, the Cyber Resilience Act, the AI Act, the Data Act right to access sensor data, and GDPR with consent for voice."},
     {menu:"experts",say:"Expert notes. Guidance from our legal, finance, market and language experts: on manual valve control, quota-trading law, fast revenue from billing and losses, and building translation in from day one."},
     {menu:"roadmap",say:"The roadmap. From a real core and loss detection in the first six months, to the AI layer and satellite data at twelve months, and an open marketplace and basin view at twenty four. That's Aquora, ready for your country."},
-    {menu:"app",say:"And this is Aquora in the farmer's pocket. Request water, follow your schedule, confirm delivery and pay — all from one phone. The numbers on the right are our targets for the first pilot season."},
-    {menu:"journey",say:"Here is the whole journey on the phone. A request becomes a plan, water is delivered, the act is signed, the charge is built from the real volume, and the farmer pays — in minutes, not weeks."},
-    {menu:"graph",say:"Behind the app, everything is connected: basins, canals, water user associations, plots, sensors and money. When water goes missing, Aquora shows exactly where — and explains why."},
     {menu:"dashboard",say:"That's Aquora: one system for a country's irrigation and melioration — operated by hand, by voice, or straight from the farmer's phone. And you can ask me anything, right here. Accessible to anyone who can speak, transparent for the government, and ready for your country."},
   ];
 
@@ -1464,7 +1464,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     a.play().catch(()=>fin());
   }
   function speak(text,after,i){
-    if(typeof i==="number")playClip("presenter/"+i+".mp4?v=t33",after);
+    if(typeof i==="number")playClip("presenter/"+i+".mp4?v=t34",after);
     else { if(after)after(); }
   }
   function fixHeard(s){ return (s||"").replace(/\bmeditation(s)?\b/gi,"melioration").replace(/\bemaciation\b/gi,"melioration").replace(/\bamelioration\b/gi,"melioration"); }
