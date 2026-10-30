@@ -1464,7 +1464,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     a.play().catch(()=>fin());
   }
   function speak(text,after,i){
-    if(typeof i==="number")playClip("presenter/"+i+".mp4",after);
+    if(typeof i==="number")playClip("presenter/"+i+".mp4?v=t33",after);
     else { if(after)after(); }
   }
   function fixHeard(s){ return (s||"").replace(/\bmeditation(s)?\b/gi,"melioration").replace(/\bemaciation\b/gi,"melioration").replace(/\bamelioration\b/gi,"melioration"); }
