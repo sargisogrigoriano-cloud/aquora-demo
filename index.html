@@ -1024,13 +1024,13 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
       +'<div class="feat" style="background:linear-gradient(135deg,#34D399,#10B981)"><b>✓ Paid — debt cleared</b>Reconciled automatically</div>'+msNav("Pay")+'</div>',
     support:'<div class="ms"><div class="hi">Help & advice</div><div class="hs">WhatsApp · voice · app</div>'
       +'<div class="row2"><span>💬 Skip next turn — rain Sat</span></div><div class="row2"><span>⚠️ Night surge — valve closed</span></div><div class="row2"><span>📋 Complaint #88 — resolved</span></div>'
-      +'<span class="mbtn">Talk to your association</span>'+msNav("Help")+'</div>'
+      +'<span class="mbtn">Talk to your operator</span>'+msNav("Help")+'</div>'
   };
   function phone(slides,spin,st){return '<div class="ph'+(spin?' spin rainbow':'')+'"'+(st?' style="'+st+'"':'')+'><div class="sb"><span>9:41</span><span>▮▮▮ ◔</span></div><div class="scr">'
     +slides.map(function(k){return '<div class="sl">'+MS[k]+'</div>';}).join("")+'</div><div class="glare"></div></div>';}
 
   const APT=[["Home",[["💧","−","20","%","water losses in the canal network"],["💳","+","30","%","on-time payments"],["📱","","70","%","of requests made from the phone"],["⏱️","−","40","%","dispatcher time on paperwork"]]],
-    ["Request",[["📱","","70","%","of requests made from the phone"],["🎙️","","24","/7","voice requests in the local language"],["⚡","<","2","min","to file a request"],["☎️","−","50","%","calls to the association office"]]],
+    ["Request",[["📱","","70","%","of requests made from the phone"],["🎙️","","24","/7","voice requests in the local language"],["⚡","<","2","min","to file a request"],["☎️","−","50","%","calls to the water office"]]],
     ["Plan",[["🌱","−","15","%","water used per hectare"],["📅","","100","%","of plots on a 10-day schedule"],["🌧️","","1","day","rain alert before a skipped turn"],["💧","−","20","%","water losses in the canal network"]]],
     ["Pay",[["💳","+","30","%","on-time payments"],["🏦","","90","%","collection rate"],["🔄","<","1","day","to reconcile a bank payment"],["⏱️","−","40","%","dispatcher time on paperwork"]]]];
   let aIdx=0,aTimer=null;
@@ -1076,18 +1076,17 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
   const WGN={basin:[330,52,"River basin","#F2A93B"],res:[150,120,"Reservoir","#F2A93B"],main:[330,150,"Main canal","#49A7FF"],
     k1:[140,250,"Canal K-1","#49A7FF"],k2:[340,270,"Canal K-2","#49A7FF"],k3:[540,240,"Canal K-3","#49A7FF"],
     g4:[470,330,"Gauge G-4","#EC4899"],sat:[620,120,"Satellite ET","#A78BFA"],wx:[600,420,"Weather","#A78BFA"],
-    w7:[110,360,"WUA 7","#8B5CF6"],w12:[300,400,"WUA 12","#8B5CF6"],w19:[560,350,"WUA 19","#8B5CF6"],
     p1:[85,470,"Plot 1041-3","#2FE6C8"],p2:[200,480,"Plot 1044-1","#2FE6C8"],p3:[360,500,"Plot 1102-2","#2FE6C8"],p4:[470,470,"Plot 1187-1","#2FE6C8"],
     loss:[230,320,"Losses 18%","#FF5C6C"],surge:[110,560,"Night surge","#FF5C6C"],plan:[640,520,"Irrigation plan","#34D399"],
     acts:[480,560,"Acceptance acts","#34D399"],bill:[650,610,"Billing","#34D399"],pay:[330,610,"Payments","#34D399"]};
   const WGE=[["basin","res"],["basin","main"],["res","main"],["main","k1"],["main","k2"],["main","k3"],["k2","g4"],["k2","loss"],["sat","loss"],["sat","k3"],
-    ["k1","w7"],["k2","w12"],["k3","w19"],["w7","p1"],["w7","p2"],["w12","p3"],["w19","p4"],["w12","loss"],["p2","surge"],["wx","plan"],["plan","p1"],["plan","p4"],
-    ["p4","acts"],["p3","acts"],["acts","bill"],["bill","pay"],["g4","acts"],["sat","w19"],["wx","w19"]];
+    ["k1","p1"],["k1","p2"],["k2","p3"],["k3","p4"],["p3","loss"],["p2","surge"],["wx","plan"],["plan","p1"],["plan","p4"],
+    ["p4","acts"],["p3","acts"],["acts","bill"],["bill","pay"],["g4","acts"],["sat","p4"],["wx","p4"]];
   const WGS=[
     {path:["k2","loss"],chip:"Canal K-2 → Losses",ev:"Gauge G-4 at the canal head logged 120,400 m³ this decade; water users' signed acts accept only 98,700 m³.",src:"Gauge G-4 + acts — decade 2, July",
-     it:"About 18% of the water leaves Canal K-2 between the gate and the farms. Satellite ET shows irrigation on 3 plots near WUA 12 that have no allocation — a likely unauthorised offtake.",status:"Needs field check"},
-    {path:["wx","plan","p1"],chip:"Weather → Plan",ev:"ECMWF forecast: 14 mm of rain on Saturday over the WUA 7 area.",src:"Weather feed — updated 06:00",
-     it:"The next irrigation turn for Plot 1041-3 is skipped automatically, saving about 900 m³. The farmer gets a message on WhatsApp.",status:"Applied by AI, confirmed by WUA"},
+     it:"About 18% of the water leaves Canal K-2 between the gate and the farms. Satellite ET shows irrigation on 3 plots along the canal that have no allocation — a likely unauthorised offtake.",status:"Needs field check"},
+    {path:["wx","plan","p1"],chip:"Weather → Plan",ev:"ECMWF forecast: 14 mm of rain on Saturday over the Canal K-1 area.",src:"Weather feed — updated 06:00",
+     it:"The next irrigation turn for Plot 1041-3 is skipped automatically, saving about 900 m³. The farmer gets a message on WhatsApp.",status:"Applied by AI, confirmed by operator"},
     {path:["p2","surge"],chip:"Plot 1044-1 → Night surge",ev:"Flow at 03:10 was 3× the normal night level and kept rising for 12 minutes.",src:"Smart valve sensor V-1044",
      it:"A likely pipe burst. The valve was closed automatically and the user was notified before any damage.",status:"Resolved"},
     {path:["acts","bill","pay"],chip:"Acts → Billing → Pay",ev:"884 m³ accepted on Plot 1187-1 and signed electronically.",src:"Acceptance act #A-5531",
@@ -1109,8 +1108,8 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     +'<div class="lbl2" style="margin-top:12px">Related connections</div><div class="chips">'+WGS.map(function(x,i){return '<span class="chip'+(i===sel?' on':'')+'" onclick="wgSel('+i+')">'+x.chip+'</span>';}).join("")+'</div></div>';}
   window.wgSel=function(i){const w=document.getElementById("wgbox");if(!w)return;w.innerHTML='<div class="gsv">'+wgSVG(i)+'</div>'+wgPanel(i)+WGLEG;};
   window.wgPick=function(k){for(var i=0;i<WGS.length;i++){if(WGS[i].path.indexOf(k)>=0){wgSel(i);return;}}};
-  const WGLEG='<div class="legend2"><span><i style="background:#F2A93B"></i>Sources</span><span><i style="background:#49A7FF"></i>Canals</span><span><i style="background:#8B5CF6"></i>Associations</span><span><i style="background:#2FE6C8"></i>Plots</span><span><i style="background:#EC4899"></i>Gauges</span><span><i style="background:#A78BFA"></i>Satellite & weather</span><span><i style="background:#FF5C6C"></i>Alerts</span><span><i style="background:#34D399"></i>Plan & money</span></div>';
-  S.graph=()=>`<h1 class="ptitle">Water graph</h1><p class="psub">Everything is connected — basins, canals, associations, plots, sensors and money. Click a node or a connection.</p>
+  const WGLEG='<div class="legend2"><span><i style="background:#F2A93B"></i>Sources</span><span><i style="background:#49A7FF"></i>Canals</span><span><i style="background:#2FE6C8"></i>Plots</span><span><i style="background:#EC4899"></i>Gauges</span><span><i style="background:#A78BFA"></i>Satellite & weather</span><span><i style="background:#FF5C6C"></i>Alerts</span><span><i style="background:#34D399"></i>Plan & money</span></div>';
+  S.graph=()=>`<h1 class="ptitle">Water graph</h1><p class="psub">Everything is connected — basins, canals, plots, sensors and money. Click a node or a connection.</p>
     <div class="wg" id="wgbox"><div class="gsv">${wgSVG(0)}</div>${wgPanel(0)}${WGLEG}</div>`;
 
   function kpi(l,v,u,c){var sp=sparkPath();return `<div class="card kpi ${c}"><div class="stripe ${c}"></div><div class="lbl">${l}</div><div class="big"><b data-t="${v.replace(/,/g,'')}" data-raw="${v}">0</b><span class="u"> ${u}</span></div><svg class="spark ${c}" viewBox="0 0 120 36" preserveAspectRatio="none"><path class="sa" d="${sp.area}"/><path class="sl" pathLength="1" d="${sp.line}"/></svg></div>`;}
