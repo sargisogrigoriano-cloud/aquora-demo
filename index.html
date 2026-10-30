@@ -509,6 +509,11 @@
   .bigwrap .ph{animation:snake 3s linear infinite}
   .bigwrap .ph.flip{animation:bflip 1.1s cubic-bezier(.55,.05,.35,1),snake 3s linear infinite}
   .jrny.sync .ph{animation:snake 3s linear infinite}
+  /* bigger mic & speaker */
+  .ac #voice,.ac #mic{font-size:24px;width:52px;height:46px;padding:0;justify-content:center;border-radius:12px;border-width:2px}
+  .ac #mic{background:linear-gradient(135deg,#12C2B0,#3B82F6);border-color:transparent;color:#fff}
+  .ac #mic.on{box-shadow:0 0 0 4px rgba(18,194,176,.35);animation:micpulse 1.2s ease-in-out infinite}
+  @keyframes micpulse{50%{box-shadow:0 0 0 9px rgba(18,194,176,.15)}}
 </style>
 
 <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="silv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FBFCFD"/><stop offset=".3" stop-color="#C3CBD4"/><stop offset=".55" stop-color="#F1F4F7"/><stop offset=".8" stop-color="#8E99A5"/><stop offset="1" stop-color="#D5DBE1"/></linearGradient><linearGradient id="silvD" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9AA6B3"/><stop offset=".5" stop-color="#5E6B79"/><stop offset="1" stop-color="#7C8896"/></linearGradient><linearGradient id="silvShine" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".4" stop-color="#fff" stop-opacity="0"/></linearGradient><radialGradient id="hubHalo"><stop offset="0" stop-color="#2FE6C8" stop-opacity=".42"/><stop offset=".55" stop-color="#2FE6C8" stop-opacity=".12"/><stop offset="1" stop-color="#2FE6C8" stop-opacity="0"/></radialGradient>
