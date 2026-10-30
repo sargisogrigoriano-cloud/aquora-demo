@@ -575,9 +575,9 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
   var FQ_STOP={the:1,a:1,an:1,is:1,are:1,do:1,does:1,did:1,how:1,what:1,why:1,when:1,where:1,who:1,can:1,could:1,would:1,i:1,my:1,you:1,it:1,its:1,to:1,of:1,and:1,on:1,in:1,for:1,me:1,we:1,us:1,our:1,your:1,this:1,that:1,these:1,those:1,with:1,have:1,has:1,had:1,will:1,be:1,been:1,there:1,by:1,or:1,get:1,if:1,at:1,as:1,so:1,about:1,from:1,any:1,all:1,"":1};
   function fqKw(s){return (s||"").toLowerCase().replace(/[^a-z0-9 ]/g," ").split(/\s+/).filter(function(w){return w&&!FQ_STOP[w]&&w.length>=2;});}
   var FQ_KEYS=Object.keys(FEMALE_QA).map(function(k){return {k:k,set:fqKw(k)};});
-  function fuzzyFQ(q){var qw=fqKw(q);if(!qw.length)return null;var best=null,bs=0;
+  function fuzzyFQ(q){var qw=fqKw(q);if(!qw.length)return null;var best=null,bs=0,bl=99;
     for(var i=0;i<FQ_KEYS.length;i++){var set=FQ_KEYS[i].set,s=0;for(var j=0;j<qw.length;j++){if(set.indexOf(qw[j])>=0)s++;}
-      var sc=s/qw.length;if(sc>bs){bs=sc;best=FQ_KEYS[i].k;}}
+      var sc=s/qw.length;if(sc>bs||(sc===bs&&sc>0&&best&&set.length<bl)){bs=sc;best=FQ_KEYS[i].k;bl=set.length;}}
     return bs>=0.34?best:null;}
   function answerFemale(q,g){ if(g===undefined)g=gen; if(g!==gen)return false;
     var nq=normQ(q), nq2=nq.replace(/[?!.,;:'"]/g,"").replace(/\s+/g," ").trim();
@@ -1467,7 +1467,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     if(typeof i==="number")playClip("presenter/"+i+".mp4?v=t34",after);
     else { if(after)after(); }
   }
-  function fixHeard(s){ return (s||"").replace(/\bmeditation(s)?\b/gi,"melioration").replace(/\bemaciation\b/gi,"melioration").replace(/\bamelioration\b/gi,"melioration"); }
+  function fixHeard(s){ return (s||"").replace(/\bwhat's\b/gi,"what is").replace(/\b(farmer's|farmers'|farmers|former|farmar|farm)\s+(app|up|application|apps)\b/gi,"farmer app").replace(/\bfarmer\s+(up|application|apps)\b/gi,"farmer app").replace(/\bmobile\s+application\b/gi,"mobile app").replace(/\b(water|walter)\s+(graf|graft|grass|graphs|grav)\b/gi,"water graph").replace(/\bwalter\s+graph\b/gi,"water graph").replace(/\b(up|ap|apps)\s+journey\b/gi,"app journey").replace(/\bmeditation(s)?\b/gi,"melioration").replace(/\bemaciation\b/gi,"melioration").replace(/\bamelioration\b/gi,"melioration"); }
   function ask(q){
     if(!q)return; q=fixHeard(q); gen++;const g=gen;stopAudio();
     var _qc=document.getElementById("qcancel"); if(_qc)_qc.disabled=false;
