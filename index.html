@@ -353,6 +353,90 @@
   .top .usr{color:#D6ECE1}
   .top .usr .av{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.22)}
   .top .lang{color:#8BEFC6;border-color:rgba(95,211,168,.55)}
+  /* ---------- MOBILE APP screens (farmer app / journey / water graph) ---------- */
+  .mapp{display:grid;grid-template-columns:minmax(200px,1fr) 270px minmax(200px,1fr);gap:22px;align-items:center;background:rgba(255,255,255,.94);border:1px solid #EEF1F7;border-radius:24px;padding:22px 24px;box-shadow:0 20px 50px rgba(20,30,60,.10)}
+  @media(max-width:1500px){.mapp{grid-template-columns:1fr 260px}.mapp .outc{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr;gap:0 18px}.mapp .outc .tgt,.mapp .outc .note{grid-column:1/-1;justify-self:start}}
+  @media(max-width:980px){.mapp{grid-template-columns:1fr}.mapp .outc{grid-template-columns:1fr}}
+  .mapp .eyebrow{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+  .mapp h2{font-size:27px;line-height:1.05;letter-spacing:-1px;margin:0 0 14px;color:#0C2A33;font-weight:800}
+  .mapp h2 em{font-style:normal;background:linear-gradient(90deg,#0FB5A6,#3B82F6);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .mapp p.lead{font-size:14px;line-height:1.55;color:#33505A;margin:0 0 18px}
+  .bridge{display:flex;align-items:center;gap:10px}
+  .bridge .bx{flex:1;background:#fff;border:1px solid #EEF1F7;border-radius:18px;padding:14px;text-align:center;box-shadow:0 10px 24px rgba(20,30,60,.06)}
+  .bridge .bx b{display:block;font-size:15px;color:#0C2A33}.bridge .bx span{font-size:12px;color:var(--muted)}
+  .bridge .ar{font-size:22px;color:#0FB5A6;animation:arpulse 1.6s ease-in-out infinite}
+  @keyframes arpulse{0%,100%{transform:translateX(0);opacity:.6}50%{transform:translateX(5px);opacity:1}}
+  .stage3d{perspective:1100px;height:520px;display:flex;align-items:center;justify-content:center;position:relative}
+  .stage3d::after{content:"";position:absolute;bottom:14px;left:50%;width:200px;height:26px;margin-left:-100px;border-radius:50%;background:radial-gradient(closest-side,rgba(12,42,51,.28),transparent);animation:shadowsw 9s ease-in-out infinite}
+  @keyframes shadowsw{0%,100%{transform:scaleX(.8)}50%{transform:scaleX(1.05)}}
+  .ph{width:250px;height:510px;border-radius:44px;background:linear-gradient(145deg,#2A3138,#0D1114);padding:11px;position:relative;
+      box-shadow:inset 0 0 0 2px #4A535C,0 40px 70px rgba(12,42,51,.35);transform-style:preserve-3d}
+  .ph.spin{animation:phspin 9s ease-in-out infinite}
+  @keyframes phspin{0%{transform:rotateY(-28deg) rotateX(6deg) rotateZ(-3deg)}50%{transform:rotateY(24deg) rotateX(2deg) rotateZ(2deg)}100%{transform:rotateY(-28deg) rotateX(6deg) rotateZ(-3deg)}}
+  .ph::before{content:"";position:absolute;top:20px;left:50%;width:84px;height:24px;margin-left:-42px;background:#000;border-radius:14px;z-index:3}
+  .ph .glare{position:absolute;inset:11px;border-radius:34px;background:linear-gradient(115deg,rgba(255,255,255,.28) 0%,rgba(255,255,255,0) 38%);pointer-events:none;z-index:4}
+  .ph .scr{position:absolute;inset:11px;border-radius:34px;overflow:hidden;background:#F7FAFC}
+  .ph .sl{position:absolute;inset:0;padding:48px 14px 12px;opacity:0;animation:slcycle 16s infinite;font-size:11px;color:#0C2A33}
+  .ph .sl:nth-child(2){animation-delay:4s}.ph .sl:nth-child(3){animation-delay:8s}.ph .sl:nth-child(4){animation-delay:12s}
+  @keyframes slcycle{0%{opacity:0;transform:translateY(14px)}3%,22%{opacity:1;transform:none}25%,100%{opacity:0;transform:translateY(-10px)}}
+  .ph .sb{position:absolute;top:16px;left:22px;right:22px;display:flex;justify-content:space-between;font-size:10px;font-weight:700;color:#0C2A33;z-index:2}
+  .ms .hi{font-size:16px;font-weight:800;margin:4px 0 2px}.ms .hs{color:#5E7A84;margin-bottom:10px}
+  .ms .tiles{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:9px}
+  .ms .mt{background:#fff;border-radius:12px;padding:9px;box-shadow:0 2px 8px rgba(20,30,60,.07);font-weight:600}
+  .ms .mt i{display:block;font-style:normal;font-size:15px;margin-bottom:3px}
+  .ms .feat{border-radius:14px;padding:10px;color:#fff;background:linear-gradient(135deg,#12C2B0,#3B82F6);margin-bottom:9px;box-shadow:0 8px 18px rgba(15,181,166,.35)}
+  .ms .feat b{display:block;font-size:13px}.ms .row2{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:10px;padding:8px 10px;margin-bottom:6px;box-shadow:0 1px 4px rgba(20,30,60,.06)}
+  .ms .mbtn{display:block;text-align:center;border-radius:12px;padding:9px;font-weight:700;color:#fff;background:#0C2A33;margin-top:8px}
+  .ms .ok{color:#10B981;font-weight:700}.ms .wa{color:#E78B09;font-weight:700}
+  .ms .bar{height:7px;border-radius:5px;background:#E6EEF2;overflow:hidden;margin:4px 0 8px}.ms .bar i{display:block;height:100%;background:linear-gradient(90deg,#12C2B0,#3B82F6)}
+  .ms .nav{position:absolute;left:0;right:0;bottom:0;display:flex;justify-content:space-around;padding:8px 6px 10px;background:#fff;border-top:1px solid #EEF1F7;font-size:9px;color:#9FB4BC}
+  .ms .nav b{color:#0FB5A6}
+  .outc .oc{display:flex;gap:14px;align-items:center;margin-bottom:18px;animation:rise .6s both}
+  .outc .oc:nth-child(2){animation-delay:.15s}.outc .oc:nth-child(3){animation-delay:.3s}.outc .oc:nth-child(4){animation-delay:.45s}.outc .oc:nth-child(5){animation-delay:.6s}
+  .outc .ic{width:52px;height:52px;flex:none;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;background:#E3F7F4}
+  .outc .v{font-size:28px;font-weight:800;color:#0FB5A6;letter-spacing:-1px;line-height:1}
+  .outc .t{font-size:14px;font-weight:600;color:#0C2A33}
+  .outc .note{font-size:11px;color:var(--muted);margin-top:6px}
+  .tgt{display:inline-block;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#E78B09;border:1px solid #F5D3A0;border-radius:20px;padding:3px 10px;margin-bottom:14px}
+  /* journey */
+  .jrny{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:10px;padding:18px 4px 18px;background:rgba(255,255,255,.94);border-radius:24px;box-shadow:0 20px 50px rgba(20,30,60,.10)}
+  .jrny .st{text-align:center}
+  @media(max-width:1500px){.jrny{grid-template-columns:repeat(4,minmax(0,1fr));row-gap:22px}}
+  .jrny .st h4{margin:0 0 22px;font-size:13.5px;font-weight:800;color:#0FB5A6;min-height:38px;display:flex;align-items:flex-end;justify-content:center}
+  .jrny .ph{width:100%;max-width:128px;height:262px;margin:0 auto;border-radius:28px;padding:7px;animation:jglow 7s infinite}
+  .jrny .ph::before{top:12px;width:46px;height:13px;margin-left:-23px}
+  .jrny .ph .scr,.jrny .ph .glare{inset:7px;border-radius:22px}
+  .jrny .ph .sl{opacity:1;animation:none;padding:28px 7px 7px;font-size:7.6px}
+  .jrny .ph .sb{top:10px;left:14px;right:14px;font-size:7px}
+  .jrny .ms .hi{font-size:10px}.jrny .ms .hs{margin-bottom:6px}.jrny .ms .mt{padding:6px;border-radius:9px}.jrny .ms .mt i{font-size:11px}
+  .jrny .ms .feat{padding:7px;border-radius:10px}.jrny .ms .feat b{font-size:10px}.jrny .ms .row2{padding:5px 7px}.jrny .ms .mbtn{padding:6px;border-radius:9px}
+  .jrny .ms .nav{font-size:7px;padding:5px 4px 7px}
+  @keyframes jglow{0%,100%{transform:none;box-shadow:inset 0 0 0 2px #4A535C,0 14px 26px rgba(12,42,51,.2)}
+    5%,12%{transform:translateY(-14px) scale(1.04);box-shadow:inset 0 0 0 2px #2FE6C8,0 0 0 4px rgba(47,230,200,.35),0 26px 44px rgba(15,181,166,.45)}
+    17%{transform:none;box-shadow:inset 0 0 0 2px #4A535C,0 14px 26px rgba(12,42,51,.2)}}
+  .jrny .st .jnum{display:inline-block;margin-top:10px;width:26px;height:26px;line-height:26px;border-radius:50%;background:#0C2A33;color:#fff;font-size:12px;font-weight:700}
+  .jline{height:4px;border-radius:3px;background:linear-gradient(90deg,#12C2B0,#3B82F6,#8B5CF6);background-size:200% 100%;animation:jl 4s linear infinite;margin:4px 0 16px}
+  @keyframes jl{to{background-position:-200% 0}}
+  .tagline{font-size:20px;background:rgba(255,255,255,.9);display:inline-block;padding:8px 14px;border-radius:14px;margin-top:14px;font-weight:800;color:#0FB5A6;letter-spacing:-.4px;margin-top:6px}
+  /* water graph */
+  .wg{position:relative;display:flex;gap:0;flex-wrap:wrap;border-radius:22px;overflow:hidden;background:radial-gradient(900px 500px at 35% 40%,#1B2350,#0A0E24 70%);box-shadow:0 20px 50px rgba(10,14,36,.35);min-height:520px}
+  .wg .gsv{flex:1 1 420px;min-width:0}.wg svg{display:block;width:100%;height:auto}
+  .wg .gn rect{rx:13;ry:13}
+  .wg .gn text{font:600 14px var(--sans);fill:#E9EEFF}
+  .wg .gn{cursor:pointer;transition:opacity .3s}
+  .wg .gn:hover rect{stroke-width:2.2}
+  .wg .why{flex:0 0 290px;margin:16px 16px 16px 0;align-self:flex-start;background:rgba(17,22,52,.92);border:1px solid #2C3570;border-radius:16px;padding:16px;color:#DCE3FF;font-size:12.5px;backdrop-filter:blur(6px);animation:rise .5s both}
+  .wg .why h5{margin:0 0 10px;font-size:15px;color:#fff}
+  .wg .why .ev{background:#0D1236;border:1px solid #2C3570;border-radius:12px;padding:10px;font-style:italic;line-height:1.45;margin:6px 0 10px}
+  .wg .why .ev small{display:block;font-style:normal;color:#8A93C2;margin-top:6px}
+  .wg .why .lbl2{font-weight:700;color:#fff;margin:8px 0 4px}
+  .wg .why .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .wg .why .chip{border:1px solid #3B4790;border-radius:14px;padding:3px 9px;font-size:11px;cursor:pointer;color:#C6CEFF}
+  .wg .why .chip.on{border-color:#2FE6C8;color:#2FE6C8}
+  .wg .why .stt{display:inline-block;border:1px solid #E7B40980;color:#F2C14E;border-radius:12px;padding:2px 9px;font-size:11px}
+  .wg .legend2{flex:1 1 100%;display:flex;flex-wrap:wrap;gap:4px 16px;padding:10px 18px 14px;color:#C6CEFF;font-size:11px;border-top:1px solid #222A5C}
+  .wg .legend2 i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:7px}
+  @media(max-width:900px){.wg .why{flex:1 1 100%;margin:12px}}
 </style>
 
 <svg width="0" height="0" style="position:absolute"><defs>
@@ -523,6 +607,8 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     ["ai","🤖","AI layer"],["data","🛰️","Data & satellites"],
     ["grp","Platform & trust"],
     ["platform","🧩","Platform"],["compliance","🛡️","Compliance (EU)"],["experts","🧠","Expert notes"],["roadmap","🧭","Roadmap"],
+    ["grp","Mobile app"],
+    ["app","📱","Farmer app"],["journey","🔄","App journey"],["graph","🕸️","Water graph"],
   ];
   MENU.forEach(m=>{
     if(m[0]==="grp"){const g=document.createElement("div");g.className="grp";g.textContent=m[1];menuEl.appendChild(g);return;}
@@ -862,6 +948,99 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     ])}`;
 
   /* ---------- helpers ---------- */
+  /* ---------- MOBILE APP screens ---------- */
+  function msNav(on){return '<div class="nav">'+["Home","Water","Pay","Help"].map(function(x){return x===on?'<b>● '+x+'</b>':'<span>'+x+'</span>';}).join("")+'</div>';}
+  const MS={
+    home:'<div class="ms"><div class="hi">Good morning, Farmer 1041</div><div class="hs">3 plots · 4.0 ha · Canal K-2</div>'
+      +'<div class="tiles"><div class="mt"><i>💧</i>My water</div><div class="mt"><i>📝</i>Requests</div><div class="mt"><i>📅</i>Schedule</div><div class="mt"><i>💳</i>Pay</div></div>'
+      +'<div class="feat"><b>Next irrigation — Thu 06:00</b>Plot 3 · 900 m³ · cotton</div>'
+      +'<div class="row2"><span>Balance</span><span class="ok">0.00 paid</span></div><div class="row2"><span>Season limit</span><span>62% used</span></div>'+msNav("Home")+'</div>',
+    request:'<div class="ms"><div class="hi">New water request</div><div class="hs">Say it or type it</div>'
+      +'<div class="row2"><span>Plot</span><b>#1041-3</b></div><div class="row2"><span>Crop</span><b>Cotton</b></div><div class="row2"><span>Volume</span><b>900 m³</b></div><div class="row2"><span>Date</span><b>Thu, 06:00</b></div>'
+      +'<div class="feat" style="margin-top:8px"><b>🎙 “I need water for plot three on Thursday”</b>Understood — request drafted</div><span class="mbtn">Send request</span>'+msNav("Water")+'</div>',
+    plan:'<div class="ms"><div class="hi">Irrigation plan</div><div class="hs">10-day schedule · cotton</div>'
+      +['Mon — skip (rain)','Thu 06:00 — 900 m³','Sun 05:30 — 850 m³'].map(function(x,i){return '<div class="row2"><span>'+x+'</span><span class="'+(i?'ok':'wa')+'">'+(i?'planned':'saved')+'</span></div>';}).join("")
+      +'<div class="hs" style="margin-top:6px">Season progress</div><div class="bar"><i style="width:58%"></i></div>'+msNav("Water")+'</div>',
+    delivery:'<div class="ms"><div class="hi">Water is on its way</div><div class="hs">Gate K-2/4 opened 06:02</div>'
+      +'<div class="feat"><b>412 / 900 m³</b>Flow 38 l/s · live from sensor</div><div class="bar"><i style="width:46%"></i></div>'
+      +'<div class="row2"><span>ETA full volume</span><b>09:40</b></div>'+msNav("Water")+'</div>',
+    act:'<div class="ms"><div class="hi">Acceptance act</div><div class="hs">Confirm what you received</div>'
+      +'<div class="row2"><span>Planned</span><b>900 m³</b></div><div class="row2"><span>Metered</span><b>884 m³</b></div>'
+      +'<div class="row2"><span>Signed</span><span class="ok">✓ e-signature</span></div><span class="mbtn">Sign act</span>'+msNav("Water")+'</div>',
+    charge:'<div class="ms"><div class="hi">Charge</div><div class="hs">From the real metered volume</div>'
+      +'<div class="row2"><span>884 m³ × tariff</span><b>13.26</b></div><div class="row2"><span>Membership fee</span><b>2.00</b></div>'
+      +'<div class="feat"><b>Total due: 15.26</b>Account № 0041-1041</div>'+msNav("Pay")+'</div>',
+    pay:'<div class="ms"><div class="hi">Pay</div><div class="hs">By personal account number</div>'
+      +'<div class="row2"><span>Due</span><b>15.26</b></div><div class="row2"><span>Bank</span><b>Mobile banking</b></div>'
+      +'<div class="feat" style="background:linear-gradient(135deg,#34D399,#10B981)"><b>✓ Paid — debt cleared</b>Reconciled automatically</div>'+msNav("Pay")+'</div>',
+    support:'<div class="ms"><div class="hi">Help & advice</div><div class="hs">WhatsApp · voice · app</div>'
+      +'<div class="row2"><span>💬 Skip next turn — rain Sat</span></div><div class="row2"><span>⚠️ Night surge — valve closed</span></div><div class="row2"><span>📋 Complaint #88 — resolved</span></div>'
+      +'<span class="mbtn">Talk to your association</span>'+msNav("Help")+'</div>'
+  };
+  function phone(slides,spin){return '<div class="ph'+(spin?' spin':'')+'"><div class="sb"><span>9:41</span><span>▮▮▮ ◔</span></div><div class="scr">'
+    +slides.map(function(k){return '<div class="sl">'+MS[k]+'</div>';}).join("")+'</div><div class="glare"></div></div>';}
+
+  S.app=()=>`<h1 class="ptitle">Farmer app</h1><p class="psub">Aquora in the farmer's pocket — or inside the app the water authority already runs.</p>
+    <div class="mapp">
+      <div><div class="eyebrow">Mobile app · white-label integration</div>
+        <h2>Aquora inside the <em>water authority's app</em></h2>
+        <p class="lead">Farmers request water, follow their schedule, confirm delivery and pay from one phone — while the authority gets measured water and money outcomes.</p>
+        <div class="bridge"><div class="bx"><b>ISUI · Water authority</b><span>existing system</span></div><div class="ar">➜</div><div class="bx"><b style="color:#0FB5A6">Aquora</b><span>farmer app inside</span></div></div></div>
+      <div class="stage3d">${phone(["home","request","plan","pay"],true)}</div>
+      <div class="outc"><span class="tgt">Pilot targets</span>
+        <div class="oc"><div class="ic">💧</div><div><div class="v">−<b data-t="20" data-raw="20">0</b>%</div><div class="t">water losses in the canal network</div></div></div>
+        <div class="oc"><div class="ic">💳</div><div><div class="v">+<b data-t="30" data-raw="30">0</b>%</div><div class="t">on-time payments</div></div></div>
+        <div class="oc"><div class="ic">📱</div><div><div class="v"><b data-t="70" data-raw="70">0</b>%</div><div class="t">of requests made from the phone</div></div></div>
+        <div class="oc"><div class="ic">⏱️</div><div><div class="v">−<b data-t="40" data-raw="40">0</b>%</div><div class="t">dispatcher time on paperwork</div></div></div>
+        <div class="note">*Targets for the first pilot season, not yet measured results.</div></div>
+    </div>`;
+
+  S.journey=()=>{const st=[["Request","request"],["Plan","plan"],["Delivery","delivery"],["Act","act"],["Charge","charge"],["Pay","pay"],["Support","support"]];
+    return `<h1 class="ptitle">App journey</h1><p class="psub">The whole water cycle on one phone — from a request to a cleared bill.</p>
+    <div class="jline"></div>
+    <div class="jrny">${st.map(function(s,i){return '<div class="st"><h4>'+s[0]+'</h4>'+phone([s[1]],false).replace('class="ph"','class="ph" style="animation-delay:'+i+'s"')+'<span class="jnum">'+(i+1)+'</span></div>';}).join("")}</div>
+    <div class="tagline">Aquora was built for the full water cycle — not just a meter reading.</div>`;};
+
+  const WGN={basin:[330,52,"River basin","#F2A93B"],res:[150,120,"Reservoir","#F2A93B"],main:[330,150,"Main canal","#49A7FF"],
+    k1:[140,250,"Canal K-1","#49A7FF"],k2:[340,270,"Canal K-2","#49A7FF"],k3:[540,240,"Canal K-3","#49A7FF"],
+    g4:[470,330,"Gauge G-4","#EC4899"],sat:[620,120,"Satellite ET","#A78BFA"],wx:[600,420,"Weather","#A78BFA"],
+    w7:[110,360,"WUA 7","#8B5CF6"],w12:[300,400,"WUA 12","#8B5CF6"],w19:[560,350,"WUA 19","#8B5CF6"],
+    p1:[85,470,"Plot 1041-3","#2FE6C8"],p2:[200,480,"Plot 1044-1","#2FE6C8"],p3:[360,500,"Plot 1102-2","#2FE6C8"],p4:[470,470,"Plot 1187-1","#2FE6C8"],
+    loss:[230,320,"Losses 18%","#FF5C6C"],surge:[110,560,"Night surge","#FF5C6C"],plan:[640,520,"Irrigation plan","#34D399"],
+    acts:[480,560,"Acceptance acts","#34D399"],bill:[650,610,"Billing","#34D399"],pay:[330,610,"Payments","#34D399"]};
+  const WGE=[["basin","res"],["basin","main"],["res","main"],["main","k1"],["main","k2"],["main","k3"],["k2","g4"],["k2","loss"],["sat","loss"],["sat","k3"],
+    ["k1","w7"],["k2","w12"],["k3","w19"],["w7","p1"],["w7","p2"],["w12","p3"],["w19","p4"],["w12","loss"],["p2","surge"],["wx","plan"],["plan","p1"],["plan","p4"],
+    ["p4","acts"],["p3","acts"],["acts","bill"],["bill","pay"],["g4","acts"],["sat","w19"],["wx","w19"]];
+  const WGS=[
+    {path:["k2","loss"],chip:"Canal K-2 → Losses",ev:"Gauge G-4 at the canal head logged 120,400 m³ this decade; water users' signed acts accept only 98,700 m³.",src:"Gauge G-4 + acts — decade 2, July",
+     it:"About 18% of the water leaves Canal K-2 between the gate and the farms. Satellite ET shows irrigation on 3 plots near WUA 12 that have no allocation — a likely unauthorised offtake.",status:"Needs field check"},
+    {path:["wx","plan","p1"],chip:"Weather → Plan",ev:"ECMWF forecast: 14 mm of rain on Saturday over the WUA 7 area.",src:"Weather feed — updated 06:00",
+     it:"The next irrigation turn for Plot 1041-3 is skipped automatically, saving about 900 m³. The farmer gets a message on WhatsApp.",status:"Applied by AI, confirmed by WUA"},
+    {path:["p2","surge"],chip:"Plot 1044-1 → Night surge",ev:"Flow at 03:10 was 3× the normal night level and kept rising for 12 minutes.",src:"Smart valve sensor V-1044",
+     it:"A likely pipe burst. The valve was closed automatically and the user was notified before any damage.",status:"Resolved"},
+    {path:["acts","bill","pay"],chip:"Acts → Billing → Pay",ev:"884 m³ accepted on Plot 1187-1 and signed electronically.",src:"Acceptance act #A-5531",
+     it:"The charge is built from the accepted volume — never guessed — and reconciled the moment the bank payment arrives.",status:"Confirmed"}];
+  function wgSVG(sel){const on=WGS[sel].path,pairs={};for(var i=0;i<on.length-1;i++){pairs[on[i]+"|"+on[i+1]]=1;pairs[on[i+1]+"|"+on[i]]=1;}
+    var s='<svg viewBox="0 20 720 620"><defs><linearGradient id="wgHl" x1="0" x2="1"><stop offset="0" stop-color="#FF6FB5"/><stop offset="1" stop-color="#FFC14E"/></linearGradient></defs>';
+    WGE.forEach(function(e){var a=WGN[e[0]],b=WGN[e[1]],mx=(a[0]+b[0])/2+(a[1]-b[1])*.18,my=(a[1]+b[1])/2+(b[0]-a[0])*.18,d="M"+a[0]+" "+a[1]+" Q"+mx+" "+my+" "+b[0]+" "+b[1],hl=pairs[e[0]+"|"+e[1]];
+      s+='<path d="'+d+'" fill="none" stroke="'+(hl?'url(#wgHl)':a[3])+'" stroke-opacity="'+(hl?1:.32)+'" stroke-width="'+(hl?3.4:1.3)+'"'+(hl?' filter="url(#fglow)"':'')+'/>';
+      if(hl)s+='<circle r="4" fill="#fff" filter="url(#fglow)"><animateMotion dur="1.8s" repeatCount="indefinite" path="'+d+'"/></circle>';
+      else s+='<circle r="1.8" fill="'+a[3]+'" opacity=".8"><animateMotion dur="'+(3+Math.random()*4).toFixed(1)+'s" repeatCount="indefinite" path="'+d+'"/></circle>';});
+    Object.keys(WGN).forEach(function(k){var n=WGN[k],w=n[2].length*8.4+36,hl=on.indexOf(k)>=0;
+      s+='<g class="gn" onclick="wgPick(\''+k+'\')"><rect x="'+(n[0]-w/2)+'" y="'+(n[1]-16)+'" width="'+w+'" height="32" fill="'+(hl?'#2A1E4A':'#141A3F')+'" stroke="'+n[3]+'" stroke-width="'+(hl?2.4:1.2)+'"'+(hl?' filter="url(#fglow)"':'')+'>'
+        +(hl?'<animate attributeName="stroke-opacity" values="1;.4;1" dur="1.6s" repeatCount="indefinite"/>':'')+'</rect>'
+        +'<circle cx="'+(n[0]-w/2+12)+'" cy="'+n[1]+'" r="5" fill="'+n[3]+'"/><text x="'+(n[0]-w/2+24)+'" y="'+(n[1]+5)+'">'+n[2]+'</text></g>';});
+    return s+'</svg>';}
+  function wgPanel(sel){const c=WGS[sel];return '<div class="why"><h5>Why this connection?</h5><div class="lbl2">Evidence</div><div class="ev">“'+c.ev+'”<small>'+c.src+'</small></div>'
+    +'<div class="lbl2">Interpretation</div><div style="line-height:1.5">'+c.it+'</div>'
+    +'<div class="lbl2">Status</div><span class="stt">'+c.status+'</span>'
+    +'<div class="lbl2" style="margin-top:12px">Related connections</div><div class="chips">'+WGS.map(function(x,i){return '<span class="chip'+(i===sel?' on':'')+'" onclick="wgSel('+i+')">'+x.chip+'</span>';}).join("")+'</div></div>';}
+  window.wgSel=function(i){const w=document.getElementById("wgbox");if(!w)return;w.innerHTML='<div class="gsv">'+wgSVG(i)+'</div>'+wgPanel(i)+WGLEG;};
+  window.wgPick=function(k){for(var i=0;i<WGS.length;i++){if(WGS[i].path.indexOf(k)>=0){wgSel(i);return;}}};
+  const WGLEG='<div class="legend2"><span><i style="background:#F2A93B"></i>Sources</span><span><i style="background:#49A7FF"></i>Canals</span><span><i style="background:#8B5CF6"></i>Associations</span><span><i style="background:#2FE6C8"></i>Plots</span><span><i style="background:#EC4899"></i>Gauges</span><span><i style="background:#A78BFA"></i>Satellite & weather</span><span><i style="background:#FF5C6C"></i>Alerts</span><span><i style="background:#34D399"></i>Plan & money</span></div>';
+  S.graph=()=>`<h1 class="ptitle">Water graph</h1><p class="psub">Everything is connected — basins, canals, associations, plots, sensors and money. Click a node or a connection.</p>
+    <div class="wg" id="wgbox"><div class="gsv">${wgSVG(0)}</div>${wgPanel(0)}${WGLEG}</div>`;
+
   function kpi(l,v,u,c){var sp=sparkPath();return `<div class="card kpi ${c}"><div class="stripe ${c}"></div><div class="lbl">${l}</div><div class="big"><b data-t="${v.replace(/,/g,'')}" data-raw="${v}">0</b><span class="u"> ${u}</span></div><svg class="spark ${c}" viewBox="0 0 120 36" preserveAspectRatio="none"><path class="sa" d="${sp.area}"/><path class="sl" pathLength="1" d="${sp.line}"/></svg></div>`;}
   function sparkPath(){var n=11,step=120/(n-1),pts=[];for(var i=0;i<n;i++){var y=8+Math.round(20*(0.5+0.5*Math.sin(i*0.8+Math.random()*2)));pts.push([Math.round(i*step),Math.min(30,Math.max(5,y))]);}var d=pts.map(function(p,i){return (i?"L":"M")+p[0]+" "+p[1];}).join(" ");return {line:d,area:d+" L120 36 L0 36 Z"};}
   function areaChart(vals,unit){var W=620,H=170,pad=12,max=Math.max.apply(null,vals)*1.15,n=vals.length,step=(W-pad*2)/(n-1);
