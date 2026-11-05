@@ -746,9 +746,9 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     ["grp","Mobile app"],
     ["app","📱","Farmer app"],["journey","🔄","App journey"],["graph","🕸️","Water graph"],
     ["grp","Platform & trust"],
-    ["platform","🧩","Platform"],["compliance","🛡️","Compliance (EU)"],["experts","🧠","Expert notes"],["roadmap","🧭","Roadmap"],
+    ["platform","🧩","Platform"],["compliance","🛡️","Compliance (EU)"],["experts","🧠","Expert notes"],
     ["grp","Investor view"],
-    ["roi","💰","ROI calculator"],["drought","🌵","Drought simulator"],["health","🌿","Crop health"],["bizmodel","💼","Business model"],
+    ["roi","💰","ROI calculator"],["drought","🌵","Drought simulator"],["health","🌿","Crop health"],["bizmodel","💼","Business model"],["roadmap","🧭","Roadmap"],
   ];
   MENU.forEach(m=>{
     if(m[0]==="grp"){const g=document.createElement("div");g.className="grp";g.textContent=m[1];menuEl.appendChild(g);return;}
@@ -1548,13 +1548,14 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     ["linear-gradient(135deg,#22D3EE,#3B82F6)",18],["linear-gradient(135deg,#6D5BF0,#A855F7)",80],
     ["linear-gradient(135deg,#0EA5E9,#2563EB)",30],["linear-gradient(135deg,#14B8A6,#0891B2)",345]];
   const ACC={};(function(){var k=0;MENU.forEach(function(m){if(m[0]==="grp")return;ACC[m[0]]=PALETTE[k%PALETTE.length];k++;});})();
+  ACC.roadmap=PALETTE[5];ACC.roi=PALETTE[6];ACC.drought=PALETTE[7];ACC.health=PALETTE[0];ACC.bizmodel=PALETTE[1];
   const BG={dashboard:"water",users:"water",crops:"fields",map:"water",requests:"water",irrigation:"fields",
     limits:"water",sensors:"water",melioration:"fields",dispatch:"water",billing:"water",payments:"water",reports:"network",
     losses:"water",inspections:"fields",maintenance:"fields",advice:"fields",climate:"fields",finance:"network",reuse:"water",basin:"water",
     ai:"network",data:"space",platform:"network",compliance:"network",experts:"network",roadmap:"network"};
   const IMGP=["patch","delta","pivot","coast","delta2"];
   const IMGMAP={};(function(){var k=0;MENU.forEach(function(m){if(m[0]==="grp")return;IMGMAP[m[0]]=IMGP[k%IMGP.length];k++;});})();
-  IMGMAP.roi="pivot";IMGMAP.drought="delta";IMGMAP.health="patch";IMGMAP.bizmodel="coast";IMGMAP.data="earth";IMGMAP.ai="earth";IMGMAP.platform="earth";
+  IMGMAP.roadmap="delta2";IMGMAP.roi="pivot";IMGMAP.drought="delta";IMGMAP.health="patch";IMGMAP.bizmodel="coast";IMGMAP.data="earth";IMGMAP.ai="earth";IMGMAP.platform="earth";
   function showScreen(id){const m=MENU.find(x=>x[0]===id),acc=ACC[id]||PALETTE[0];
     content.style.setProperty("--phue",acc[1]+"deg");
     content.style.setProperty("--pbg","url('img/"+(IMGMAP[id]||"patch")+".jpg')");
@@ -1648,11 +1649,11 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     {menu:"platform",say:"Platform features. Country packs configure language, tariffs, payments and law without code, plus an open API, role-based permissions, an offline mobile app, a full audit log, accessibility, and strong security."},
     {menu:"compliance",say:"Compliance. Aquora is built for the EU rules: NIS2 supply-chain clauses, the Cyber Resilience Act, the AI Act, the Data Act right to access sensor data, and GDPR with consent for voice."},
     {menu:"experts",say:"Expert notes. Guidance from our legal, finance, market and language experts: on manual valve control, quota-trading law, fast revenue from billing and losses, and building translation in from day one."},
-    {menu:"roadmap",say:"The roadmap. From a real core and loss detection in the first six months, to the AI layer and satellite data at twelve months, and an open marketplace and basin view at twenty four. That's Aquora, ready for your country."},
     {menu:"roi",say:"Now, for investors: the numbers. This is the ROI calculator. Pick a crop, set your area, the value of water and the expected saving, and you see, live, what Aquora saves, what it costs, and how many months it takes to pay back."},
     {menu:"drought",say:"The drought simulator. When the canal runs short, an equal cut hurts every farm. Aquora's AI keeps every plot at least half its water, then sends the rest where it saves the most harvest, cutting the losses almost in half. The water authority always approves."},
     {menu:"health",say:"Crop health, from space. On a real satellite image, every field shows its vigour. Aquora links it to the water: a stressed field gets an irrigation drafted, and a field that was declared but never sown is flagged for a check."},
     {menu:"bizmodel",say:"And the business model. Recurring software subscriptions, implementation, and sensors and AI as add-ons, sold to water agencies, utilities, agribusiness and industry. We land with one pilot, and grow module by module to national scale."},
+    {menu:"roadmap",say:"The roadmap. From a real core and loss detection in the first six months, to the AI layer and satellite data at twelve months, and an open marketplace and basin view at twenty four. That's Aquora, ready for your country."},
     {menu:"dashboard",say:"That's Aquora: one system for a country's irrigation and melioration — operated by hand, by voice, or straight from the farmer's phone. And you can ask me anything, right here. Accessible to anyone who can speak, transparent for the government, and ready for your country."},
   ];
 
@@ -1677,7 +1678,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     a.play().catch(()=>fin());
   }
   function speak(text,after,i){
-    if(typeof i==="number")playClip("presenter/"+i+".mp4?v=t36",after);
+    if(typeof i==="number")playClip("presenter/"+i+".mp4?v=t37",after);
     else { if(after)after(); }
   }
   function fixHeard(s){ return (s||"").replace(/\bwhat's\b/gi,"what is").replace(/\b(r\.?\s?o\.?\s?i|are oh i|our oi)\b/gi,"roi").replace(/\b(n\.?\s?d\.?\s?v\.?\s?i|end vi|nd vi)\b/gi,"ndvi").replace(/\b(draught|drowned|drout)\b/gi,"drought").replace(/\bbusiness mode\b/gi,"business model").replace(/\b(crap|crowd|cross) health\b/gi,"crop health").replace(/\b(farmer's|farmers'|farmers|former|farmar|farm)\s+(app|up|application|apps)\b/gi,"farmer app").replace(/\bfarmer\s+(up|application|apps)\b/gi,"farmer app").replace(/\bmobile\s+application\b/gi,"mobile app").replace(/\b(water|walter)\s+(graf|graft|grass|graphs|grav)\b/gi,"water graph").replace(/\bwalter\s+graph\b/gi,"water graph").replace(/\b(up|ap|apps)\s+journey\b/gi,"app journey").replace(/\bmeditation(s)?\b/gi,"melioration").replace(/\bemaciation\b/gi,"melioration").replace(/\bamelioration\b/gi,"melioration"); }
