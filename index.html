@@ -575,6 +575,13 @@
   .bstat .n{font-family:var(--mono);font-size:26px;font-weight:800;color:#0277BD;min-width:74px}
   .bstat .t{font-size:13px;font-weight:700;color:var(--text);line-height:1.4}
   .bstat .t small{display:block;color:var(--muted);font-weight:600;font-size:11px}
+  /* phone: keep the left menu rail clickable; assistant becomes a bottom sheet beside it */
+  @media(max-width:820px){
+    .assistant{left:68px;right:6px;width:auto;max-width:none;top:auto;bottom:6px;max-height:56vh;border-radius:16px}
+    .assistant .avbanner{aspect-ratio:16/9;max-height:22vh;object-position:50% 30%}
+    .assistant .cap{max-height:16vh}
+    .content{padding-bottom:60vh}
+  }
 </style>
 
 <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="silv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FBFCFD"/><stop offset=".3" stop-color="#C3CBD4"/><stop offset=".55" stop-color="#F1F4F7"/><stop offset=".8" stop-color="#8E99A5"/><stop offset="1" stop-color="#D5DBE1"/></linearGradient><linearGradient id="silvD" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9AA6B3"/><stop offset=".5" stop-color="#5E6B79"/><stop offset="1" stop-color="#7C8896"/></linearGradient><linearGradient id="silvShine" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".4" stop-color="#fff" stop-opacity="0"/></linearGradient><radialGradient id="hubHalo"><stop offset="0" stop-color="#2FE6C8" stop-opacity=".42"/><stop offset=".55" stop-color="#2FE6C8" stop-opacity=".12"/><stop offset="1" stop-color="#2FE6C8" stop-opacity="0"/></radialGradient>
