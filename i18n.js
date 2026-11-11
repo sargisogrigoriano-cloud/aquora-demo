@@ -53,7 +53,7 @@
   var SKIP={SCRIPT:1,STYLE:1,TEXTAREA:1,INPUT:1};
   var busy=false;
   function trText(n){
-    var p=n.parentNode; if(!p||SKIP[p.nodeName])return;
+    var p=n.parentNode; if(!p||SKIP[p.nodeName])return; if(p.closest&&p.closest("[data-notr]"))return;
     var o=n.nodeValue; if(!o||!/[A-Za-z]/.test(o))return;
     var t=tr(o); if(t!==o){ busy=true; n.nodeValue=t; busy=false; }
   }
@@ -72,7 +72,7 @@
   window.aqTrTree=trTree;
 
   function start(){
-    var sw=document.getElementById("langsw");
+    ["langsw","langpick"].forEach(function(id){ var sw=document.getElementById(id);
     if(sw){
       sw.querySelectorAll("[data-l]").forEach(function(b){
         b.classList.toggle("on",b.getAttribute("data-l")===L);
@@ -80,7 +80,7 @@
           try{localStorage.setItem("aq_lang",nl);}catch(_){}
           var url=new URL(location.href); url.searchParams.set("lang",nl); location.href=url.toString(); });
       });
-    }
+    } });
     if(L!=="ru")return;
     trTree(document.body);
     new MutationObserver(function(ms){
