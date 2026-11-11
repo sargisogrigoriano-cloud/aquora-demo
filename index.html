@@ -582,6 +582,9 @@
     .assistant .cap{max-height:16vh}
     .content{padding-bottom:60vh}
   }
+  #langsw{display:inline-flex;gap:2px;padding:2px!important;cursor:pointer}
+  #langsw b{padding:2px 8px;border-radius:999px;font-weight:600;opacity:.55}
+  #langsw b.on{opacity:1;background:var(--aqua);color:#fff}
 </style>
 
 <svg width="0" height="0" style="position:absolute"><defs><linearGradient id="silv" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FBFCFD"/><stop offset=".3" stop-color="#C3CBD4"/><stop offset=".55" stop-color="#F1F4F7"/><stop offset=".8" stop-color="#8E99A5"/><stop offset="1" stop-color="#D5DBE1"/></linearGradient><linearGradient id="silvD" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9AA6B3"/><stop offset=".5" stop-color="#5E6B79"/><stop offset="1" stop-color="#7C8896"/></linearGradient><linearGradient id="silvShine" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset=".4" stop-color="#fff" stop-opacity="0"/></linearGradient><radialGradient id="hubHalo"><stop offset="0" stop-color="#2FE6C8" stop-opacity=".42"/><stop offset=".55" stop-color="#2FE6C8" stop-opacity=".12"/><stop offset="1" stop-color="#2FE6C8" stop-opacity="0"/></radialGradient>
@@ -609,7 +612,7 @@
   <div class="main">
     <div class="top">
       <span class="crumb" id="crumb">Dashboard</span><span class="sp"></span>
-      <span class="lang">EN</span>
+      <span class="lang" id="langsw"><b data-l="en">EN</b><b data-l="ru">RU</b></span>
       <span class="usr"><span class="av"><svg width="16" height="16"><use href="#person"/></svg></span><span>Operator</span></span>
     </div>
     <div class="content" id="content"></div>
@@ -634,6 +637,9 @@
   </div>
 </div>
 
+<script src="i18n_ru.js?v=1"></script>
+<script src="i18n_ruqa.js?v=1"></script>
+<script src="i18n.js?v=1"></script>
 <script>
 (function(){
   "use strict";
@@ -646,15 +652,29 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     for(var i=0;i<FQ_KEYS.length;i++){var set=FQ_KEYS[i].set,s=0;for(var j=0;j<qw.length;j++){if(set.indexOf(qw[j])>=0)s++;}
       var sc=s/qw.length;if(sc>bs||(sc===bs&&sc>0&&best&&set.length<bl)){bs=sc;best=FQ_KEYS[i].k;bl=set.length;}}
     return bs>=0.34?best:null;}
+  var AQRU=(window.AQ_LANG==="ru");
+  var FQ_BYF={}; Object.keys(FEMALE_QA).forEach(function(k){var v=FEMALE_QA[k]; if(!FQ_BYF[v.f])FQ_BYF[v.f]=v;});
+  var RU_STOP={"что":1,"как":1,"это":1,"такое":1,"ли":1,"а":1,"и":1,"в":1,"во":1,"на":1,"с":1,"со":1,"по":1,"у":1,"о":1,"об":1,"для":1,"же":1,"мне":1,"я":1,"вы":1,"ты":1,"мы":1,"мой":1,"моя":1,"мои":1,"ваш":1,"ваша":1,"есть":1,"можно":1,"какой":1,"какая":1,"какие":1,"каков":1,"где":1,"когда":1,"зачем":1,"почему":1,"сколько":1,"расскажи":1,"расскажите":1,"покажи":1,"покажите":1,"объясни":1,"объясните":1,"про":1,"не":1,"или":1,"то":1,"от":1,"до":1,"из":1,"за":1,"при":1,"будет":1,"бы":1,"нужно":1};
+  function ruStem(w){return w.length>5?w.slice(0,5):w;}
+  function ruKw(s){return (s||"").toLowerCase().replace(/ё/g,"е").replace(/[^a-zа-я0-9 ]/g," ").split(/\s+/).filter(function(w){return w&&!RU_STOP[w]&&w.length>=2;}).map(ruStem);}
+  var RU_KEYS=[]; if(AQRU&&window.AQ_RUQA){ Object.keys(AQ_RUQA).forEach(function(f){ (AQ_RUQA[f].q||[]).forEach(function(q){ RU_KEYS.push({f:f,q:q.toLowerCase().replace(/ё/g,"е"),set:ruKw(q)}); }); }); }
+  function ruFind(q){ if(!RU_KEYS.length)return null; var nq=(q||"").toLowerCase().replace(/ё/g,"е").replace(/[?!.,;:'"«»]/g,"").replace(/\s+/g," ").trim();
+    for(var i=0;i<RU_KEYS.length;i++){ if(RU_KEYS[i].q===nq) return FQ_BYF[RU_KEYS[i].f]||null; }
+    var qw=ruKw(q); if(!qw.length)return null; var best=null,bs=0,bl=99;
+    for(var i=0;i<RU_KEYS.length;i++){var set=RU_KEYS[i].set,sc=0;for(var j=0;j<qw.length;j++){if(set.indexOf(qw[j])>=0)sc++;}
+      sc=sc/qw.length; if(sc>bs||(sc===bs&&sc>0&&set.length<bl)){bs=sc;best=RU_KEYS[i].f;bl=set.length;}}
+    return bs>=0.5?(FQ_BYF[best]||null):null; }
+  function clipSrc(name){ return (AQRU&&window.AQ_RU_TOUR)?("presenter/ru/"+name+".mp4?v=r1"):("presenter/"+name+".mp4"+(/^\d+$/.test(name)?"?v=t37":"")); }
   function answerFemale(q,g){ if(g===undefined)g=gen; if(g!==gen)return false;
     var nq=normQ(q), nq2=nq.replace(/[?!.,;:'"]/g,"").replace(/\s+/g," ").trim();
-    var k=FEMALE_QA[nq]||FEMALE_QA[nq2]||FEMALE_QA[fuzzyFQ(q)]||FEMALE_QA[fuzzyFQ(nq2)];
+    var k=(AQRU?ruFind(q):null)||FEMALE_QA[nq]||FEMALE_QA[nq2]||FEMALE_QA[fuzzyFQ(q)]||FEMALE_QA[fuzzyFQ(nq2)];
     if(!k) return false;
+    if(AQRU&&window.AQ_RUQA&&AQ_RUQA[k.f]){ k={a:AQ_RUQA[k.f].a,screen:k.screen,f:"ru/"+k.f}; }
     if(k.screen){activate(k.screen);showScreen(k.screen);}
     cap.textContent="One moment \u2014 let me check that\u2026"; stt.textContent="Checking\u2026";
-    playClip("presenter/filler_"+(Math.random()<0.5?0:1)+".mp4", function(){ if(g!==gen)return;
+    playClip(clipSrc("filler_"+(Math.random()<0.5?0:1)), function(){ if(g!==gen)return;
       cap.textContent="I've checked \u2014 my assistant will answer that.";
-      playClip("presenter/handoff.mp4", function(){ if(g!==gen)return;
+      playClip(clipSrc("handoff"), function(){ if(g!==gen)return;
         cap.textContent=k.a||""; stt.textContent="Speaking\u2026"; playSrc("voice/"+k.f,function(){ var qc=document.getElementById("qcancel"); if(qc)qc.disabled=true; }); }); });
     return true; }
   const SERVER="https://candidate-prints-travis-cgi.trycloudflare.com";
@@ -676,8 +696,9 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     QVOICE=vs.find(function(x){return /^en/i.test(x.lang)&&/female|woman|samantha|victoria|zira|aria|karen|susan|linda|hazel/i.test(x.name);})||vs.find(function(x){return /^en/i.test(x.lang);})||null; }catch(e){} }
   if("speechSynthesis" in window){ pickQVoice(); speechSynthesis.onvoiceschanged=pickQVoice; }
   function speakTTS(text){ try{ if(!voiceOn||!("speechSynthesis" in window)||!text)return;
-    speechSynthesis.cancel(); var u=new SpeechSynthesisUtterance(text);
-    if(QVOICE){u.voice=QVOICE;u.lang=QVOICE.lang;}else{u.lang="en-US";} u.rate=1;u.pitch=1;
+    speechSynthesis.cancel(); if(window.AQ_LANG==="ru"&&window.aqTr)text=aqTr(text); var u=new SpeechSynthesisUtterance(text);
+    if(window.AQ_LANG==="ru"){var rv=(speechSynthesis.getVoices()||[]).find(function(x){return /^ru/i.test(x.lang);});if(rv)u.voice=rv;u.lang="ru-RU";}
+    else if(QVOICE){u.voice=QVOICE;u.lang=QVOICE.lang;}else{u.lang="en-US";} u.rate=1;u.pitch=1;
     setSpeaking(true); u.onend=function(){setSpeaking(false);}; u.onerror=function(){setSpeaking(false);};
     speechSynthesis.speak(u); }catch(e){} }
 
@@ -686,7 +707,12 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
    {re:"open .{0,12}(water|tap|valve)|turn on .{0,8}water", flow:"homeon"},
    {re:"make .*request|new request|request water|create .*request", flow:"req"},
    {re:"receive water|get water|sign .{0,6}act|confirm .*deliver", flow:"del"},
-   {re:"\bpay\b|pay .{0,6}bill|pay for water", flow:"pay"}
+   {re:"\bpay\b|pay .{0,6}bill|pay for water", flow:"pay"},
+   {re:"(закр|выключ|перекр).{0,14}(вод|кран|клапан)", flow:"homeoff"},
+   {re:"(откр|включ).{0,14}(вод|кран|клапан)", flow:"homeon"},
+   {re:"(созд|оформ|подать|сдела|нов).{0,14}заявк|заказ.{0,6}вод", flow:"req"},
+   {re:"получ.{0,10}вод|подпис.{0,8}акт|подтверд.{0,12}(подач|постав)", flow:"del"},
+   {re:"оплат|заплат", flow:"pay"}
   ];
   function playClip(src,after){ stopAudio();
     var v=document.getElementById("avatarVid"); if(!src||!v){ if(after)after(); return; }
@@ -697,7 +723,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     var p=v.play(); if(p&&p.catch)p.catch(function(){ fin(); }); }
   function playFiller(){ var v=document.getElementById("avatarVid"); if(!v)return;
     stopAudio(); v.loop=true; v.muted=!voiceOn; v.onended=null; v.onerror=null;
-    try{ v.src="presenter/filler_"+(Math.random()<0.5?0:1)+".mp4"; v.currentTime=0; }catch(e){}
+    try{ v.src=clipSrc("filler_"+(Math.random()<0.5?0:1)); v.currentTime=0; }catch(e){}
     setSpeaking(true); var p=v.play(); if(p&&p.catch)p.catch(function(){}); }
   function screenClip(scr){ for(var j=0;j<INTENTS.length;j++){ if(INTENTS[j].screen===scr) return ""; } return ""; }
   function deliver(d,g){ if(g!==gen)return;
@@ -708,7 +734,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
   function handoffThenSpeak(d,g){ if(g!==gen)return;
     if(d.screen){activate(d.screen);showScreen(d.screen);}
     cap.textContent=d.answer||"";
-    playClip("presenter/handoff.mp4", function(){ if(g!==gen)return; speakTTS(d.answer||""); }); }
+    playClip(clipSrc("handoff"), function(){ if(g!==gen)return; speakTTS(d.answer||""); }); }
   function pollJob(job,g,n){ if(g!==gen)return;
     if(n>80){ stopAudio(); cap.textContent="That took too long — please ask again."; return; }
     setTimeout(function(){ if(g!==gen)return;
@@ -1354,7 +1380,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
 
   /* ---------- voice intro for screens that are not in the avatar tour ---------- */
   var INTRO={"roi": {"f": "q190.mp3", "a": "This is the ROI calculator. Choose a crop, set your irrigated area, the value of water, and how much water you expect to save through scheduling and loss control. The calculator shows, live, how much water and money is saved each year, what Aquora costs, the net benefit, and how many months it takes to pay back. These are your numbers and your assumptions, not measured results, so an investor or a ministry can test any scenario in seconds."}, "drought": {"f": "q195.mp3", "a": "This is the drought simulator. Move the slider to cut the water in the canal, for example to seventy percent of the plan. With an equal cut, every farm loses the same share, and high value crops like vineyards and tomatoes suffer the most. With Aquora's AI, every plot first keeps at least half its water, then the rest goes where each cubic metre saves the most harvest, using FAO yield response factors. At seventy percent, the AI cuts the harvest lost almost in half. The water authority always approves the final allocation."}, "health": {"f": "q199.mp3", "a": "This is crop health from space. On a real satellite image, switch to the vegetation index, and every field shows its vigour, from bare soil in brown to dense, healthy crops in green. Aquora links each field to its water. Here, plot C seven shows falling vigour, and its last irrigation was eleven days ago, so the system drafts an irrigation within forty-eight hours. Plot E three was declared as cotton, but looks unsown, so it is flagged for a field check. In production we use Sentinel-2 NDVI, about every five days."}, "bizmodel": {"f": "q204.mp3", "a": "This is the business model. Aquora earns in three ways. First, a recurring software subscription: an annual licence per network or per meter, tiered by water volume and modules. Second, implementation: integration, data onboarding and configuration. Third, hardware and data: IoT sensors and meters through partners, with analytics and AI as premium add-ons. Buyers are government water agencies and utilities, enterprise agriculture, and industrial water users. We land with a pilot, then expand module by module to national scale."}};
-  function introSay(id){var it=INTRO[id];if(!it)return;cap.textContent=it.a;stt.textContent="Speaking…";playSrc("voice/"+it.f,function(){});}
+  function introSay(id){var it=INTRO[id];if(!it)return;var ru=(window.AQ_LANG==="ru"&&window.AQ_RUQA&&AQ_RUQA[it.f]);cap.textContent=ru?AQ_RUQA[it.f].a:it.a;stt.textContent="Speaking…";playSrc("voice/"+(ru?"ru/":"")+it.f,function(){});}
 
   function kpi(l,v,u,c){var sp=sparkPath();return `<div class="card kpi ${c}"><div class="stripe ${c}"></div><div class="lbl">${l}</div><div class="big"><b data-t="${v.replace(/,/g,'')}" data-raw="${v}">0</b><span class="u"> ${u}</span></div><svg class="spark ${c}" viewBox="0 0 120 36" preserveAspectRatio="none"><path class="sa" d="${sp.area}"/><path class="sl" pathLength="1" d="${sp.line}"/></svg></div>`;}
   function sparkPath(){var n=11,step=120/(n-1),pts=[];for(var i=0;i<n;i++){var y=8+Math.round(20*(0.5+0.5*Math.sin(i*0.8+Math.random()*2)));pts.push([Math.round(i*step),Math.min(30,Math.max(5,y))]);}var d=pts.map(function(p,i){return (i?"L":"M")+p[0]+" "+p[1];}).join(" ");return {line:d,area:d+" L120 36 L0 36 Z"};}
@@ -1684,7 +1710,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     a.play().catch(()=>fin());
   }
   function speak(text,after,i){
-    if(typeof i==="number")playClip("presenter/"+i+".mp4?v=t37",after);
+    if(typeof i==="number")playClip(clipSrc(String(i)),after);
     else { if(after)after(); }
   }
   function fixHeard(s){ return (s||"").replace(/\bwhat's\b/gi,"what is").replace(/\b(c|see|sea)[\s-]?(0?7|zero seven)\b/gi,"c seven").replace(/\be[\s-]?(0?3|zero three)\b/gi,"e three").replace(/\bn[\s-]?(12|twelve)\b/gi,"n twelve").replace(/\bn[\s-]?(0?4|zero four)\b/gi,"n four").replace(/\b(r\.?\s?o\.?\s?i|are oh i|our oi)\b/gi,"roi").replace(/\b(n\.?\s?d\.?\s?v\.?\s?i|end vi|nd vi)\b/gi,"ndvi").replace(/\b(draught|drowned|drout)\b/gi,"drought").replace(/\bbusiness mode\b/gi,"business model").replace(/\b(crap|crowd|cross) health\b/gi,"crop health").replace(/\b(farmer's|farmers'|farmers|former|farmar|farm)\s+(app|up|application|apps)\b/gi,"farmer app").replace(/\bfarmer\s+(up|application|apps)\b/gi,"farmer app").replace(/\bmobile\s+application\b/gi,"mobile app").replace(/\b(water|walter)\s+(graf|graft|grass|graphs|grav)\b/gi,"water graph").replace(/\bwalter\s+graph\b/gi,"water graph").replace(/\b(up|ap|apps)\s+journey\b/gi,"app journey").replace(/\bmeditation(s)?\b/gi,"melioration").replace(/\bemaciation\b/gi,"melioration").replace(/\bamelioration\b/gi,"melioration"); }
@@ -1695,9 +1721,9 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
     for(var ai=0;ai<ACTIONS.length;ai++){ if(new RegExp(ACTIONS[ai].re,"i").test(ql)){ runFlow(ACTIONS[ai].flow); return; } }
     if(answerFemale(q,g)) return;
     cap.textContent="One moment \u2014 let me check that\u2026"; stt.textContent="Checking\u2026";
-    playClip("presenter/filler_"+(Math.random()<0.5?0:1)+".mp4", function(){ if(g!==gen)return;
+    playClip(clipSrc("filler_"+(Math.random()<0.5?0:1)), function(){ if(g!==gen)return;
       cap.textContent="I've checked \u2014 my assistant will answer that.";
-      playClip("presenter/handoff.mp4", function(){ if(g!==gen)return; askServer(q,g); }); });
+      playClip(clipSrc("handoff"), function(){ if(g!==gen)return; askServer(q,g); }); });
   }
   function askServer(q,g){ if(g!==gen)return;
     cap.textContent="\u2026"; stt.textContent="Thinking\u2026";
@@ -1742,7 +1768,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
   function srFlow(){
     if(listening){try{recog&&recog.stop();}catch(_){}return;}
     stopAudio();
-    recog=new SR();recog.lang="en-US";recog.interimResults=true;recog.continuous=true;recog.maxAlternatives=1;
+    recog=new SR();recog.lang=(window.AQ_LANG==="ru")?"ru-RU":"en-US";recog.interimResults=true;recog.continuous=true;recog.maxAlternatives=1;
     var qi=document.getElementById("qin"); if(qi){qi.value="";qi.placeholder="Listening… speak your question";}
     var silence=null; function waitStop(){clearTimeout(silence);silence=setTimeout(function(){try{recog.stop();}catch(_){}} ,2500);}
     recog.onstart=()=>{listening=true;setMic(true);};
