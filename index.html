@@ -1754,7 +1754,7 @@ const FEMALE_QA = {"what is aquora": {"a": "Aquora is a complete smart water sys
   $("#next").addEventListener("click",()=>{paused=false;go(Math.min(TOUR.length-1,idx+1));});
   $("#prev").addEventListener("click",()=>{paused=false;go(Math.max(0,idx-1));});
   $("#playpause").addEventListener("click",function(){var v=document.getElementById("avatarVid");
-    var wantPlay=this.textContent.indexOf("Play")>=0;
+    var wantPlay=this.textContent.indexOf("⏸")<0;
     if(wantPlay){ paused=false; this.textContent="⏸ Pause"; try{if("speechSynthesis"in window)speechSynthesis.resume();}catch(e){}
       if(v.src&&v.currentTime>0&&v.paused&&!v.ended){setSpeaking(true);v.play().catch(function(){});} else { go(idx>=0?idx:0); } }
     else { paused=true; try{v.pause();}catch(e){} try{if("speechSynthesis"in window)speechSynthesis.pause();}catch(e){} setSpeaking(false); this.textContent="▶ Play"; } });
